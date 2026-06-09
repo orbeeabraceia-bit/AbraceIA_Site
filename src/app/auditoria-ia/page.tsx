@@ -2,10 +2,26 @@ import Link from "next/link";
 import { ClientPortfolioStrip } from "@/components/cases/client-portfolio-strip";
 import { AuditoriaForm } from "@/components/auditoria/auditoria-form";
 import { Button } from "@/components/ui/button";
+import { JsonLd } from "@/components/seo/json-ld";
+import { webApplicationSchema, breadcrumbSchema } from "@/lib/schema";
 
 export default function AuditoriaIaPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-16 md:px-6">
+      <JsonLd
+        data={[
+          webApplicationSchema({
+            name: "Auditoria de Presença em IA — AbraceIA",
+            description:
+              "Ferramenta gratuita que gera um relatório orientativo sobre a citação da sua clínica em IAs generativas (ChatGPT, Perplexity, Google AI Overview).",
+            path: "/auditoria-ia",
+          }),
+          breadcrumbSchema([
+            { name: "Início", path: "/" },
+            { name: "Auditoria IA", path: "/auditoria-ia" },
+          ]),
+        ]}
+      />
       <h1 className="font-display text-3xl font-bold text-navy">Auditoria de presença em IA</h1>
       <p className="mt-4 text-muted-foreground">
         Informe nome, especialidade e cidade. Geramos relatório orientativo sobre citação em IAs —

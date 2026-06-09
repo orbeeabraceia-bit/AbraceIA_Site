@@ -207,3 +207,87 @@ export function webPageSchema(name: string, path: string) {
     url: `${siteConfig.url}${path}`,
   };
 }
+
+export function collectionPageSchema(input: {
+  name: string;
+  description: string;
+  path: string;
+  items: { name: string; path: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: input.name,
+    description: input.description,
+    url: `${siteConfig.url}${input.path}`,
+    inLanguage: "pt-BR",
+    isPartOf: { "@type": "WebSite", name: siteConfig.name, url: siteConfig.url },
+    mainEntity: {
+      "@type": "ItemList",
+      itemListElement: input.items.map((item, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: item.name,
+        url: `${siteConfig.url}${item.path}`,
+      })),
+    },
+  };
+}
+
+export function blogSchema(posts: { title: string; slug: string; publishedAt: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: `Blog ${siteConfig.name}`,
+    url: `${siteConfig.url}/blog`,
+    inLanguage: "pt-BR",
+    publisher: { "@type": "Organization", name: siteConfig.org.name },
+    blogPost: posts.map((p) => ({
+      "@type": "BlogPosting",
+      headline: p.title,
+      datePublished: p.publishedAt,
+      url: `${siteConfig.url}/blog/${p.slug}`,
+    })),
+  };
+}
+
+export function webApplicationSchema(input: {
+  name: string;
+  description: string;
+  path: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: input.name,
+    description: input.description,
+    url: `${siteConfig.url}${input.path}`,
+    applicationCategory: "BusinessApplication",
+    operatingSystem: "Web",
+    inLanguage: "pt-BR",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "BRL" },
+    provider: { "@type": "Organization", name: siteConfig.org.name },
+  };
+}
+
+export function howToSchema(input: {
+  name: string;
+  description: string;
+  path: string;
+  steps: { name: string; text: string }[];
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: input.name,
+    description: input.description,
+    inLanguage: "pt-BR",
+    step: input.steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+      url: `${siteConfig.url}${input.path}#etapa-${i + 1}`,
+    })),
+  };
+}

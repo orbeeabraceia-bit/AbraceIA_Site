@@ -5,7 +5,7 @@ import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { FadeIn } from "@/components/animations/fade-in";
 import { Button } from "@/components/ui/button";
 import { coreDifferentiators, methodSteps } from "@/lib/content/home-marketing";
-import { breadcrumbSchema } from "@/lib/schema";
+import { breadcrumbSchema, howToSchema } from "@/lib/schema";
 import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
@@ -19,10 +19,19 @@ export default function MetodoPage() {
   return (
     <>
       <JsonLd
-        data={breadcrumbSchema([
-          { name: "Home", path: "/" },
-          { name: "Método", path: "/metodo" },
-        ])}
+        data={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Método", path: "/metodo" },
+          ]),
+          howToSchema({
+            name: "Método AbraceIA — do diagnóstico à escala",
+            description:
+              "Processo em 4 etapas para construir presença em IA e SEO para clínicas e médicos, dentro do compliance CFM.",
+            path: "/metodo",
+            steps: methodSteps.map((s) => ({ name: s.title, text: s.description })),
+          }),
+        ]}
       />
       <article className="mx-auto max-w-[1400px] px-4 py-20 md:px-8">
         <div className="mb-12">
