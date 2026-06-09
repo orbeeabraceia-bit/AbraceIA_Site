@@ -1,0 +1,32 @@
+# AbraceIA — Presença de saúde com IA · Belo Horizonte
+> Vertical da Orbee Labs para clínicas e profissionais de saúde. SEO arquitetural, GEO (citação em IAs generativas) e compliance CFM/CFO/CFP/CFN/COFFITO.
+
+## Sobre
+- **Marca:** AbraceIA (Orbee Labs)
+- **Cidade:** Belo Horizonte, MG, Brasil
+- **Foco:** Citação em ChatGPT, Perplexity, Claude e Google AI Overview + SEO orgânico
+- **Stack:** Next.js 16, React 19, Tailwind 4, Prisma, Neon, Vercel
+
+## Serviços
+- GEO para saúde: otimização para IAs generativas (llms.txt, conteúdo enciclopédico, E-E-A-T)
+- Sites para médicos e clínicas com Core Web Vitals certificados
+- SEO médico com Schema Physician, MedicalBusiness, FAQPage
+- Automação com IA revisada por humano credenciado
+
+## Compliance
+- Res. CFM 2.336/2023, CFO 196/2019, CFP 23/2022, CFN 856/2026, COFFITO 532/2021
+- LGPD: dados sensíveis de saúde com consentimento explícito
+- IA não diagnostica, não prescreve; conteúdo revisado por profissional habilitado
+
+## Portfólio em produção (Orbee Labs)
+- Neuropediatria: https://lauraneuroped.com.br/
+- Ortopedia (mão e punho): https://www.janainadrumond.com.br/
+- Geriatria: https://drapaulakac.com.br/
+- Psicologia TCC: https://www.psicologoericmoreira.com.br/
+
+## Contato
+- Site: https://abraceia.com.br
+- Email: contato@abraceia.com.br
+
+## Fontes e autoria
+- Conteúdo estratégico baseado no Livro-Guia AbraceIA Saúde BH 2026 (Orbee Labs)

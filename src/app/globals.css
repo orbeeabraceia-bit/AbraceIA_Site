@@ -1,26 +1,151 @@
 @import "tailwindcss";
 
+/* AbraceIA — Teal (marca), Pêssego (calor), Ouro (luxo escuro), Ônix, Creme */
 :root {
+  --teal: #00897b;
+  --teal-50: #e0f2f1;
+  --teal-100: #b2dfdb;
+  --teal-700: #00695c;
+
+  --peach: #ff8c5a;
+  --peach-50: #fff0e8;
+  --peach-100: #ffe0d0;
+  --peach-600: #e67a45;
+  --peach-700: #d96a35;
+
+  --gold: #dfb060;
+  --gold-50: #faf3e3;
+  --gold-100: #f5e8cc;
+  --gold-500: #dfb060;
+  --gold-600: #c9974a;
+  --gold-700: #b8863b;
+
+  --onyx: #0a0a0a;
+  --cream: #f1f7f5;
+
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: var(--onyx);
+  --orbee-black: var(--onyx);
+
+  /* Aliases legados — mapeados para a nova paleta */
+  --navy: var(--onyx);
+  --navy-50: #f5f5f5;
+  --navy-100: #eeeeee;
+  --navy-700: #1a1a1a;
+  --navy-900: var(--onyx);
+
+  --care: var(--teal);
+  --care-50: var(--teal-50);
+  --care-500: var(--teal);
+  --care-700: var(--teal-700);
+
+  --ai: var(--peach);
+  --ai-50: var(--peach-50);
+  --ai-100: var(--peach-100);
+  --ai-500: var(--peach);
+  --ai-700: var(--peach-700);
+
+  --danger: #ef4444;
+
+  --border: #dde8e5;
+  --muted: var(--cream);
+  --muted-foreground: #5a6b66;
+
+  --radius-card: 16px;
+  --radius-btn: 9999px;
+  --glass-border: rgba(0, 137, 123, 0.2);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-teal: var(--teal);
+  --color-teal-50: var(--teal-50);
+  --color-teal-100: var(--teal-100);
+  --color-teal-700: var(--teal-700);
+  --color-peach: var(--peach);
+  --color-peach-50: var(--peach-50);
+  --color-peach-100: var(--peach-100);
+  --color-peach-600: var(--peach-600);
+  --color-peach-700: var(--peach-700);
+  --color-gold: var(--gold);
+  --color-gold-50: var(--gold-50);
+  --color-gold-100: var(--gold-100);
+  --color-gold-500: var(--gold-500);
+  --color-gold-600: var(--gold-600);
+  --color-gold-700: var(--gold-700);
+  --color-onyx: var(--onyx);
+  --color-cream: var(--cream);
+  --color-navy: var(--navy);
+  --color-navy-50: var(--navy-50);
+  --color-navy-100: var(--navy-100);
+  --color-navy-700: var(--navy-700);
+  --color-navy-900: var(--navy-900);
+  --color-care: var(--care);
+  --color-care-50: var(--care-50);
+  --color-care-500: var(--care-500);
+  --color-care-700: var(--care-700);
+  --color-ai: var(--ai);
+  --color-ai-50: var(--ai-50);
+  --color-ai-100: var(--ai-100);
+  --color-ai-500: var(--ai-500);
+  --color-ai-700: var(--ai-700);
+  --color-danger: var(--danger);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --radius-card: var(--radius-card);
+  --radius-btn: var(--radius-btn);
+  --font-display: var(--font-geist-sans), system-ui, sans-serif;
+  --font-body: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.orbee-gradient-text {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--peach) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.orbee-btn-gradient {
+  background: linear-gradient(to right, var(--peach), var(--peach-600));
+  color: var(--onyx);
+}
+
+.orbee-btn-gradient:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 10px 25px -5px rgba(255, 140, 90, 0.35);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
