@@ -13,17 +13,24 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function CasesPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-16 md:px-6">
-      <h1 className="font-display text-3xl font-bold text-navy">Cases</h1>
-      <p className="mt-4 max-w-2xl text-muted-foreground">
-        Portfólio Orbee Labs em produção: neuropediatria, ortopedia, geriatria e psicologia
-        clínica em Belo Horizonte — sites que a AbraceIA administra e evolui continuamente.
-      </p>
-      <ClientPortfolioStrip className="mt-8" showCaseLinks />
-      <div className="mt-10 grid gap-6 md:grid-cols-2">
-        {cases.map((c) => (
-          <CaseCard key={c.slug} caseStudy={c} />
-        ))}
+    <div className="mx-auto max-w-[1400px] px-4 py-20 md:px-8">
+      <div className="grid gap-12 lg:grid-cols-12">
+        <div className="lg:col-span-4 lg:sticky lg:top-32 lg:h-fit">
+          <h1 className="font-display text-4xl font-bold tracking-tight text-navy lg:text-5xl">Cases</h1>
+          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+            Portfólio Orbee Labs em produção: neuropediatria, ortopedia, geriatria e psicologia
+            clínica em Belo Horizonte — sites que a AbraceIA administra e evolui continuamente.
+          </p>
+        </div>
+        
+        <div className="lg:col-span-8">
+          <ClientPortfolioStrip className="rounded-3xl border border-border bg-white p-4 shadow-sm" showCaseLinks />
+          <div className="mt-12 grid gap-8 sm:grid-cols-2">
+            {cases.map((c) => (
+              <CaseCard key={c.slug} caseStudy={c} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -37,31 +37,39 @@ function ServicePage({
           ]),
         ]}
       />
-      <article className="mx-auto max-w-5xl px-4 py-16 md:px-6">
-        <p className="text-sm font-medium text-ai">{keyword}</p>
-        <h1 className="mt-2 font-display text-3xl font-bold text-navy">{h1}</h1>
-        <p className="mt-4 text-lg text-muted-foreground">{description}</p>
-        {sections.map((section) => (
-          <section key={section.heading} className="mt-10">
-            <h2 className="text-xl font-semibold text-navy">{section.heading}</h2>
-            <p className="mt-3 text-muted-foreground">{section.body}</p>
-          </section>
-        ))}
-        {faq.length > 0 && (
-          <section className="mt-10">
-            <h2 className="text-xl font-semibold text-navy">Perguntas frequentes</h2>
-            <div className="mt-4">
-              <FaqAccordion items={faq} />
+      <article className="mx-auto max-w-[1400px] px-4 py-20 md:px-8">
+        <div className="grid gap-16 lg:grid-cols-12">
+          <div className="lg:col-span-5 lg:sticky lg:top-32 lg:h-fit">
+            <p className="text-sm font-bold uppercase tracking-widest text-ai">{keyword}</p>
+            <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-navy md:text-5xl lg:text-[3.5rem] lg:leading-[1.1] text-balance">{h1}</h1>
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{description}</p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link href="/auditoria-ia">
+                <Button intent="ai" className="rounded-full">Auditoria de presença em IA</Button>
+              </Link>
+              <Link href="/contato">
+                <Button intent="outline" className="rounded-full">Falar com especialista</Button>
+              </Link>
             </div>
-          </section>
-        )}
-        <div className="mt-12 flex flex-wrap gap-4">
-          <Link href="/auditoria-ia">
-            <Button intent="ai">Auditoria de presença em IA</Button>
-          </Link>
-          <Link href="/contato">
-            <Button intent="outline">Falar com especialista</Button>
-          </Link>
+          </div>
+          <div className="lg:col-span-7">
+            <div className="space-y-12">
+              {sections.map((section) => (
+                <section key={section.heading} className="rounded-3xl border border-border bg-white p-8 shadow-sm">
+                  <h2 className="font-display text-2xl font-bold text-navy">{section.heading}</h2>
+                  <p className="mt-4 text-lg text-muted-foreground">{section.body}</p>
+                </section>
+              ))}
+            </div>
+            {faq.length > 0 && (
+              <section className="mt-20">
+                <h2 className="font-display text-3xl font-bold text-navy">Perguntas frequentes</h2>
+                <div className="mt-8">
+                  <FaqAccordion items={faq} />
+                </div>
+              </section>
+            )}
+          </div>
         </div>
       </article>
     </>

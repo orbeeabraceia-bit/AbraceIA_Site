@@ -17,37 +17,47 @@ export function ClientPortfolioStrip({
   return (
     <section className={cn("rounded-card border border-border bg-white p-6", className)}>
       <p className="text-sm font-semibold text-navy">{title}</p>
-      <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+      <ul className="mt-8 grid gap-6 sm:grid-cols-2">
         {managedClients.map((client) => (
           <li
             key={client.url}
-            className="flex items-start gap-3 rounded-lg border border-border bg-cream/80 p-3"
+            className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-care/40 hover:shadow-xl"
           >
-            <span
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ai text-sm font-bold text-white"
-              aria-hidden
-            >
-              {client.initials}
-            </span>
-            <div className="min-w-0">
+            <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-muted border-b border-border/50">
+              <img
+                src={`https://api.microlink.io/?url=${encodeURIComponent(client.url)}&screenshot=true&meta=false&embed=screenshot.url`}
+                alt={`Miniatura do site: ${client.name}`}
+                className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                loading="lazy"
+                crossOrigin="anonymous"
+              />
+              {/* Overlay sutil para elegância */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
+            </div>
+            
+            <div className="flex flex-1 flex-col p-6">
               <a
                 href={client.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 font-medium text-navy hover:text-ai"
+                className="inline-flex items-center gap-2 font-display text-xl font-bold text-navy transition-colors hover:text-care"
               >
                 {client.name}
-                <ExternalLink className="h-3.5 w-3.5 shrink-0" aria-hidden />
+                <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground transition-colors group-hover:text-care" aria-hidden />
               </a>
-              <p className="text-xs text-muted-foreground">{client.specialty}</p>
-              <p className="text-xs text-muted-foreground/70">{client.credentials}</p>
+              <p className="mt-2 text-sm font-semibold text-care">{client.specialty}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{client.credentials}</p>
+              
               {showCaseLinks && client.caseSlug && (
-                <Link
-                  href={`/cases/${client.caseSlug}`}
-                  className="mt-1 inline-block text-xs font-medium text-ai hover:underline"
-                >
-                  Ver case AbraceIA →
-                </Link>
+                <div className="mt-auto pt-6">
+                  <Link
+                    href={`/cases/${client.caseSlug}`}
+                    className="inline-flex items-center gap-1.5 font-display text-sm font-bold text-ai transition-colors hover:text-ai-700"
+                  >
+                    Ler estudo de caso completo
+                    <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
+                  </Link>
+                </div>
               )}
             </div>
           </li>
