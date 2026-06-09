@@ -18,6 +18,7 @@ import { PillarsSection } from "@/components/home/pillars-section";
 import { MethodSection } from "@/components/home/method-section";
 import { FinalCta } from "@/components/home/final-cta";
 import { emotionalLead } from "@/lib/content/home-marketing";
+import { CrossParticles } from "@/components/animations/cross-particles";
 import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = createPageMetadata({
@@ -57,43 +58,63 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={[faqSchema(homeFaq), medicalBusinessSchema(), physicianSchema()]} />
-      <section className="bg-gradient-to-b from-cream via-white to-white px-4 py-16 md:py-24">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-2">
+      <section className="relative overflow-hidden bg-gradient-to-b from-cream/30 via-white to-white px-4 py-20 md:py-32">
+        <CrossParticles />
+        {/* Glow de fundo simulando IA */}
+        <div className="absolute left-1/2 top-0 -z-10 h-[40rem] w-[40rem] -translate-x-1/2 rounded-full bg-care/5 opacity-50 blur-3xl md:left-1/3" />
+        
+        <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2">
           <FadeIn className="text-center lg:text-left">
-            <p className="text-sm font-semibold uppercase tracking-widest text-care">
+            <div className="inline-flex items-center rounded-full border border-care/20 bg-care/5 px-3 py-1 text-xs font-bold uppercase tracking-widest text-care backdrop-blur-sm">
               Orbee Labs · Belo Horizonte
-            </p>
-            <p className="mt-4 font-display text-xl font-semibold leading-snug text-navy md:text-2xl">
+            </div>
+            
+            <p className="mt-6 font-display text-lg font-medium leading-relaxed text-muted-foreground md:text-xl">
               {emotionalLead}
             </p>
-            <h1 className="mt-4 font-display text-3xl font-extrabold leading-tight text-navy md:text-4xl">
-              Seu consultório citado pela IA e no topo do Google — dentro da ética do
-              seu conselho
+            
+            <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-navy md:text-5xl lg:text-[3.5rem] lg:leading-[1.1] text-balance">
+              Seu consultório citado pela <span className="bg-gradient-to-br from-care to-teal-600 bg-clip-text text-transparent">IA e no topo</span> do Google
+              <span className="mt-2 block text-2xl font-bold text-navy/80 md:text-3xl lg:text-[2.2rem]">dentro da ética do seu conselho.</span>
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground lg:mx-0">
+            
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground lg:mx-0">
               Cuidamos da sua presença no Google, da reputação online e da citação em
               ChatGPT e Perplexity — com Core Web Vitals certificados e a atenção que a
               medicina pede.
             </p>
-            <HeroActions />
-            <div className="mt-12 grid grid-cols-2 gap-4">
+            
+            <div className="mt-10">
+              <HeroActions />
+            </div>
+            
+            <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
               {kpis.map((kpi) => (
-                <div key={kpi.label} className="rounded-card border border-border bg-white p-4 shadow-sm">
-                  <p className="text-2xl font-extrabold text-care">{kpi.value}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{kpi.label}</p>
+                <div key={kpi.label} className="group relative overflow-hidden rounded-2xl border border-border/60 bg-white/50 p-4 shadow-sm backdrop-blur-md transition-all hover:border-care/30 hover:shadow-md">
+                  <div className="absolute inset-0 bg-gradient-to-br from-white to-transparent opacity-50" />
+                  <p className="relative text-2xl font-black tracking-tight text-navy transition-colors group-hover:text-care">{kpi.value}</p>
+                  <p className="relative mt-1 text-xs font-medium text-muted-foreground">{kpi.label}</p>
                 </div>
               ))}
             </div>
           </FadeIn>
-          <FadeIn delay={0.1} className="hidden lg:block">
-            <Image
-              src="/images/hero-health.svg"
-              alt="Ilustração: site médico otimizado para SEO, GEO e compliance CFM"
-              width={800}
-              height={600}
-              priority
-              className="w-full rounded-card border border-border shadow-sm"
-            />
+          
+          <FadeIn delay={0.2} className="relative hidden lg:block">
+            {/* Decoração atrás da imagem (glow) */}
+            <div className="absolute -inset-4 z-0 rounded-[2.5rem] bg-gradient-to-br from-care/15 to-transparent blur-2xl" />
+            
+            {/* Imagem com efeito glass/borda */}
+            <div className="relative z-10 overflow-hidden rounded-3xl border border-white/60 bg-white shadow-2xl shadow-navy/5 ring-1 ring-border/50 transition-transform duration-700 hover:-translate-y-1 hover:shadow-xl">
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/40 to-transparent" />
+              <Image
+                src="/images/hero-ai-health.png"
+                alt="Profissional de saúde em clínica moderna com elementos sutis de IA representando a solução AbraceIA"
+                width={800}
+                height={800}
+                priority
+                className="w-full object-cover"
+              />
+            </div>
           </FadeIn>
         </div>
       </section>
