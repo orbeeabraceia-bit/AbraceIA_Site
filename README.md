@@ -1,36 +1,109 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AbraceIA — Site de Produção
 
-## Getting Started
+Implementação do **Livro-Guia AbraceIA Saúde BH 2026** (Orbee Labs).
 
-First, run the development server:
+## Stack (Cap. 4.1)
+
+| Camada | Tecnologia |
+|--------|------------|
+| Front-end | Next.js 16.2 · React 19.2 · App Router |
+| Estilo | Tailwind CSS 4 · tokens AbraceIA |
+| Banco | PostgreSQL (Neon) · Prisma 7 |
+| IA | Vercel AI SDK · Anthropic (auditoria + triagem) |
+| Deploy | Vercel |
+| Testes | Jest · React Testing Library |
+
+## Início rápido (< 30 min — Cap. 4.4)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+cd web
+cp env.example .env.local   # preencher variáveis
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Ver o localhost remotamente (cliente / celular)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Recomendado — Cloudflare Tunnel** (instalado via `brew install cloudflared`):
 
-## Learn More
+```bash
+pnpm dev          # terminal 1
+pnpm run link     # terminal 2 → URL *.trycloudflare.com (sem senha)
+```
 
-To learn more about Next.js, take a look at the following resources:
+**Alternativa — localtunnel** (se Cloudflare falhar):
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm run link:lt  # pode pedir IP público na 1ª visita
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Tudo em um comando:** `pnpm dev:link`
 
-## Deploy on Vercel
+> **Rede local (sem túnel):** `pnpm dev:host` → `http://SEU_IP:3000` na mesma Wi‑Fi.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Scripts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Comando | Descrição |
+|---------|-----------|
+| `pnpm dev` | Servidor de desenvolvimento |
+| `pnpm dev:host` | Dev acessível na rede local (`0.0.0.0:3000`) |
+| `pnpm run link` | Túnel Cloudflare (`*.trycloudflare.com`, sem senha) |
+| `pnpm run link:lt` | Túnel localtunnel (fallback) |
+| `pnpm dev:link` | Sobe dev + túnel em um comando |
+| `pnpm build` | Build de produção |
+| `pnpm test` | Testes (TDD — Cap. 4.7) |
+| `pnpm type-check` | Verificação TypeScript |
+| `pnpm lint` | ESLint |
+
+## Páginas (Sitemap — Cap. 5.1)
+
+- `/` — Home (Hero, diferenciais, quiz, FAQ)
+- `/servicos/geo-saude` · `/servicos/sites-medicos` · `/servicos/seo-medico`
+- `/sobre` · `/metodo` · `/guia/geo-para-saude` · `/blog` · `/cases` · `/auditoria-ia` · `/contato`
+- `/faq` · `/compliance` · `/cookies` · `/privacidade` · `/termos`
+
+## Lead magnets (Cap. 5.3)
+
+- **Quiz prontidão IA** — home + persistência via `POST /api/quiz`
+- **Auditoria de presença em IA** — `/auditoria-ia` + `POST /api/audit`
+- **Chat de triagem** — `/contato` + `POST /api/chat` (guardrails clínicos)
+- **Formulário de contato** — `POST /api/contact` (Prisma quando `DATABASE_URL` definida)
+
+## GEO (Cap. 6.3)
+
+- `public/llms.txt` — orientação para LLMs
+- `src/app/robots.ts` — bots de IA permitidos
+- `src/app/sitemap.ts` — sitemap automático
+- Schema.org completo (Organization, Service, FAQ, Article, Physician…)
+
+## Deploy Vercel
+
+1. Conectar repositório GitHub
+2. Root directory: `web`
+3. Variáveis de ambiente (ver `env.example`)
+4. `main` → produção · PRs → preview
+
+## Variáveis principais
+
+| Variável | Uso |
+|----------|-----|
+| `DATABASE_URL` | Neon Postgres (leads, quiz) |
+| `ANTHROPIC_API_KEY` | Auditoria IA e chat de triagem |
+| `NEXT_PUBLIC_GTM_ID` | Google Tag Manager (após consentimento) |
+| `NEXT_PUBLIC_GA4_ID` | Google Analytics 4 |
+| `LEAD_NOTIFICATION_EMAIL` | Destino dos e-mails de lead (Resend) |
+| `CRM_WEBHOOK_URL` | Webhook opcional (HubSpot, RD, Zapier) |
+| `RESEND_API_KEY` | Envio de e-mail ao receber lead |
+| `NEXT_PUBLIC_SITE_URL` | Canonical e OG |
+
+## Compliance
+
+- Banner LGPD (`CookieBanner`) — analytics só após consentimento
+- Verificador de termos proibidos (Cap. 1.6)
+- Disclaimer de IA em formulários e auditoria
+
+## Referência
+
+Livro-Guia: `../Livro-Guia-AbraceIA-SAUDE-BH-2026.html`
