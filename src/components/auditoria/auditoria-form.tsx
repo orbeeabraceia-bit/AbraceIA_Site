@@ -90,7 +90,7 @@ export function AuditoriaForm() {
 
       <Card className="mt-10">
         <CardTitle>Verificador de compliance de anúncio</CardTitle>
-        <CardDescription>Termos proibidos — Cap. 1.6 Livro-Guia</CardDescription>
+        <CardDescription>Termos proibidos (Diretrizes do CFM)</CardDescription>
         <textarea
           value={adText}
           onChange={(e) => setAdText(e.target.value)}

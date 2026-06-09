@@ -116,7 +116,7 @@ export default function GeoSaudePage() {
         {
           question: "É permitido pelo CFM?",
           answer:
-            "Sim, quando o conteúdo é informativo, sem promessas de cura e com autor/revisor identificados — seguimos Cap. 1.6 do Livro-Guia.",
+            "Sim, quando o conteúdo é informativo, sem promessas de cura e com autor/revisor identificados — seguimos as resoluções do Manual de Publicidade Médica.",
         },
       ]}
     />

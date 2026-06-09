@@ -1,4 +1,4 @@
-/** Palavras/expressões proibidas — Livro-Guia Cap. 1.6 */
+/** Palavras/expressões proibidas — Diretrizes do CFM */
 export const forbiddenTerms = [
   "garantia de resultado",
   "1º lugar garantido",

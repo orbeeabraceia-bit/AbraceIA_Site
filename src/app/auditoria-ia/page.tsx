@@ -39,8 +39,8 @@ export default function AuditoriaIaPage() {
       <div className="mt-10 rounded-card border border-ai-100 bg-ai-50 p-5">
         <p className="text-sm font-semibold text-navy">Quer ver a arquitetura por trás?</p>
         <p className="mt-2 text-sm text-muted-foreground">
-          A Dra. Janaína Drumond publica &ldquo;Desenvolvido por Orbee Labs&rdquo; no rodapé — FAQ,
-          depoimentos com disclaimer CFM e páginas por condição são o padrão que replicamos.
+          Nossos clientes vão para o ar com uma arquitetura de conversão focada em IA — 
+          FAQ inteligente, depoimentos com disclaimer do CFM e páginas por condição clínica são o padrão de excelência que replicamos.
         </p>
         <Link href="/cases" className="mt-4 inline-block">
           <Button intent="outline" size="sm">
