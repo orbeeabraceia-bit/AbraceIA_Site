@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { analyzeSeo, normalizeUrl } from "@/lib/seo-audit";
+import { analyzeSeo, normalizeUrl, SsrfBlockedError } from "@/lib/seo-audit";
 import { notifyCrmWebhook } from "@/lib/integrations";
 
 export const runtime = "nodejs";
@@ -19,6 +19,7 @@ const bodySchema = z.object({
       faturamento: z.string().max(60).optional(),
       palavrasChave: z.string().max(400).optional(),
       concorrentes: z.string().max(400).optional(),
+      consent: z.boolean().optional(),
     })
     .optional(),
 });
@@ -34,6 +35,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
   }
 
+  // LGPD (Cap. 9): dados de contato só seguem para o CRM com consentimento
+  // explícito validado no servidor.
+  const fd = parsed.data.formData;
+  if ((fd?.email || fd?.telefone) && fd?.consent !== true) {
+    return NextResponse.json(
+      { error: "Para enviar seus dados de contato, é necessário aceitar a Política de Privacidade (LGPD)." },
+      { status: 400 },
+    );
+  }
+
   let url: string;
   try {
     url = normalizeUrl(parsed.data.url);
@@ -47,7 +58,6 @@ export async function POST(request: Request) {
   try {
     const result = await analyzeSeo(url);
 
-    const fd = parsed.data.formData;
     if (fd?.email || fd?.telefone) {
       void notifyCrmWebhook({
         type: "seo-audit",
@@ -64,6 +74,12 @@ export async function POST(request: Request) {
 
     return NextResponse.json(result);
   } catch (err) {
+    if (err instanceof SsrfBlockedError) {
+      return NextResponse.json(
+        { error: "Essa URL não pode ser analisada (endereço privado ou reservado)." },
+        { status: 400 },
+      );
+    }
     const message =
       err instanceof Error && err.name === "AbortError"
         ? "O site demorou demais para responder. Tente novamente."

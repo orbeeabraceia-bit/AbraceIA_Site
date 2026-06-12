@@ -1,22 +1,52 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
-import { trackEvent } from "@/lib/analytics";
+import { applyAnalyticsConsent, trackEvent } from "@/lib/analytics";
 
 const STORAGE_KEY = "abraceia-cookie-consent";
 
-export function CookieBanner() {
-  const [visible, setVisible] = useState(false);
+// Evento que reabre o banner para alterar/revogar o consentimento (LGPD:
+// retirar deve ser tão fácil quanto consentir). Disparado em /cookies.
+export const COOKIE_SETTINGS_EVENT = "abraceia:cookie-settings";
 
-  useEffect(() => {
-    if (!localStorage.getItem(STORAGE_KEY)) setVisible(true);
-  }, []);
+const BANNER_REFRESH_EVENT = "abraceia:cookie-banner-refresh";
+
+// Estado de "reaberto manualmente" fora do React: o banner é singleton e a
+// visibilidade deriva de localStorage + eventos (useSyncExternalStore).
+let forcedOpen = false;
+
+function subscribe(onChange: () => void) {
+  const open = () => {
+    forcedOpen = true;
+    onChange();
+  };
+  window.addEventListener(COOKIE_SETTINGS_EVENT, open);
+  window.addEventListener(BANNER_REFRESH_EVENT, onChange);
+  return () => {
+    window.removeEventListener(COOKIE_SETTINGS_EVENT, open);
+    window.removeEventListener(BANNER_REFRESH_EVENT, onChange);
+  };
+}
+
+function getSnapshot() {
+  return forcedOpen || !localStorage.getItem(STORAGE_KEY);
+}
+
+function getServerSnapshot() {
+  return false;
+}
+
+export function CookieBanner() {
+  const visible = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   function save(accepted: boolean) {
     localStorage.setItem(STORAGE_KEY, accepted ? "accepted" : "rejected");
-    setVisible(false);
+    forcedOpen = false;
+    applyAnalyticsConsent(accepted);
+    window.dispatchEvent(new CustomEvent(BANNER_REFRESH_EVENT));
     window.dispatchEvent(new CustomEvent("abraceia:analytics-consent"));
+    // Com consentimento revogado, trackEvent é no-op por design.
     trackEvent(accepted ? "cookie_consent_accept" : "cookie_consent_reject");
   }
 
@@ -40,11 +70,13 @@ export function CookieBanner() {
           </a>
           .
         </p>
+        {/* Mesmo peso visual nos dois botões (LGPD: aceitar não pode ser
+            mais proeminente que rejeitar). */}
         <div className="flex shrink-0 gap-3">
           <Button intent="outline" size="sm" onClick={() => save(false)}>
             Rejeitar
           </Button>
-          <Button intent="primary" size="sm" onClick={() => save(true)}>
+          <Button intent="outline" size="sm" onClick={() => save(true)}>
             Aceitar
           </Button>
         </div>

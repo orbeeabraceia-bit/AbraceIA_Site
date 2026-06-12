@@ -7,6 +7,7 @@ const quizSchema = z.object({
   score: z.number().int().min(0).max(100),
   answers: z.record(z.string(), z.boolean()),
   email: z.string().email().optional(),
+  consent: z.boolean().optional(),
 });
 
 export async function POST(request: Request) {
@@ -15,6 +16,15 @@ export async function POST(request: Request) {
     const parsed = quizSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
+    }
+
+    // LGPD: e-mail é dado pessoal — só é aceito com consentimento explícito
+    // validado no servidor (a API é pública e pode ser chamada direto).
+    if (parsed.data.email && parsed.data.consent !== true) {
+      return NextResponse.json(
+        { error: "Para registrar seu e-mail, é necessário aceitar a Política de Privacidade (LGPD)." },
+        { status: 400 },
+      );
     }
 
     if (process.env.DATABASE_URL && prisma) {

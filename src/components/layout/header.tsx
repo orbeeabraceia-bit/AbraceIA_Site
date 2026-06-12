@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { Button } from "@/components/ui/button";
@@ -81,24 +82,12 @@ export function Header() {
         Pular para o conteúdo
       </a>
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-6">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex shrink-0 items-center gap-3">
-            <img src="/logo.svg" alt="" width={40} height={40} aria-hidden className="h-10 w-10" />
-          </Link>
-          <div className="leading-tight">
-            <Link href="/" className="font-display text-xl font-bold text-navy">
-              {siteConfig.name}
-            </Link>
-            <a
-              href="https://orbeelabs.com/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-xs font-medium text-care hover:underline"
-            >
-              by Orbee Labs · BH
-            </a>
-          </div>
-        </div>
+        <Link href="/" className="flex items-center gap-3">
+          <Image src="/logo.svg" alt="" width={40} height={40} unoptimized aria-hidden className="h-10 w-10 shrink-0" />
+          <span className="font-display text-xl font-bold text-navy">
+            {siteConfig.name.split("—")[0].trim()}
+          </span>
+        </Link>
         <nav className="hidden items-center gap-5 lg:flex" aria-label="Principal">
           {nav.slice(0, 6).map((item) => (
             <Link
@@ -110,9 +99,19 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <a
+            href="https://orbeelabs.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden lg:block"
+          >
+            <Button intent="outline" size="sm" className="h-9 border-border text-xs font-semibold text-muted-foreground hover:text-navy hover:bg-muted">
+              by Orbee Labs
+            </Button>
+          </a>
           <Link href="/auditoria-ia" className="hidden sm:block">
-            <Button intent="ai" size="sm">
+            <Button intent="ai" size="sm" className="h-9">
               Auditoria IA
             </Button>
           </Link>

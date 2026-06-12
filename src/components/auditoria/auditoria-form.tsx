@@ -23,6 +23,7 @@ export function AuditoriaForm() {
   const [name, setName] = useState("");
   const [specialty, setSpecialty] = useState("");
   const [city, setCity] = useState("Belo Horizonte");
+  const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AuditResult | null>(null);
   const [adText, setAdText] = useState("");
@@ -39,7 +40,7 @@ export function AuditoriaForm() {
       const res = await fetch("/api/audit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, specialty, city }),
+        body: JSON.stringify({ name, specialty, city, consent }),
       });
       const data = (await res.json()) as AuditResult;
       setResult(data);
@@ -82,6 +83,22 @@ export function AuditoriaForm() {
             required
           />
           <Input label="Cidade" value={city} onChange={(e) => setCity(e.target.value)} required />
+          <label className="flex items-start gap-3 text-sm text-muted-foreground">
+            <input
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => setConsent(e.target.checked)}
+              required
+              className="mt-1 h-4 w-4 rounded border-border"
+            />
+            <span>
+              Autorizo o tratamento dos meus dados conforme a{" "}
+              <a href="/privacidade" className="text-ai underline">
+                Política de Privacidade
+              </a>{" "}
+              (LGPD).
+            </span>
+          </label>
           <Button type="submit" intent="ai" disabled={loading}>
             {loading ? "Analisando…" : "Ver presença em IA"}
           </Button>
@@ -90,7 +107,7 @@ export function AuditoriaForm() {
 
       <Card className="mt-10">
         <CardTitle>Verificador de compliance de anúncio</CardTitle>
-        <CardDescription>Termos proibidos — Cap. 1.6 Livro-Guia</CardDescription>
+        <CardDescription>Termos proibidos (Diretrizes do CFM)</CardDescription>
         <textarea
           value={adText}
           onChange={(e) => setAdText(e.target.value)}

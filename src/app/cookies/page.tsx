@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
+import { CookiePreferencesButton } from "@/components/cookie-preferences-button";
 import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata: Metadata = createPageMetadata({
@@ -33,9 +34,16 @@ export default function CookiesPage() {
         </p>
       </section>
       <section className="mt-8">
-        <h2 className="text-xl font-semibold text-navy">Como revogar</h2>
+        <h2 className="text-xl font-semibold text-navy">Como alterar ou revogar</h2>
         <p className="mt-2 text-muted-foreground">
-          Limpe os cookies do navegador ou entre em contato via{" "}
+          Você pode alterar ou revogar seu consentimento a qualquer momento, com a mesma
+          facilidade com que consentiu:
+        </p>
+        <div className="mt-4">
+          <CookiePreferencesButton />
+        </div>
+        <p className="mt-4 text-muted-foreground">
+          Em caso de dúvidas, fale conosco via{" "}
           <Link href="/contato" className="text-care hover:underline">
             formulário
           </Link>

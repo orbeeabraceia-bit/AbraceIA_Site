@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { getAiModel, isAiConfigured } from "@/lib/ai-model";
 import { siteConfig } from "@/lib/site-config";
 
 const chatSchema = z.object({
@@ -33,12 +33,12 @@ export async function POST(request: Request) {
       });
     }
 
-    if (!process.env.AI_GATEWAY_KEY && !process.env.ANTHROPIC_API_KEY) {
+    if (!isAiConfigured()) {
       return NextResponse.json({ reply: FALLBACK, fallback: true });
     }
 
     const { text } = await generateText({
-      model: anthropic("claude-sonnet-4-20250514"),
+      model: getAiModel(),
       system: SYSTEM,
       prompt: parsed.data.message,
       maxOutputTokens: 300,

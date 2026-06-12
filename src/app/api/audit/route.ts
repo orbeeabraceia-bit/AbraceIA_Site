@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { generateText } from "ai";
-import { anthropic } from "@ai-sdk/anthropic";
+import { getAiModel, isAiConfigured } from "@/lib/ai-model";
 import { siteConfig } from "@/lib/site-config";
 import { notifyCrmWebhook } from "@/lib/integrations";
 
@@ -9,6 +9,9 @@ const auditSchema = z.object({
   name: z.string().min(2).max(120),
   specialty: z.string().min(2).max(80),
   city: z.string().min(2).max(80),
+  consent: z.boolean().refine((v) => v === true, {
+    message: "Consentimento LGPD obrigatório",
+  }),
 });
 
 function fallbackReport(name: string, specialty: string, city: string) {
@@ -45,7 +48,7 @@ export async function POST(request: Request) {
       createdAt: new Date().toISOString(),
     });
 
-    if (!process.env.AI_GATEWAY_KEY && !process.env.ANTHROPIC_API_KEY) {
+    if (!isAiConfigured()) {
       return NextResponse.json(fallbackReport(name, specialty, city));
     }
 
@@ -55,7 +58,7 @@ Responda em JSON: { "summary": string, "items": string[5], "risks": string[] }
 Respeite CFM 2.336/2023 — sem promessa de resultado.`;
 
     const { text } = await generateText({
-      model: anthropic("claude-sonnet-4-20250514"),
+      model: getAiModel(),
       prompt,
       maxOutputTokens: 800,
     });

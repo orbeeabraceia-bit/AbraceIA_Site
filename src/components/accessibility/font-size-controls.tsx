@@ -1,25 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useSyncExternalStore } from "react";
 
 const STORAGE_KEY = "abraceia-font-scale";
+const SCALE_EVENT = "abraceia:font-scale";
 const scales = [
   { label: "A-", value: 0.9 },
   { label: "A", value: 1 },
   { label: "A+", value: 1.12 },
 ] as const;
 
-export function FontSizeControls() {
-  const [scale, setScale] = useState(1);
+let cachedScale: number | null = null;
 
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) setScale(Number(saved));
-  }, []);
+function subscribe(onChange: () => void) {
+  window.addEventListener(SCALE_EVENT, onChange);
+  return () => window.removeEventListener(SCALE_EVENT, onChange);
+}
+
+function getScale() {
+  if (cachedScale === null) {
+    cachedScale = Number(localStorage.getItem(STORAGE_KEY)) || 1;
+  }
+  return cachedScale;
+}
+
+function getServerScale() {
+  return 1;
+}
+
+function saveScale(value: number) {
+  cachedScale = value;
+  localStorage.setItem(STORAGE_KEY, String(value));
+  window.dispatchEvent(new CustomEvent(SCALE_EVENT));
+}
+
+export function FontSizeControls() {
+  const scale = useSyncExternalStore(subscribe, getScale, getServerScale);
 
   useEffect(() => {
     document.documentElement.style.fontSize = `${scale * 100}%`;
-    localStorage.setItem(STORAGE_KEY, String(scale));
   }, [scale]);
 
   return (
@@ -36,7 +55,7 @@ export function FontSizeControls() {
             scale === item.value ? "bg-peach text-onyx" : "text-navy hover:bg-muted"
           }`}
           aria-pressed={scale === item.value}
-          onClick={() => setScale(item.value)}
+          onClick={() => saveScale(item.value)}
         >
           {item.label}
         </button>

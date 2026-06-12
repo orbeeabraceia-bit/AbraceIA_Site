@@ -15,8 +15,12 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
-  // Permite HMR/assets via túnel (pnpm link → *.loca.lt)
-  allowedDevOrigins: ["*.loca.lt", "*.localtunnel.me", "*.trycloudflare.com"],
+  // Permite HMR/assets via túnel Cloudflare (pnpm link)
+  allowedDevOrigins: ["*.trycloudflare.com"],
+  images: {
+    // Miniaturas de sites do portfólio (screenshots via Microlink)
+    remotePatterns: [{ protocol: "https", hostname: "api.microlink.io" }],
+  },
   turbopack: {
     root: path.join(__dirname),
   },

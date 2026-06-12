@@ -1,21 +1,23 @@
 "use client";
 
 import Script from "next/script";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { hasAnalyticsConsent } from "@/lib/analytics";
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
 const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID;
 
-export function AnalyticsScripts() {
-  const [enabled, setEnabled] = useState(false);
+function subscribe(onChange: () => void) {
+  window.addEventListener("abraceia:analytics-consent", onChange);
+  return () => window.removeEventListener("abraceia:analytics-consent", onChange);
+}
 
-  useEffect(() => {
-    setEnabled(hasAnalyticsConsent());
-    const onConsent = () => setEnabled(hasAnalyticsConsent());
-    window.addEventListener("abraceia:analytics-consent", onConsent);
-    return () => window.removeEventListener("abraceia:analytics-consent", onConsent);
-  }, []);
+function getServerSnapshot() {
+  return false;
+}
+
+export function AnalyticsScripts() {
+  const enabled = useSyncExternalStore(subscribe, hasAnalyticsConsent, getServerSnapshot);
 
   if (!enabled || (!GTM_ID && !GA4_ID)) return null;
 

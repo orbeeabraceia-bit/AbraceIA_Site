@@ -1,8 +1,24 @@
 import { SeoAuditForm } from "@/components/auditoria/seo-audit-form";
+import { JsonLd } from "@/components/seo/json-ld";
+import { webApplicationSchema, breadcrumbSchema } from "@/lib/schema";
 
 export default function AuditoriaSeoPage() {
   return (
     <div className="mx-auto max-w-[1400px] px-4 py-20 md:px-8">
+      <JsonLd
+        data={[
+          webApplicationSchema({
+            name: "Auditoria SEO Gratuita — AbraceIA",
+            description:
+              "Ferramenta gratuita que analisa mais de 50 fatores de SEO do seu site e gera um relatório técnico com recomendações personalizadas.",
+            path: "/auditoria-seo",
+          }),
+          breadcrumbSchema([
+            { name: "Início", path: "/" },
+            { name: "Auditoria SEO", path: "/auditoria-seo" },
+          ]),
+        ]}
+      />
       <div className="grid gap-16 lg:grid-cols-12 lg:items-center">
         <div className="lg:col-span-5 text-center lg:text-left">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-ai-500">Auditoria SEO</p>

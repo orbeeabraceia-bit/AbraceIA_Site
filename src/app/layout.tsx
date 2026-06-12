@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
     title: siteConfig.name,
     description: siteConfig.description,
-    images: [{ url: "/og.svg", width: 1200, height: 630, alt: siteConfig.name }],
+    // Imagem fornecida pela convenção app/opengraph-image.tsx (PNG 1200×630).
   },
   robots: { index: true, follow: true },
 };

@@ -72,9 +72,9 @@ export default function SeoMedicoPage() {
 
         <section className="mt-10">
           <h2 className="text-xl font-semibold text-navy">Performance certificada</h2>
-          <p className="mt-3 text-muted-foreground">
-            LCP ≤ 0,8s, INP ≤ 200ms e CLS ≤ 0,1 — requisitos do Livro-Guia para páginas YMYL em
-            2026.
+          <p className="text-muted-foreground">
+            LCP ≤ 0,8s, INP ≤ 200ms e CLS ≤ 0,1 — requisitos essenciais do Google para páginas YMYL em
+            saúde. Performance nativa em Edge.
           </p>
         </section>
 
