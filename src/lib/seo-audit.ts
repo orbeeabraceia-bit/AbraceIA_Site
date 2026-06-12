@@ -2,6 +2,9 @@
 // dependências externas) e calcula scores no mesmo formato da ferramenta de
 // referência (orbeelabs.com/auditoria-seo).
 
+import { lookup } from "node:dns/promises";
+import { isIP } from "node:net";
+
 export type SeoStatus = "good" | "warning" | "error";
 
 export type SeoAuditResult = {
@@ -45,11 +48,129 @@ export type SeoAuditResult = {
 export function normalizeUrl(raw: string): string {
   const trimmed = raw.trim();
   if (!trimmed) throw new Error("URL vazia");
+  if (/^[a-z][a-z0-9+.-]*:/i.test(trimmed) && !/^https?:\/\//i.test(trimmed)) {
+    throw new Error("URL inválida");
+  }
   const withProtocol = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
   // Lança se inválida.
   const parsed = new URL(withProtocol);
-  if (!parsed.hostname.includes(".")) throw new Error("URL inválida");
+  if (!/^https?:$/.test(parsed.protocol)) throw new Error("URL inválida");
+  if (!parsed.hostname.includes(".") && !isBlockedHostname(parsed.hostname)) {
+    throw new Error("URL inválida");
+  }
   return parsed.toString();
+}
+
+// --- Proteção contra SSRF -------------------------------------------------
+// A análise roda no servidor e busca uma URL fornecida pelo visitante, então
+// nenhum destino pode resolver para rede privada, loopback ou link-local.
+
+export class SsrfBlockedError extends Error {
+  constructor() {
+    super("URL não permitida para análise");
+    this.name = "SsrfBlockedError";
+  }
+}
+
+export function isPrivateIp(ip: string): boolean {
+  const v4 = ip.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
+  if (v4) {
+    const a = Number(v4[1]);
+    const b = Number(v4[2]);
+    return (
+      a === 0 ||
+      a === 10 ||
+      a === 127 ||
+      (a === 100 && b >= 64 && b <= 127) ||
+      (a === 169 && b === 254) ||
+      (a === 172 && b >= 16 && b <= 31) ||
+      (a === 192 && b === 0) ||
+      (a === 192 && b === 168) ||
+      (a === 198 && (b === 18 || b === 19)) ||
+      a >= 224
+    );
+  }
+  const lower = ip.toLowerCase();
+  if (lower === "::" || lower === "::1") return true;
+  if (lower.startsWith("fe80:") || lower.startsWith("fc") || lower.startsWith("fd")) return true;
+  if (lower.startsWith("::ffff:")) return isPrivateIp(lower.slice("::ffff:".length));
+  return false;
+}
+
+export function isBlockedHostname(hostname: string): boolean {
+  const host = hostname.toLowerCase().replace(/^\[|\]$/g, "").replace(/\.$/, "");
+  if (host === "localhost" || host.endsWith(".localhost")) return true;
+  if (host.endsWith(".local") || host.endsWith(".internal")) return true;
+  if (isIP(host)) return isPrivateIp(host);
+  return false;
+}
+
+async function assertPublicHost(target: URL): Promise<void> {
+  if (!/^https?:$/.test(target.protocol)) throw new SsrfBlockedError();
+  const hostname = target.hostname.replace(/^\[|\]$/g, "");
+  if (isBlockedHostname(hostname)) throw new SsrfBlockedError();
+  if (isIP(hostname)) return;
+  let addresses: Array<{ address: string }>;
+  try {
+    addresses = await lookup(hostname, { all: true, verbatim: true });
+  } catch {
+    throw new Error("Não foi possível resolver o domínio");
+  }
+  if (addresses.length === 0 || addresses.some((a) => isPrivateIp(a.address))) {
+    throw new SsrfBlockedError();
+  }
+}
+
+const MAX_REDIRECTS = 3;
+const MAX_HTML_BYTES = 2_000_000;
+const REDIRECT_STATUS = new Set([301, 302, 303, 307, 308]);
+
+const FETCH_HEADERS = {
+  "User-Agent": "Mozilla/5.0 (compatible; AbraceIA-SEO-Bot/1.0; +https://abraceia.com.br)",
+  Accept: "text/html,application/xhtml+xml",
+};
+
+// Segue redirects manualmente para revalidar o host de cada salto contra
+// redes privadas (um destino público pode redirecionar para um interno).
+async function fetchPublicUrl(
+  initialUrl: string,
+  signal: AbortSignal,
+): Promise<{ response: Response; finalUrl: string }> {
+  let current = new URL(initialUrl);
+  for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
+    await assertPublicHost(current);
+    const response = await fetch(current.toString(), {
+      signal,
+      redirect: "manual",
+      headers: FETCH_HEADERS,
+    });
+    const location = response.headers.get("location");
+    if (REDIRECT_STATUS.has(response.status) && location) {
+      await response.body?.cancel().catch(() => undefined);
+      current = new URL(location, current);
+      continue;
+    }
+    return { response, finalUrl: current.toString() };
+  }
+  throw new Error("Redirecionamentos em excesso");
+}
+
+async function readBodyLimited(response: Response, maxBytes: number): Promise<string> {
+  if (!response.body) return "";
+  const reader = response.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let total = 0;
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    total += value.byteLength;
+    chunks.push(value);
+    if (total >= maxBytes) {
+      await reader.cancel().catch(() => undefined);
+      break;
+    }
+  }
+  return Buffer.concat(chunks).toString("utf8");
 }
 
 function countMatches(html: string, regex: RegExp): number {
@@ -86,8 +207,7 @@ function makeAuditId(): string {
  * Busca a URL e executa a análise on-page completa.
  */
 export async function analyzeSeo(rawUrl: string): Promise<SeoAuditResult> {
-  const url = normalizeUrl(rawUrl);
-  const hostname = new URL(url).hostname;
+  let url = normalizeUrl(rawUrl);
 
   const startedAt = Date.now();
   const controller = new AbortController();
@@ -96,19 +216,15 @@ export async function analyzeSeo(rawUrl: string): Promise<SeoAuditResult> {
   let html = "";
   let responseHeaders: Headers | null = null;
   try {
-    const res = await fetch(url, {
-      signal: controller.signal,
-      redirect: "follow",
-      headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; AbraceIA-SEO-Bot/1.0; +https://abraceia.com.br)",
-        Accept: "text/html,application/xhtml+xml",
-      },
-    });
-    responseHeaders = res.headers;
-    html = await res.text();
+    const { response, finalUrl } = await fetchPublicUrl(url, controller.signal);
+    url = finalUrl;
+    responseHeaders = response.headers;
+    html = await readBodyLimited(response, MAX_HTML_BYTES);
   } finally {
     clearTimeout(timeout);
   }
+
+  const hostname = new URL(url).hostname;
 
   const loadMs = Date.now() - startedAt;
   const byteSize = Buffer.byteLength(html, "utf8");
