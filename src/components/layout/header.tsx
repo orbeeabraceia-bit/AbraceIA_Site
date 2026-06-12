@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { Button } from "@/components/ui/button";
@@ -82,7 +83,7 @@ export function Header() {
       </a>
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-6">
         <Link href="/" className="flex items-center gap-3">
-          <img src="/logo.svg" alt="" width={40} height={40} aria-hidden className="h-10 w-10 shrink-0" />
+          <Image src="/logo.svg" alt="" width={40} height={40} unoptimized aria-hidden className="h-10 w-10 shrink-0" />
           <span className="font-display text-xl font-bold text-navy">
             {siteConfig.name.split("—")[0].trim()}
           </span>

@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { Button } from "@/components/ui/button";
-import { trackEvent } from "@/lib/analytics";
+import { applyAnalyticsConsent, trackEvent } from "@/lib/analytics";
 
 const STORAGE_KEY = "abraceia-cookie-consent";
 
@@ -43,8 +43,10 @@ export function CookieBanner() {
   function save(accepted: boolean) {
     localStorage.setItem(STORAGE_KEY, accepted ? "accepted" : "rejected");
     forcedOpen = false;
+    applyAnalyticsConsent(accepted);
     window.dispatchEvent(new CustomEvent(BANNER_REFRESH_EVENT));
     window.dispatchEvent(new CustomEvent("abraceia:analytics-consent"));
+    // Com consentimento revogado, trackEvent é no-op por design.
     trackEvent(accepted ? "cookie_consent_accept" : "cookie_consent_reject");
   }
 

@@ -46,12 +46,6 @@ pnpm dev          # terminal 1
 pnpm run link     # terminal 2 → URL *.trycloudflare.com (sem senha)
 ```
 
-**Alternativa — localtunnel** (se Cloudflare falhar):
-
-```bash
-pnpm run link:lt  # pode pedir IP público na 1ª visita
-```
-
 **Tudo em um comando:** `pnpm dev:link`
 
 > **Rede local (sem túnel):** `pnpm dev:host` → `http://SEU_IP:3000` na mesma Wi‑Fi.
@@ -63,7 +57,6 @@ pnpm run link:lt  # pode pedir IP público na 1ª visita
 | `pnpm dev` | Servidor de desenvolvimento |
 | `pnpm dev:host` | Dev acessível na rede local (`0.0.0.0:3000`) |
 | `pnpm run link` | Túnel Cloudflare (`*.trycloudflare.com`, sem senha) |
-| `pnpm run link:lt` | Túnel localtunnel (fallback) |
 | `pnpm dev:link` | Sobe dev + túnel em um comando |
 | `pnpm build` | Build de produção |
 | `pnpm test` | Testes (TDD — Cap. 4.7) |

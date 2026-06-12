@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { blogPosts } from "@/lib/content/blog";
 import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { FaqAccordion } from "@/components/seo/faq-accordion";
 import { JsonLd } from "@/components/seo/json-ld";

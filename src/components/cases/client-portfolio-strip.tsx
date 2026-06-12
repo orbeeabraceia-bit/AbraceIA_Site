@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import { managedClients } from "@/lib/content/cases";
 import { cn } from "@/lib/utils";
@@ -24,12 +25,12 @@ export function ClientPortfolioStrip({
             className="group flex flex-col overflow-hidden rounded-3xl border border-border bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-care/40 hover:shadow-xl"
           >
             <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-muted border-b border-border/50">
-              <img
+              <Image
                 src={`https://api.microlink.io/?url=${encodeURIComponent(client.url)}&screenshot=true&meta=false&embed=screenshot.url`}
                 alt={`Miniatura do site: ${client.name}`}
-                className="h-full w-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
-                loading="lazy"
-                crossOrigin="anonymous"
+                fill
+                sizes="(min-width: 640px) 50vw, 100vw"
+                className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
               />
               {/* Overlay sutil para elegância */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>

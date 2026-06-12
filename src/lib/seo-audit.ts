@@ -4,6 +4,8 @@
 
 import { lookup } from "node:dns/promises";
 import { isIP } from "node:net";
+import { request as httpRequest, type IncomingMessage } from "node:http";
+import { request as httpsRequest } from "node:https";
 
 export type SeoStatus = "good" | "warning" | "error";
 
@@ -105,11 +107,14 @@ export function isBlockedHostname(hostname: string): boolean {
   return false;
 }
 
-async function assertPublicHost(target: URL): Promise<void> {
+// Resolve e valida o host, devolvendo o IP público que DEVE ser usado na
+// conexão. Conectar no IP validado (e não deixar o cliente HTTP resolver DNS
+// de novo) elimina a janela de DNS rebinding/TOCTOU entre validação e fetch.
+async function resolvePublicAddress(target: URL): Promise<string> {
   if (!/^https?:$/.test(target.protocol)) throw new SsrfBlockedError();
   const hostname = target.hostname.replace(/^\[|\]$/g, "");
   if (isBlockedHostname(hostname)) throw new SsrfBlockedError();
-  if (isIP(hostname)) return;
+  if (isIP(hostname)) return hostname;
   let addresses: Array<{ address: string }>;
   try {
     addresses = await lookup(hostname, { all: true, verbatim: true });
@@ -119,6 +124,7 @@ async function assertPublicHost(target: URL): Promise<void> {
   if (addresses.length === 0 || addresses.some((a) => isPrivateIp(a.address))) {
     throw new SsrfBlockedError();
   }
+  return addresses[0].address;
 }
 
 const MAX_REDIRECTS = 3;
@@ -130,45 +136,76 @@ const FETCH_HEADERS = {
   Accept: "text/html,application/xhtml+xml",
 };
 
+// Faz a requisição conectando diretamente no IP validado, preservando o
+// header Host e o SNI do hostname original (necessário para TLS/vhosts).
+function pinnedRequest(
+  target: URL,
+  address: string,
+  signal: AbortSignal,
+): Promise<IncomingMessage> {
+  return new Promise((resolve, reject) => {
+    const isHttps = target.protocol === "https:";
+    const requestFn = isHttps ? httpsRequest : httpRequest;
+    const req = requestFn(
+      {
+        host: address,
+        port: target.port ? Number(target.port) : isHttps ? 443 : 80,
+        path: `${target.pathname}${target.search}` || "/",
+        method: "GET",
+        headers: { ...FETCH_HEADERS, Host: target.host },
+        ...(isHttps ? { servername: target.hostname } : {}),
+        signal,
+      },
+      resolve,
+    );
+    req.on("error", reject);
+    req.end();
+  });
+}
+
 // Segue redirects manualmente para revalidar o host de cada salto contra
 // redes privadas (um destino público pode redirecionar para um interno).
 async function fetchPublicUrl(
   initialUrl: string,
   signal: AbortSignal,
-): Promise<{ response: Response; finalUrl: string }> {
+): Promise<{ response: IncomingMessage; headers: Headers; finalUrl: string }> {
   let current = new URL(initialUrl);
   for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
-    await assertPublicHost(current);
-    const response = await fetch(current.toString(), {
-      signal,
-      redirect: "manual",
-      headers: FETCH_HEADERS,
-    });
-    const location = response.headers.get("location");
-    if (REDIRECT_STATUS.has(response.status) && location) {
-      await response.body?.cancel().catch(() => undefined);
+    const address = await resolvePublicAddress(current);
+    const response = await pinnedRequest(current, address, signal);
+    const status = response.statusCode ?? 0;
+    const location = response.headers.location;
+    if (REDIRECT_STATUS.has(status) && location) {
+      response.resume();
       current = new URL(location, current);
       continue;
     }
-    return { response, finalUrl: current.toString() };
+    const headers = new Headers();
+    for (const [key, value] of Object.entries(response.headers)) {
+      if (typeof value === "string") headers.set(key, value);
+      else if (Array.isArray(value)) headers.set(key, value.join(", "));
+    }
+    return { response, headers, finalUrl: current.toString() };
   }
   throw new Error("Redirecionamentos em excesso");
 }
 
-async function readBodyLimited(response: Response, maxBytes: number): Promise<string> {
-  if (!response.body) return "";
-  const reader = response.body.getReader();
-  const chunks: Uint8Array[] = [];
+async function readBodyLimited(response: IncomingMessage, maxBytes: number): Promise<string> {
+  const chunks: Buffer[] = [];
   let total = 0;
-  for (;;) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    total += value.byteLength;
-    chunks.push(value);
-    if (total >= maxBytes) {
-      await reader.cancel().catch(() => undefined);
-      break;
+  try {
+    for await (const chunk of response) {
+      const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk);
+      total += buf.byteLength;
+      chunks.push(buf);
+      if (total >= maxBytes) {
+        response.destroy();
+        break;
+      }
     }
+  } catch (err) {
+    // Stream destruído por atingir o limite não é erro; o resto propaga.
+    if (!response.destroyed) throw err;
   }
   return Buffer.concat(chunks).toString("utf8");
 }
@@ -216,9 +253,9 @@ export async function analyzeSeo(rawUrl: string): Promise<SeoAuditResult> {
   let html = "";
   let responseHeaders: Headers | null = null;
   try {
-    const { response, finalUrl } = await fetchPublicUrl(url, controller.signal);
+    const { response, headers, finalUrl } = await fetchPublicUrl(url, controller.signal);
     url = finalUrl;
-    responseHeaders = response.headers;
+    responseHeaders = headers;
     html = await readBodyLimited(response, MAX_HTML_BYTES);
   } finally {
     clearTimeout(timeout);
