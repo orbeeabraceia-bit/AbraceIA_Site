@@ -11,7 +11,7 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <div className="divide-y divide-border rounded-card border border-border">
+    <div className="divide-y divide-border overflow-hidden rounded-card border border-border">
       {items.map((item, index) => {
         const isOpen = openIndex === index;
         const panelId = `${baseId}-panel-${index}`;
@@ -22,14 +22,20 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
               <button
                 id={buttonId}
                 type="button"
-                className="flex min-h-11 w-full items-center justify-between gap-4 px-5 py-4 text-left font-semibold text-navy hover:bg-cream"
+                className={cn(
+                  "flex min-h-11 w-full items-center justify-between gap-4 px-5 py-4 text-left font-semibold transition-colors",
+                  isOpen ? "bg-care text-white" : "text-navy hover:bg-cream",
+                )}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setOpenIndex(isOpen ? null : index)}
               >
                 {item.question}
                 <ChevronDown
-                  className={cn("h-5 w-5 shrink-0 text-ai transition", isOpen && "rotate-180")}
+                  className={cn(
+                    "h-5 w-5 shrink-0 transition",
+                    isOpen ? "rotate-180 text-white" : "text-ai",
+                  )}
                   aria-hidden
                 />
               </button>
@@ -39,7 +45,7 @@ export function FaqAccordion({ items }: { items: FaqItem[] }) {
               role="region"
               aria-labelledby={buttonId}
               hidden={!isOpen}
-              className="px-5 pb-4 text-muted-foreground"
+              className="bg-teal-50 px-5 pb-5 pt-4 leading-relaxed text-navy/80"
             >
               {item.answer}
             </div>

@@ -2,7 +2,11 @@
 
 import { useEffect, useRef } from "react";
 
-export function CrossParticles({ screensaverOnly = false }: { screensaverOnly?: boolean } = {}) {
+export function CrossParticles({
+  screensaverOnly = false,
+  sizeFactor = 0.22,
+  bounce = false,
+}: { screensaverOnly?: boolean; sizeFactor?: number; bounce?: boolean } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -55,6 +59,14 @@ export function CrossParticles({ screensaverOnly = false }: { screensaverOnly?: 
     // Em repouso (sem mexer o mouse) o globo vagueia sozinho, tipo proteção de tela
     let lastMoveAt = -Infinity;
     const IDLE_MS = 6000; // tempo ocioso até entrar no modo proteção de tela
+
+    // Modo "Pong/Atari": o centro anda em linha reta e ricocheteia nas bordas do container.
+    let bx = 0;
+    let by = 0;
+    let bvx = 0;
+    let bvy = 0;
+    let bounceReady = false;
+    const bounceSpeed = 1.9; // px por frame (só usado no modo bounce do footer)
 
     class Particle {
       // Direção unitária na esfera; o relevo orgânico (raio mutável) é aplicado no update()
@@ -264,7 +276,7 @@ export function CrossParticles({ screensaverOnly = false }: { screensaverOnly?: 
       mouseRotX += (targetMouseRotX - mouseRotX) * 0.05;
       mouseRotY += (targetMouseRotY - mouseRotY) * 0.05;
 
-      const sphereRadius = Math.min(width, height) * 0.22; // Bolha contida na área de conteúdo do hero
+      const sphereRadius = Math.min(width, height) * sizeFactor; // Tamanho da bolha (configurável)
       const elapsed = now - startTime;
 
       // Em repouso: o alvo passeia pelo hero numa figura de Lissajous (proteção de tela)
@@ -298,6 +310,35 @@ export function CrossParticles({ screensaverOnly = false }: { screensaverOnly?: 
       centerX = Math.max(margin, Math.min(width - margin, baseCenterX() + mouseOffsetX));
       centerY = Math.max(margin, Math.min(height - margin, height / 2 + mouseOffsetY));
 
+      // Modo Pong: sobrescreve o centro com movimento linear que ricocheteia nas bordas.
+      if (bounce) {
+        if (!bounceReady) {
+          bx = centerX;
+          by = centerY;
+          bvx = bounceSpeed;
+          bvy = bounceSpeed * 0.72; // ângulo ≠ 45° => trajetória mais variada
+          bounceReady = true;
+        }
+        bx += bvx;
+        by += bvy;
+        if (bx <= margin) {
+          bx = margin;
+          bvx = Math.abs(bvx);
+        } else if (bx >= width - margin) {
+          bx = width - margin;
+          bvx = -Math.abs(bvx);
+        }
+        if (by <= margin) {
+          by = margin;
+          bvy = Math.abs(bvy);
+        } else if (by >= height - margin) {
+          by = height - margin;
+          bvy = -Math.abs(bvy);
+        }
+        centerX = bx;
+        centerY = by;
+      }
+
       // Ordena por profundidade (Z-sorting) para desenhar as cruzes de trás primeiro
       particles.sort((a, b) => b.z - a.z);
 
@@ -325,7 +366,7 @@ export function CrossParticles({ screensaverOnly = false }: { screensaverOnly?: 
       window.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [screensaverOnly]);
+  }, [screensaverOnly, sizeFactor, bounce]);
 
   return (
     <canvas
