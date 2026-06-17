@@ -4,7 +4,7 @@ import { methodSteps } from "@/lib/content/home-marketing";
 
 export function MethodSection() {
   return (
-    <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" aria-labelledby="method-heading">
+    <section className="mx-auto max-w-[1500px] px-4 py-16 md:px-6" aria-labelledby="method-heading">
       <FadeIn>
         <h2 id="method-heading" className="font-display text-2xl font-bold text-navy md:text-3xl">
           Quatro etapas. Um abraço completo.

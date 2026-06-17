@@ -34,7 +34,7 @@ export default function ContatoPage() {
           { name: "Contato", path: "/contato" },
         ])]}
       />
-      <div className="mx-auto max-w-7xl px-4 py-16 md:px-6">
+      <div className="mx-auto max-w-[1500px] px-4 py-16 md:px-6">
         <h1 className="font-display text-3xl font-bold text-navy">Contato</h1>
         <p className="mt-4 max-w-2xl text-muted-foreground">
           Agende conversa sobre GEO, SEO médico ou sites para clínicas.

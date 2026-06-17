@@ -33,7 +33,7 @@ export default function MetodoPage() {
           }),
         ]}
       />
-      <article className="mx-auto max-w-[1400px] px-4 py-20 md:px-8">
+      <article className="mx-auto max-w-[1500px] px-4 py-20 md:px-8">
         <div className="mb-12">
           <Breadcrumbs
             items={[

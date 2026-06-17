@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-export function CrossParticles() {
+export function CrossParticles({ screensaverOnly = false }: { screensaverOnly?: boolean } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -291,9 +291,12 @@ export function CrossParticles() {
       mouseOffsetX += (smoothTargetX - mouseOffsetX) * k;
       mouseOffsetY += (smoothTargetY - mouseOffsetY) * k;
 
-      // Centro = base (atrás do texto no desktop / centralizado no mobile) + acompanhamento do mouse
-      centerX = baseCenterX() + mouseOffsetX;
-      centerY = height / 2 + mouseOffsetY;
+      // Centro = base (atrás do texto no desktop / centralizado no mobile) + acompanhamento do mouse.
+      // Clamp: mantém a bolha CONTIDA no hero — o centro nunca chega tão perto da
+      // borda que a bolha vaze (margem ≈ raio da bolha), mesmo se o cursor sair do hero.
+      const margin = sphereRadius * 1.15;
+      centerX = Math.max(margin, Math.min(width - margin, baseCenterX() + mouseOffsetX));
+      centerY = Math.max(margin, Math.min(height - margin, height / 2 + mouseOffsetY));
 
       // Ordena por profundidade (Z-sorting) para desenhar as cruzes de trás primeiro
       particles.sort((a, b) => b.z - a.z);
@@ -308,8 +311,12 @@ export function CrossParticles() {
 
     init();
     window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseleave", handleMouseLeave);
+    // Modo proteção de tela: sem listeners de mouse => lastMoveAt fica -Infinity,
+    // então a bolha fica permanentemente no passeio (idle sempre true).
+    if (!screensaverOnly) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseleave", handleMouseLeave);
+    }
     animationFrameId = requestAnimationFrame(animate);
 
     return () => {
@@ -318,7 +325,7 @@ export function CrossParticles() {
       window.removeEventListener("mouseleave", handleMouseLeave);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [screensaverOnly]);
 
   return (
     <canvas

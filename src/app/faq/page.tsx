@@ -27,7 +27,7 @@ export default function FaqPage() {
           ]),
         ]}
       />
-      <div className="mx-auto max-w-5xl px-4 py-16 md:px-6">
+      <div className="mx-auto max-w-[1500px] px-4 py-16 md:px-6">
         <Breadcrumbs items={[{ name: "Início", path: "/" }, { name: "FAQ" }]} />
         <h1 className="font-display text-3xl font-bold text-navy">Perguntas frequentes</h1>
         <p className="mt-4 text-muted-foreground">

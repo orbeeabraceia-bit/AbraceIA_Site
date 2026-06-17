@@ -25,7 +25,7 @@ export default function SobrePage() {
           ]),
         ]}
       />
-      <article className="mx-auto max-w-5xl px-4 py-16 md:px-6">
+      <article className="mx-auto max-w-[1500px] px-4 py-16 md:px-6">
         <FadeIn>
           <h1 className="font-display text-3xl font-bold text-navy">Sobre o AbraceIA</h1>
           <p className="mt-4 text-lg text-muted-foreground">

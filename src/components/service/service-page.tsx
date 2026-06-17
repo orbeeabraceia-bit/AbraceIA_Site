@@ -57,7 +57,7 @@ export function ServicePage({
         {/* Glow de fundo sutil (mesma linguagem do hero) */}
         <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-care/5 opacity-60 blur-3xl" />
 
-        <article className="mx-auto max-w-[1400px] px-4 py-20 md:px-8 md:py-24">
+        <article className="mx-auto max-w-[1500px] px-4 py-20 md:px-8 md:py-24">
           <div className="grid gap-16 lg:grid-cols-12">
             {/* Coluna sticky: eyebrow + h1 + CTAs */}
             <div className="lg:col-span-5 lg:sticky lg:top-32 lg:h-fit">

@@ -5,7 +5,7 @@ import { marketingPillars } from "@/lib/content/home-marketing";
 export function PillarsSection() {
   return (
     <section className="bg-cream px-4 py-16" aria-labelledby="pillars-heading">
-      <div className="mx-auto max-w-7xl md:px-6">
+      <div className="mx-auto max-w-[1500px] md:px-6">
         <FadeIn>
           <h2 id="pillars-heading" className="font-display text-2xl font-bold text-navy md:text-3xl">
             Tudo o que a sua presença digital precisa, num só lugar

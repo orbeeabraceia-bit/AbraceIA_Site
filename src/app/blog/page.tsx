@@ -14,7 +14,7 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function BlogPage() {
   return (
-    <div className="mx-auto max-w-5xl px-4 py-16 md:px-6">
+    <div className="mx-auto max-w-[1500px] px-4 py-16 md:px-6">
       <JsonLd
         data={[
           blogSchema(blogPosts),
