@@ -4,7 +4,7 @@ import { webApplicationSchema, breadcrumbSchema } from "@/lib/schema";
 
 export default function AuditoriaSeoPage() {
   return (
-    <div className="mx-auto max-w-[1400px] px-4 py-20 md:px-8">
+    <div className="mx-auto max-w-[1500px] px-4 py-20 md:px-8">
       <JsonLd
         data={[
           webApplicationSchema({

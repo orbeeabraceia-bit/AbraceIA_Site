@@ -58,7 +58,7 @@ export function CookieBanner() {
       aria-label="Consentimento de cookies"
       className="fixed inset-x-0 bottom-0 z-50 border-t border-border bg-white p-4 shadow-lg md:p-6"
     >
-      <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
+      <div className="mx-auto flex max-w-[1500px] flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <p className="text-sm text-muted-foreground">
           Usamos cookies essenciais e, com seu consentimento, analytics (GA4/GTM).{" "}
           <a href="/cookies" className="font-medium text-care underline">

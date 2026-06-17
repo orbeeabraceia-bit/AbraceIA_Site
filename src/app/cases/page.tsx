@@ -15,7 +15,7 @@ export const metadata: Metadata = createPageMetadata({
 
 export default function CasesPage() {
   return (
-    <div className="mx-auto max-w-[1400px] px-4 py-20 md:px-8">
+    <div className="mx-auto max-w-[1500px] px-4 py-20 md:px-8">
       <JsonLd
         data={[
           collectionPageSchema({
@@ -42,7 +42,7 @@ export default function CasesPage() {
         
         <div className="lg:col-span-8">
           <ClientPortfolioStrip className="rounded-3xl border border-border bg-white p-4 shadow-sm" showCaseLinks />
-          <div className="mt-12 grid gap-8 sm:grid-cols-2">
+          <div className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-2">
             {cases.map((c) => (
               <CaseCard key={c.slug} caseStudy={c} />
             ))}

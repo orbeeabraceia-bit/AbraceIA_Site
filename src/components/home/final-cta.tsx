@@ -13,7 +13,7 @@ export function FinalCta() {
       className="bg-gradient-to-br from-onyx via-navy to-navy/95 px-4 py-20 text-cream"
       aria-labelledby="final-cta-heading"
     >
-      <div className="mx-auto max-w-[1400px] md:px-8">
+      <div className="mx-auto max-w-[1500px] md:px-8">
         <div className="flex flex-col items-center justify-between gap-10 lg:flex-row">
           <div className="max-w-2xl text-center lg:text-left">
             <h2 id="final-cta-heading" className="font-display text-3xl font-bold tracking-tight text-gold md:text-4xl lg:text-5xl">

@@ -58,12 +58,12 @@ export default function HomePage() {
   return (
     <>
       <JsonLd data={[faqSchema(homeFaq), medicalBusinessSchema(), physicianSchema()]} />
-      <section className="relative overflow-hidden bg-gradient-to-b from-cream/30 via-white to-white px-4 py-20 md:py-32">
+      <section className="relative overflow-hidden bg-gradient-to-b from-cream/30 via-white to-white px-4 py-12 md:py-20">
         <CrossParticles />
         {/* Glow de fundo simulando IA */}
         <div className="absolute left-1/2 top-0 -z-10 h-[40rem] w-[40rem] -translate-x-1/2 rounded-full bg-care/5 opacity-50 blur-3xl md:left-1/3" />
-        
-        <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-16 lg:grid-cols-2">
+
+        <div className="relative z-10 mx-auto grid max-w-[1500px] items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <FadeIn className="text-center lg:text-left">
             <div className="inline-flex items-center rounded-full border border-care/20 bg-care/5 px-3 py-1 text-xs font-bold uppercase tracking-widest text-care backdrop-blur-sm">
               Orbee Labs · Belo Horizonte
@@ -121,7 +121,7 @@ export default function HomePage() {
 
       <PillarsSection />
 
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
+      <section className="mx-auto max-w-[1500px] px-4 py-16 md:px-6">
         <FadeIn>
           <h2 className="font-display text-2xl font-bold text-navy md:text-3xl">
             A IA domina a SERP de saúde
@@ -134,7 +134,7 @@ export default function HomePage() {
       </section>
 
       <section className="bg-muted px-4 py-16">
-        <div className="mx-auto max-w-7xl md:px-6">
+        <div className="mx-auto max-w-[1500px] md:px-6">
           <h2 className="font-display text-2xl font-bold text-navy">
             Como funciona: GEO + SEO + Compliance
           </h2>
@@ -160,7 +160,7 @@ export default function HomePage() {
 
       <MethodSection />
 
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
+      <section className="mx-auto max-w-[1500px] px-4 py-16 md:px-6">
         <h2 className="font-display text-2xl font-bold text-navy">6 diferenciais verificáveis</h2>
         <ul className="mt-6 grid gap-3 md:grid-cols-2">
           {differentials.map((item) => (
@@ -173,13 +173,13 @@ export default function HomePage() {
       </section>
 
       <section className="bg-cream/60 px-4 py-16">
-        <div className="mx-auto max-w-7xl md:px-6">
+        <div className="mx-auto max-w-[1500px] md:px-6">
           <h2 className="font-display text-2xl font-bold text-navy">Prova social</h2>
           <p className="mt-2 text-muted-foreground">
             Sites em produção que a Orbee Labs administra para saúde em BH e online.
           </p>
           <ClientPortfolioStrip className="mt-6 bg-white" showCaseLinks />
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
+          <div className="mt-8 grid gap-x-8 gap-y-12 md:grid-cols-2">
             {cases.map((c) => (
               <CaseCard key={c.slug} caseStudy={c} />
             ))}
@@ -187,7 +187,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-16 md:px-6">
+      <section className="mx-auto max-w-[1500px] px-4 py-16 md:px-6">
         <div className="grid gap-10 lg:grid-cols-2">
           <FadeIn>
             <h2 className="font-display text-2xl font-bold text-navy">
@@ -205,7 +205,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-4 py-16 md:px-6">
+      <section className="mx-auto max-w-[1500px] px-4 py-16 md:px-6">
         <h2 className="font-display text-2xl font-bold text-navy">FAQ</h2>
         <div className="mt-6">
           <FaqAccordion items={homeFaq} />

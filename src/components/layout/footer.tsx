@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { siteConfig } from "@/lib/site-config";
 import { footerTagline } from "@/lib/content/home-marketing";
+import { CrossParticles } from "@/components/animations/cross-particles";
+
+// Quebra o disclaimer na 1ª frase para a 2ª ("Não substitui…") iniciar em nova linha.
+const [disclaimerHead, ...disclaimerTail] = siteConfig.aiDisclaimer.split(". ");
 
 const footerLinks = [
   { href: "/privacidade", label: "Privacidade" },
@@ -12,25 +16,35 @@ const footerLinks = [
 
 export function Footer() {
   return (
-    <footer className="mt-auto border-t border-border bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-12 md:px-6">
-        <div className="grid gap-8 md:grid-cols-3">
+    <footer className="relative mt-auto overflow-hidden border-t border-border bg-white">
+      <CrossParticles screensaverOnly />
+      <div className="relative z-10 mx-auto max-w-[1500px] px-4 py-12 md:px-6">
+        <div className="grid gap-8 md:grid-cols-[1.6fr_1fr_1fr] md:items-start">
           <div>
+            {/* Título */}
             <p className="font-display text-lg font-bold text-navy">{siteConfig.name}</p>
-            <p className="mt-2 text-sm text-muted-foreground">{siteConfig.tagline}</p>
-            <p className="mt-2 text-xs text-muted-foreground">{footerTagline}</p>
-            <p className="mt-4 text-xs text-muted-foreground">{siteConfig.aiDisclaimer}</p>
+            {/* Subtítulo (tagline) */}
+            <p className="mt-3 text-sm font-medium text-navy/90">{siteConfig.tagline}</p>
+            {/* Conteúdo */}
+            <div className="mt-4 max-w-sm space-y-3 text-xs leading-relaxed text-muted-foreground">
+              <p>{footerTagline}</p>
+              <p>
+                {disclaimerHead}.
+                <br />
+                {disclaimerTail.join(". ")}
+              </p>
+            </div>
             <a
               href="https://orbeelabs.com/"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 inline-block text-sm font-medium text-care hover:underline"
+              className="mt-6 inline-block text-sm font-medium text-care hover:underline"
             >
               Desenvolvido por Orbee Labs ↗
             </a>
           </div>
           <div>
-            <p className="font-semibold text-navy">Serviços</p>
+            <p className="font-display text-base font-bold text-navy">Serviços</p>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               <li>
                 <Link href="/metodo" className="hover:text-care">
@@ -55,7 +69,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <p className="font-semibold text-navy">Legal</p>
+            <p className="font-display text-base font-bold text-navy">Legal</p>
             <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
               {footerLinks.map((link) => (
                 <li key={link.href}>

@@ -146,7 +146,7 @@ export function Header() {
       >
         Pular para o conteúdo
       </a>
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 md:px-6">
+      <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-4 md:px-6">
         <Link href="/" className="flex items-center gap-3">
           <Image src="/logo.png" alt="" width={40} height={40} unoptimized aria-hidden className="h-10 w-10 shrink-0 object-contain" />
           <span className="font-display text-xl font-bold text-navy">
