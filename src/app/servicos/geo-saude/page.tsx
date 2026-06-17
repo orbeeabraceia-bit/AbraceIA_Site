@@ -1,80 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { JsonLd } from "@/components/seo/json-ld";
-import { FaqAccordion } from "@/components/seo/faq-accordion";
 import { createPageMetadata } from "@/lib/metadata";
-import { serviceSchema, faqSchema, breadcrumbSchema } from "@/lib/schema";
-
-type ServicePageProps = {
-  title: string;
-  description: string;
-  h1: string;
-  keyword: string;
-  path: string;
-  sections: { heading: string; body: string }[];
-  faq?: { question: string; answer: string }[];
-};
-
-function ServicePage({
-  title,
-  description,
-  h1,
-  keyword,
-  path,
-  sections,
-  faq = [],
-}: ServicePageProps) {
-  return (
-    <>
-      <JsonLd
-        data={[
-          serviceSchema(title, description, path),
-          ...(faq.length ? [faqSchema(faq)] : []),
-          breadcrumbSchema([
-            { name: "Início", path: "/" },
-            { name: title, path },
-          ]),
-        ]}
-      />
-      <article className="mx-auto max-w-[1400px] px-4 py-20 md:px-8">
-        <div className="grid gap-16 lg:grid-cols-12">
-          <div className="lg:col-span-5 lg:sticky lg:top-32 lg:h-fit">
-            <p className="text-sm font-bold uppercase tracking-widest text-ai">{keyword}</p>
-            <h1 className="mt-4 font-display text-4xl font-bold tracking-tight text-navy md:text-5xl lg:text-[3.5rem] lg:leading-[1.1] text-balance">{h1}</h1>
-            <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{description}</p>
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Link href="/auditoria-ia">
-                <Button intent="ai" className="rounded-full">Auditoria de presença em IA</Button>
-              </Link>
-              <Link href="/contato">
-                <Button intent="outline" className="rounded-full">Falar com especialista</Button>
-              </Link>
-            </div>
-          </div>
-          <div className="lg:col-span-7">
-            <div className="space-y-12">
-              {sections.map((section) => (
-                <section key={section.heading} className="rounded-3xl border border-border bg-white p-8 shadow-sm">
-                  <h2 className="font-display text-2xl font-bold text-navy">{section.heading}</h2>
-                  <p className="mt-4 text-lg text-muted-foreground">{section.body}</p>
-                </section>
-              ))}
-            </div>
-            {faq.length > 0 && (
-              <section className="mt-20">
-                <h2 className="font-display text-3xl font-bold text-navy">Perguntas frequentes</h2>
-                <div className="mt-8">
-                  <FaqAccordion items={faq} />
-                </div>
-              </section>
-            )}
-          </div>
-        </div>
-      </article>
-    </>
-  );
-}
+import { ServicePage } from "@/components/service/service-page";
 
 export const metadata: Metadata = createPageMetadata({
   title: "GEO para Saúde — Como aparecer no ChatGPT",
@@ -92,6 +18,10 @@ export default function GeoSaudePage() {
       h1="Faça sua clínica ser citada por IAs generativas"
       description="Otimizamos llms.txt, conteúdo enciclopédico, Schema e E-E-A-T para ChatGPT, Perplexity, Claude e Google AI Overview — dentro da ética do seu conselho."
       path="/servicos/geo-saude"
+      ctas={[
+        { href: "/auditoria-ia", label: "Auditoria de presença em IA", intent: "ai" },
+        { href: "/contato", label: "Falar com especialista", intent: "outline" },
+      ]}
       sections={[
         {
           heading: "Baseline de citação",
@@ -106,17 +36,17 @@ export default function GeoSaudePage() {
         {
           question: "GEO substitui SEO?",
           answer:
-            "Não. GEO complementa o SEO tradicional. Você precisa ranquear no Google e ser citado nas IAs — fazemos os dois.",
+            "Não. GEO complementa o SEO tradicional, não o substitui. Sua clínica precisa ranquear no Google e, ao mesmo tempo, ser citada pelas IAs generativas que já respondem antes dos links azuis. Fazemos as duas frentes a partir de uma única base técnica — arquitetura Next.js, Schema de saúde e conteúdo informativo que alimenta tanto o buscador quanto os modelos de IA.",
         },
         {
           question: "Quais IAs vocês monitoram?",
           answer:
-            "ChatGPT, Perplexity, Claude, Gemini e Google AI Overview — com baseline documentado e reteste em 90 dias.",
+            "Acompanhamos as principais plataformas que respondem perguntas de saúde: ChatGPT, Perplexity, Claude, Gemini e o Google AI Overview. Para cada uma, registramos um baseline de citação no início do projeto e retestamos em 90 dias, com a evolução documentada em prints. Assim você enxerga, com prova, se sua clínica passou a ser citada e em quais perguntas.",
         },
         {
           question: "É permitido pelo CFM?",
           answer:
-            "Sim, quando o conteúdo é informativo, sem promessas de cura e com autor/revisor identificados — seguimos as resoluções do Manual de Publicidade Médica.",
+            "Sim, desde que feito dentro das regras. A Resolução CFM 2.336/2023 permite presença digital quando o conteúdo é informativo, sem promessa de cura ou resultado, e com autor e revisor identificados (nome, CRM e RQE). Seguimos o Manual de Publicidade Médica e passamos cada peça por um checklist de compliance antes de publicar.",
         },
       ]}
     />

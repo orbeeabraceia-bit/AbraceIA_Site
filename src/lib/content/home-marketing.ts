@@ -50,9 +50,9 @@ export const coreDifferentiators = [
       "O SEO não entra depois. Ele é a fundação: cada página nasce pronta para o Google entender, ranquear e alimentar as IAs.",
   },
   {
-    title: "Performance certificada",
+    title: "Performance comprovada",
     description:
-      "Sites com Core Web Vitals verdes e carregamento ultra-rápido. Velocidade que o Google e o paciente premiam.",
+      "Sites com Core Web Vitals verdes e carregamento muito rápido. Velocidade que o Google e o paciente premiam.",
   },
   {
     title: "Inteligência artificial real",
@@ -70,4 +70,4 @@ export const emotionalLead =
   "Você cuida dos pacientes. A AbraceIA cuida de todo o resto.";
 
 export const footerTagline =
-  "Marketing médico 360° com inteligência artificial. Transformamos presença digital em pacientes reais — com compliance.";
+  "Marketing médico 360° com inteligência artificial. Ajudamos a transformar presença digital em mais agendamentos — com compliance.";

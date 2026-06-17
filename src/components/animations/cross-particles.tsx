@@ -23,14 +23,14 @@ export function CrossParticles() {
     canvas.style.width = `${width}px`;
     canvas.style.height = `${height}px`;
 
-    // Cores exatas do guia
+    // Cores oficiais do Manual de Marca AbraceIA
     const colors = [
-      "#139D87", // Teal
-      "#FF8E5E", // Pêssego
-      "#DFB55D", // Ouro
+      "#3F8A7E", // Teal
+      "#E49668", // Pêssego
+      "#D3B675", // Ouro
     ];
 
-    const PARTICLE_COUNT = 600; // Alta densidade para formar a bolha
+    const PARTICLE_COUNT = 1600; // Alta densidade para formar a bolha
     const particles: Particle[] = [];
     
     // Rastreamento do mouse para girar a bolha
@@ -39,35 +39,88 @@ export function CrossParticles() {
     let mouseRotY = 0;
     let targetMouseRotY = 0;
 
+    // Centro da bolha (recalculado a cada frame): atrás do texto no desktop, centralizado no mobile
+    let centerX = width / 2;
+    let centerY = height / 2;
+
+    // Deslocamento do centro em direção ao cursor (a bolha "acompanha" o mouse)
+    const FOLLOW = 1.0; // 1 = a bolha percorre todo o hero atrás do cursor (sem limite)
+    let mouseOffsetX = 0;
+    let mouseOffsetY = 0;
+    let targetOffsetX = 0;
+    let targetOffsetY = 0;
+    // Estágio intermediário: suaviza o próprio alvo (movimento mais sedoso, ease-in/out)
+    let smoothTargetX = 0;
+    let smoothTargetY = 0;
+    // Em repouso (sem mexer o mouse) o globo vagueia sozinho, tipo proteção de tela
+    let lastMoveAt = -Infinity;
+    const IDLE_MS = 6000; // tempo ocioso até entrar no modo proteção de tela
+
     class Particle {
-      baseX: number;
-      baseY: number;
-      baseZ: number;
+      // Direção unitária na esfera; o relevo orgânico (raio mutável) é aplicado no update()
+      dirX: number;
+      dirY: number;
+      dirZ: number;
+      phi: number;
+      theta: number;
+      rSeed: number; // pequena variação de espessura por cruz
       x: number = 0;
       y: number = 0;
       z: number = 0;
       color: string;
       size: number;
       angleOffset: number;
+      // Plano 3D da cruz: eixos base (orientação aleatória) e suas projeções em tela após rotação
+      u0x: number; u0y: number; u0z: number;
+      v0x: number; v0y: number; v0z: number;
+      ux: number = 1; uy: number = 0; // eixo horizontal da cruz projetado
+      vx: number = 0; vy: number = 1; // eixo vertical da cruz projetado
 
       constructor(index: number, total: number) {
-        // Distribuição Fibonacci em uma Esfera (para manter o formato estruturado)
+        // Distribuição Fibonacci em uma Esfera (base estruturada que será deformada)
         const phi = Math.acos(1 - (2 * index) / total);
         const theta = Math.PI * (1 + Math.sqrt(5)) * index;
-        
-        // Variação de profundidade para a "casca" da bolha ser espessa
-        const r = 0.7 + Math.random() * 0.6; // Raio varia de 0.7 a 1.3
-        
-        this.baseX = Math.cos(theta) * Math.sin(phi) * r;
-        this.baseY = Math.cos(phi) * r;
-        this.baseZ = Math.sin(theta) * Math.sin(phi) * r;
+        this.phi = phi;
+        this.theta = theta;
+
+        this.dirX = Math.cos(theta) * Math.sin(phi);
+        this.dirY = Math.cos(phi);
+        this.dirZ = Math.sin(theta) * Math.sin(phi);
+
+        this.rSeed = Math.random() * 0.18;
 
         this.color = colors[Math.floor(Math.random() * colors.length)];
         this.size = Math.random() * 2 + 1;
         this.angleOffset = Math.random() * Math.PI * 2; // Rotação individual da cruz
+
+        // Eixo U: vetor unitário aleatório (define a orientação do plano da cruz)
+        const a = Math.random() * Math.PI * 2;
+        const b = Math.acos(2 * Math.random() - 1);
+        this.u0x = Math.sin(b) * Math.cos(a);
+        this.u0y = Math.sin(b) * Math.sin(a);
+        this.u0z = Math.cos(b);
+        // Eixo V: outro vetor aleatório ortogonalizado em relação a U (Gram-Schmidt)
+        let rx = Math.random() * 2 - 1;
+        let ry = Math.random() * 2 - 1;
+        let rz = Math.random() * 2 - 1;
+        const dot = rx * this.u0x + ry * this.u0y + rz * this.u0z;
+        rx -= dot * this.u0x;
+        ry -= dot * this.u0y;
+        rz -= dot * this.u0z;
+        const len = Math.hypot(rx, ry, rz) || 1;
+        this.v0x = rx / len;
+        this.v0y = ry / len;
+        this.v0z = rz / len;
       }
 
       update(time: number) {
+        // Esfera perfeitamente redonda: raio constante (apenas leve variação de espessura da casca)
+        const r = 1.0 + this.rSeed;
+
+        const baseX = this.dirX * r;
+        const baseY = this.dirY * r;
+        const baseZ = this.dirZ * r;
+
         // Rotação automática da bolha + a rotação causada pelo mouse
         const rotY = time * 0.0003 + mouseRotX; // Gira no eixo Y
         const rotX = time * 0.0002 + mouseRotY; // Gira no eixo X
@@ -76,18 +129,29 @@ export function CrossParticles() {
         // Rotação Y
         const cosY = Math.cos(rotY);
         const sinY = Math.sin(rotY);
-        const x1 = this.baseX * cosY - this.baseZ * sinY;
-        const z1 = this.baseZ * cosY + this.baseX * sinY;
+        const x1 = baseX * cosY - baseZ * sinY;
+        const z1 = baseZ * cosY + baseX * sinY;
 
         // Rotação X
         const cosX = Math.cos(rotX);
         const sinX = Math.sin(rotX);
-        const y2 = this.baseY * cosX - z1 * sinX;
-        const z2 = z1 * cosX + this.baseY * sinX;
+        const y2 = baseY * cosX - z1 * sinX;
+        const z2 = z1 * cosX + baseY * sinX;
 
         this.x = x1;
         this.y = y2;
         this.z = z2;
+
+        // Roto os eixos do plano da cruz com a MESMA rotação (só preciso de x,y projetados).
+        // Quando o plano fica de perfil, ux/uy/vx/vy encurtam => foreshortening 3D.
+        const rot = (vx: number, vy: number, vz: number): [number, number] => {
+          const rx = vx * cosY - vz * sinY;
+          const rz = vz * cosY + vx * sinY;
+          const ry = vy * cosX - rz * sinX;
+          return [rx, ry];
+        };
+        [this.ux, this.uy] = rot(this.u0x, this.u0y, this.u0z);
+        [this.vx, this.vy] = rot(this.v0x, this.v0y, this.v0z);
       }
 
       draw(sphereRadius: number) {
@@ -97,8 +161,8 @@ export function CrossParticles() {
         const fov = 400;
         const scale = fov / (fov + this.z * sphereRadius);
         
-        const projX = width / 2 + this.x * sphereRadius * scale;
-        const projY = height / 2 + this.y * sphereRadius * scale;
+        const projX = centerX + this.x * sphereRadius * scale;
+        const projY = centerY + this.y * sphereRadius * scale;
 
         // Oculta partículas que estão muito "atrás" ou fora da tela
         if (scale < 0.1) return;
@@ -117,15 +181,31 @@ export function CrossParticles() {
         const currentSize = this.size * scale;
         
         ctx.strokeStyle = this.color;
-        ctx.lineWidth = Math.max(0.8, currentSize / 3);
+        ctx.lineWidth = Math.max(0.6, currentSize * 0.22);
         ctx.lineCap = "round";
-        
-        // Cruz (+) perfeitamente reta
+        ctx.lineJoin = "round"; // cantos arredondados do contorno
+
+        // Cruz vazada (contorno em "+") desenhada no plano 3D da partícula.
+        const s = currentSize; // alcance de cada braço
+        const t = currentSize * 0.38; // meia-espessura do braço
+        const ux = this.ux;
+        const uy = this.uy; // eixo horizontal projetado
+        const vx = this.vx;
+        const vy = this.vy; // eixo vertical projetado
+        // Vértices do contorno do "+" (sentido horário): a = horizontal, b = vertical
+        const pts: [number, number][] = [
+          [-t, -s], [t, -s], [t, -t], [s, -t], [s, t], [t, t],
+          [t, s], [-t, s], [-t, t], [-s, t], [-s, -t], [-t, -t],
+        ];
         ctx.beginPath();
-        ctx.moveTo(0, -currentSize);
-        ctx.lineTo(0, currentSize);
-        ctx.moveTo(-currentSize, 0);
-        ctx.lineTo(currentSize, 0);
+        for (let i = 0; i < pts.length; i++) {
+          const [a, b] = pts[i];
+          const sx = a * ux + b * vx; // projeta no plano 3D da cruz
+          const sy = a * uy + b * vy;
+          if (i === 0) ctx.moveTo(sx, sy);
+          else ctx.lineTo(sx, sy);
+        }
+        ctx.closePath();
         ctx.stroke();
         
         ctx.restore();
@@ -142,18 +222,29 @@ export function CrossParticles() {
       canvas.style.height = `${height}px`;
     };
 
+    const baseCenterX = () => (width >= 1024 ? width * 0.3 : width * 0.5);
+
     const handleMouseMove = (e: MouseEvent) => {
-      // Calcula a influência do mouse na rotação (parallax)
+      // Influência do mouse na rotação (parallax)
       const mouseDx = (e.clientX - window.innerWidth / 2) / (window.innerWidth / 2);
       const mouseDy = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
-      
       targetMouseRotX = mouseDx * 0.5; // O quão longe o mouse consegue girar a bolha
       targetMouseRotY = mouseDy * 0.5;
+
+      // A bolha acompanha o mouse: centro é puxado em direção ao cursor
+      const rect = canvas.getBoundingClientRect();
+      const relX = e.clientX - rect.left;
+      const relY = e.clientY - rect.top;
+      targetOffsetX = (relX - baseCenterX()) * FOLLOW;
+      targetOffsetY = (relY - height / 2) * FOLLOW;
+      lastMoveAt = performance.now(); // registra interação (sai do modo proteção de tela)
     };
 
     const handleMouseLeave = () => {
       targetMouseRotX = 0;
       targetMouseRotY = 0;
+      targetOffsetX = 0; // volta ao centro-base
+      targetOffsetY = 0;
     };
 
     const init = () => {
@@ -173,8 +264,36 @@ export function CrossParticles() {
       mouseRotX += (targetMouseRotX - mouseRotX) * 0.05;
       mouseRotY += (targetMouseRotY - mouseRotY) * 0.05;
 
-      const sphereRadius = Math.min(width, height) * 0.5; // Tamanho da bolha responsivo
+      const sphereRadius = Math.min(width, height) * 0.22; // Bolha contida na área de conteúdo do hero
       const elapsed = now - startTime;
+
+      // Em repouso: o alvo passeia pelo hero numa figura de Lissajous (proteção de tela)
+      const idle = now - lastMoveAt > IDLE_MS;
+      if (idle) {
+        const ax = width * 0.4; // amplitude horizontal do passeio (chega perto das bordas)
+        const ay = height * 0.34; // amplitude vertical
+        // Movimento circular (cos/sin) => velocidade constante, nunca para num ponto.
+        // Um 2º círculo menor (epiciclo) dá variação sem nunca repetir igual.
+        const w1 = 0.00018; // velocidade do círculo principal (lento)
+        const w2 = 0.00031; // velocidade do círculo secundário
+        const cx = width * 0.5 + (Math.cos(elapsed * w1) * 0.7 + Math.cos(elapsed * w2) * 0.3) * ax;
+        const cy = height * 0.5 + (Math.sin(elapsed * w1) * 0.7 + Math.sin(elapsed * w2 + 1.3) * 0.3) * ay;
+        targetOffsetX = cx - baseCenterX();
+        targetOffsetY = cy - height / 2;
+      }
+
+      // Suavização em 2 estágios adaptativa:
+      // - em repouso anda um pouco mais (k maior) pra o passeio ser visível;
+      // - seguindo o cursor fica bem lento/flutuante (tipo nuvem).
+      const k = idle ? 0.04 : 0.012;
+      smoothTargetX += (targetOffsetX - smoothTargetX) * k;
+      smoothTargetY += (targetOffsetY - smoothTargetY) * k;
+      mouseOffsetX += (smoothTargetX - mouseOffsetX) * k;
+      mouseOffsetY += (smoothTargetY - mouseOffsetY) * k;
+
+      // Centro = base (atrás do texto no desktop / centralizado no mobile) + acompanhamento do mouse
+      centerX = baseCenterX() + mouseOffsetX;
+      centerY = height / 2 + mouseOffsetY;
 
       // Ordena por profundidade (Z-sorting) para desenhar as cruzes de trás primeiro
       particles.sort((a, b) => b.z - a.z);
