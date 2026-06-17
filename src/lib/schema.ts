@@ -7,7 +7,7 @@ export function organizationSchema() {
     "@type": "Organization",
     name: siteConfig.org.name,
     url: siteConfig.url,
-    logo: `${siteConfig.url}/logo.svg`,
+    logo: `${siteConfig.url}/logo-full.png`,
     description: siteConfig.description,
     address: {
       "@type": "PostalAddress",
@@ -174,7 +174,7 @@ export function articleSchema(input: {
     publisher: {
       "@type": "Organization",
       name: siteConfig.org.name,
-      logo: { "@type": "ImageObject", url: `${siteConfig.url}/logo.svg` },
+      logo: { "@type": "ImageObject", url: `${siteConfig.url}/logo-full.png` },
     },
     mainEntityOfPage: `${siteConfig.url}${input.path}`,
   };

@@ -38,11 +38,11 @@ const kpis = [
 
 const differentials = [
   "Citação em IA generativa (GEO ativo)",
-  "Stack 2026 ultra-segura",
+  "Stack 2026 com segurança monitorada",
   "Compliance setorial documentado",
-  "Core Web Vitals certificados",
+  "Core Web Vitals verdes",
   "Automação com IA revisada por humano",
-  "Schema Markup proprietário",
+  "Schema Markup de saúde validado",
 ];
 
 const homeFaq = [
@@ -69,18 +69,18 @@ export default function HomePage() {
               Orbee Labs · Belo Horizonte
             </div>
             
-            <p className="mt-6 font-display text-lg font-medium leading-relaxed text-muted-foreground md:text-xl">
+            <p className="mt-6 font-serif text-xl italic leading-relaxed text-muted-foreground md:text-2xl">
               {emotionalLead}
             </p>
             
             <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-navy md:text-5xl lg:text-[3.5rem] lg:leading-[1.1] text-balance">
-              Seu consultório citado pela <span className="bg-gradient-to-br from-care to-teal-600 bg-clip-text text-transparent">IA e no topo</span> do Google
+              Seu consultório citado pela <span className="bg-gradient-to-br from-care to-teal-700 bg-clip-text text-transparent">IA e no topo</span> do Google
               <span className="mt-2 block text-2xl font-bold text-navy/80 md:text-3xl lg:text-[2.2rem]">dentro da ética do seu conselho.</span>
             </h1>
             
             <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground lg:mx-0">
               Cuidamos da sua presença no Google, da reputação online e da citação em
-              ChatGPT e Perplexity — com Core Web Vitals certificados e a atenção que a
+              ChatGPT e Perplexity — com Core Web Vitals verdes e a atenção que a
               medicina pede.
             </p>
             

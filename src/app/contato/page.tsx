@@ -10,12 +10,12 @@ const faq = [
   {
     question: "Quanto tempo leva uma auditoria?",
     answer:
-      "A auditoria inicial de presença em IA é gratuita e entrega checklist orientativo em minutos.",
+      "A auditoria inicial de presença em IA é gratuita e leva apenas alguns minutos: você informa nome, especialidade e cidade, e geramos um checklist orientativo com as maiores oportunidades de citação em ChatGPT, Perplexity e Google AI Overview. Já o diagnóstico comercial completo, mais aprofundado, é entregue em poucos dias úteis após a conversa inicial.",
   },
   {
     question: "Atendem fora de BH?",
     answer:
-      "Foco em Belo Horizonte e região metropolitana, com método replicável para outras cidades.",
+      "Nosso foco é Belo Horizonte e a região metropolitana, onde conhecemos a fundo a busca local e a concorrência. Mas o método AbraceIA é replicável: teleconsulta e sites de alcance nacional seguem o mesmo padrão de arquitetura, Schema e compliance. Se você atende em outra cidade, conversamos sobre como adaptar a estratégia ao seu mercado.",
   },
 ];
 

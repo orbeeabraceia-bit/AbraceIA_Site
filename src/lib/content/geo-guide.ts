@@ -12,7 +12,7 @@ export const geoGuideSections = [
     paragraphs: [
       "SEO tradicional foca em ranquear links azuis nos motores de busca. AEO (Answer Engine Optimization) foca em Featured Snippets e busca por voz — a 'posição zero'. GEO foca em ser a fonte citada dentro da resposta da IA, não apenas listado abaixo dela.",
       "As três práticas se complementam. Um consultório que só investe em SEO clássico pode estar invisível para quem pergunta à IA 'qual o melhor cardiologista em BH'. Um consultório que só investe em GEO sem base técnica de SEO perde tráfego orgânico estrutural.",
-      "O método AbraceIA integra as três camadas desde a arquitetura do site: Next.js 16 com performance certificada, Schema JSON-LD de saúde e conteúdo enciclopédico desenhado para citação em IAs.",
+      "O método AbraceIA integra as três camadas desde a arquitetura do site: Next.js 16 com performance comprovada, Schema JSON-LD de saúde e conteúdo enciclopédico desenhado para citação em IAs.",
     ],
   },
   {
@@ -103,16 +103,16 @@ export const geoGuideFaq = [
   {
     question: "O que é GEO em saúde?",
     answer:
-      "GEO é a otimização para ser citado por IAs generativas (ChatGPT, Perplexity, Claude, Google AI Overview), complementando SEO e AEO tradicionais.",
+      "GEO (Generative Engine Optimization) é a otimização para que sua clínica seja citada pelas IAs generativas — ChatGPT, Perplexity, Claude e o Google AI Overview. Ele complementa o SEO clássico e o AEO, estruturando conteúdo informativo, Schema de saúde e sinais de E-E-A-T para que os modelos reconheçam e recomendem o profissional dentro do compliance do conselho.",
   },
   {
     question: "Quanto tempo leva para aparecer em IAs?",
     answer:
-      "Depende da autoridade existente e do nicho. Baseline em 90 dias é referência comum; conteúdo enciclopédico + llms.txt aceleram citações.",
+      "Depende da autoridade já existente do site e da concorrência do nicho. Um baseline em torno de 90 dias é a referência comum: registramos a citação no início e retestamos com documentação. Conteúdo enciclopédico (artigos que cobrem o tema de A a Z), um arquivo llms.txt bem estruturado e autores identificados aceleram esse reconhecimento pelas IAs.",
   },
   {
     question: "GEO viola o CFM?",
     answer:
-      "Não, quando o conteúdo é informativo, identificado (CRM/RQE) e sem promessa de resultado — conforme Res. CFM 2.336/2023.",
+      "Não, desde que feito dentro das regras. Conforme a Res. CFM 2.336/2023, o conteúdo precisa ser informativo e educativo, identificado com autor e revisor (nome, CRM e RQE) e sem promessa de resultado ou sensacionalismo. GEO trabalha justamente com esse tipo de conteúdo citável e técnico, o que o mantém naturalmente alinhado ao compliance do conselho.",
   },
 ];

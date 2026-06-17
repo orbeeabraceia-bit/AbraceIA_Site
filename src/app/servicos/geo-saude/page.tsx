@@ -106,17 +106,17 @@ export default function GeoSaudePage() {
         {
           question: "GEO substitui SEO?",
           answer:
-            "Não. GEO complementa o SEO tradicional. Você precisa ranquear no Google e ser citado nas IAs — fazemos os dois.",
+            "Não. GEO complementa o SEO tradicional, não o substitui. Sua clínica precisa ranquear no Google e, ao mesmo tempo, ser citada pelas IAs generativas que já respondem antes dos links azuis. Fazemos as duas frentes a partir de uma única base técnica — arquitetura Next.js, Schema de saúde e conteúdo informativo que alimenta tanto o buscador quanto os modelos de IA.",
         },
         {
           question: "Quais IAs vocês monitoram?",
           answer:
-            "ChatGPT, Perplexity, Claude, Gemini e Google AI Overview — com baseline documentado e reteste em 90 dias.",
+            "Acompanhamos as principais plataformas que respondem perguntas de saúde: ChatGPT, Perplexity, Claude, Gemini e o Google AI Overview. Para cada uma, registramos um baseline de citação no início do projeto e retestamos em 90 dias, com a evolução documentada em prints. Assim você enxerga, com prova, se sua clínica passou a ser citada e em quais perguntas.",
         },
         {
           question: "É permitido pelo CFM?",
           answer:
-            "Sim, quando o conteúdo é informativo, sem promessas de cura e com autor/revisor identificados — seguimos as resoluções do Manual de Publicidade Médica.",
+            "Sim, desde que feito dentro das regras. A Resolução CFM 2.336/2023 permite presença digital quando o conteúdo é informativo, sem promessa de cura ou resultado, e com autor e revisor identificados (nome, CRM e RQE). Seguimos o Manual de Publicidade Médica e passamos cada peça por um checklist de compliance antes de publicar.",
         },
       ]}
     />

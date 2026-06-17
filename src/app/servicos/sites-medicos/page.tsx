@@ -10,24 +10,24 @@ const faq = [
   {
     question: "Por que Next.js e não WordPress?",
     answer:
-      "Stack 2026 sem CVEs críticas conhecidas, performance nativa, Schema no código e deploy preview por PR — ideal para YMYL.",
+      "Porque conteúdo de saúde é YMYL e não admite falhas de performance ou segurança. O Next.js entrega Core Web Vitals verdes nativos, Schema de saúde direto no código, segurança monitorada via CVEs e um deploy de preview a cada alteração. O WordPress depende de plugins que envelhecem e abrem brechas — um risco que a sua reputação médica não precisa correr.",
   },
   {
     question: "O site inclui formulários LGPD?",
     answer:
-      "Sim: consentimento explícito, política de privacidade linkada e analytics só após aceite de cookies.",
+      "Sim. Todos os formulários nascem em conformidade com a LGPD: consentimento explícito do paciente antes do envio, política de privacidade linkada e clara, e analytics que só são ativados depois do aceite no banner de cookies. Os dados trafegam de forma segura e você mantém o registro de consentimento — proteção tanto para o paciente quanto para o seu CRM.",
   },
   {
     question: "Integram com CRM?",
     answer:
-      "API de contato pronta para HubSpot, RD Station ou Resend — configuramos na implantação.",
+      "Sim. O site já vem com uma API de contato pronta para integrar com as principais ferramentas do mercado — HubSpot, RD Station ou Resend — e configuramos a integração na implantação, conforme o fluxo que você já usa. Assim, cada lead que chega pelo site entra direto no seu funil de atendimento, sem digitação manual e sem perder contato.",
   },
 ];
 
 export const metadata: Metadata = createPageMetadata({
   title: "Sites para Médicos e Clínicas em BH",
   description:
-    "Sites Next.js 16 com Schema MedicalBusiness, Core Web Vitals certificados e compliance CFM para consultórios em Belo Horizonte.",
+    "Sites Next.js 16 com Schema MedicalBusiness, Core Web Vitals verdes e compliance CFM para consultórios em Belo Horizonte.",
   path: "/servicos/sites-medicos",
   keywords: ["site para médico BH", "site clínica Belo Horizonte", "site médico Next.js"],
 });

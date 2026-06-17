@@ -10,17 +10,17 @@ const faq = [
   {
     question: "SEO médico é diferente de SEO comum?",
     answer:
-      "Sim. Conteúdo YMYL exige E-E-A-T, Schema de saúde, compliance CFM/CRM e revisão por profissional habilitado — além de Core Web Vitals rigorosos.",
+      "Sim, e muito. Saúde é conteúdo YMYL (“Your Money or Your Life”), que o Google avalia com rigor extra. Exige sinais de E-E-A-T (autoridade e experiência comprovadas), Schema de saúde, compliance com CFM/CRM, revisão por profissional habilitado e Core Web Vitals impecáveis. Um SEO genérico ignora essas camadas e, em medicina, isso custa ranqueamento e credibilidade.",
   },
   {
     question: "Quanto tempo para ver resultados?",
     answer:
-      "Primeiros sinais em 60–90 dias para keywords locais; cases auditáveis em 6 meses com arquitetura correta.",
+      "Os primeiros sinais aparecem em 60–90 dias para keywords locais, quando a arquitetura é construída corretamente desde o início. Cases auditáveis — com evolução documentada no Google Search Console e GA4 — costumam amadurecer em torno de 6 meses. Temas mais competitivos levam mais tempo, e por isso registramos cada métrica para você acompanhar o progresso real.",
   },
   {
     question: "Vocês garantem posição no Google?",
     answer:
-      "Não garantimos posição — garantimos método auditável: arquitetura, Schema, conteúdo e métricas documentadas.",
+      "Não. Garantir posição viola o Art. 9º, IV da Res. CFM 2.336/2023 e nenhuma agência séria promete isso. O que garantimos é método auditável: arquitetura técnica correta, Schema de saúde, conteúdo YMYL com E-E-A-T e métricas documentadas no Google Search Console e GA4. Você acompanha a evolução com dados reais, não com promessas.",
   },
 ];
 
@@ -71,7 +71,7 @@ export default function SeoMedicoPage() {
         </section>
 
         <section className="mt-10">
-          <h2 className="text-xl font-semibold text-navy">Performance certificada</h2>
+          <h2 className="text-xl font-semibold text-navy">Performance comprovada</h2>
           <p className="text-muted-foreground">
             LCP ≤ 0,8s, INP ≤ 200ms e CLS ≤ 0,1 — requisitos essenciais do Google para páginas YMYL em
             saúde. Performance nativa em Edge.

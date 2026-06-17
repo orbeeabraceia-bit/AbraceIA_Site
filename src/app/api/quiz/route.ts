@@ -6,7 +6,7 @@ import { notifyCrmWebhook } from "@/lib/integrations";
 const quizSchema = z.object({
   score: z.number().int().min(0).max(100),
   answers: z.record(z.string(), z.boolean()),
-  email: z.string().email().optional(),
+  email: z.email().optional(),
   consent: z.boolean().optional(),
 });
 

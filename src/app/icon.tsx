@@ -13,11 +13,15 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0A0A0A",
+          background: "#3F8A7E", // teal oficial (variação "app icon" do manual)
           borderRadius: 8,
+          color: "#F5FAF8", // off-white oficial
+          fontSize: 22,
+          fontWeight: 800,
+          fontFamily: "sans-serif",
         }}
       >
-        <div style={{ width: 16, height: 16, borderRadius: 8, background: "#00897B" }} />
+        A
       </div>
     ),
     { ...size },

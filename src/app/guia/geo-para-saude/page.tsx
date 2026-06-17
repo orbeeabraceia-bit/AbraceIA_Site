@@ -52,7 +52,7 @@ export default function GeoGuiaPage() {
         </h1>
         <p className="mt-4 text-lg text-muted-foreground">
           Otimização para citação em IAs generativas em Belo Horizonte — método
-          auditável, compliance CFM/CFO/CFP e performance certificada.
+          auditável, compliance CFM/CFO/CFP e performance comprovada.
         </p>
 
         {geoGuideSections.map((section, i) => (

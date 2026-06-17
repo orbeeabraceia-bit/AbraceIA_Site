@@ -18,8 +18,8 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "72px",
-          background: "linear-gradient(135deg, #0B1F3A 0%, #0E4D5C 60%, #139D87 100%)",
-          color: "#ffffff",
+          background: "linear-gradient(135deg, #0D0E0E 0%, #2E665D 55%, #3F8A7E 100%)",
+          color: "#F5FAF8",
           fontFamily: "sans-serif",
         }}
       >
@@ -32,7 +32,7 @@ export default function OpengraphImage() {
               width: 64,
               height: 64,
               borderRadius: 16,
-              background: "#139D87",
+              background: "#3F8A7E",
               fontSize: 38,
               fontWeight: 800,
             }}
@@ -46,7 +46,7 @@ export default function OpengraphImage() {
           <div style={{ display: "flex", fontSize: 64, fontWeight: 800, lineHeight: 1.1, maxWidth: 980 }}>
             Seu consultório citado pela IA e no topo do Google
           </div>
-          <div style={{ display: "flex", fontSize: 30, color: "#DFB55D", fontWeight: 600 }}>
+          <div style={{ display: "flex", fontSize: 30, color: "#D3B675", fontWeight: 600 }}>
             GEO · SEO · Compliance CFM — Belo Horizonte
           </div>
         </div>
