@@ -17,7 +17,7 @@ const footerLinks = [
 export function Footer() {
   return (
     <footer className="relative mt-auto overflow-hidden border-t border-border bg-white">
-      <CrossParticles screensaverOnly />
+      <CrossParticles screensaverOnly bounce sizeFactor={0.33} />
       <div className="relative z-10 mx-auto max-w-[1500px] px-4 py-12 md:px-6">
         <div className="grid gap-8 md:grid-cols-[1.6fr_1fr_1fr] md:items-start">
           <div>
