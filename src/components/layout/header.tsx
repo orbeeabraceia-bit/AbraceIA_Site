@@ -1,12 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { siteConfig } from "@/lib/site-config";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+// Flag client-only (SSR-safe, sem setState em efeito) para portalizar o menu.
+const noopSubscribe = () => () => {};
 
 type NavLink = { href: string; label: string };
 type NavGroup = { label: string; children: NavLink[] };
@@ -77,6 +81,7 @@ function ServicesDropdown({ group }: { group: NavGroup }) {
 
 function MobileNav() {
   const [open, setOpen] = useState(false);
+  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -84,6 +89,36 @@ function MobileNav() {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  // Painel renderizado via portal no <body> para escapar do contexto de
+  // backdrop-filter do header (que quebraria o position:fixed do overlay).
+  const panel = (
+    <div
+      id="mobile-menu"
+      className={cn(
+        "fixed inset-0 top-[73px] z-40 bg-white transition-opacity lg:hidden",
+        open ? "visible opacity-100" : "invisible pointer-events-none opacity-0",
+      )}
+    >
+      <nav className="flex flex-col gap-1 border-t border-border p-4" aria-label="Mobile">
+        {flatNav.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className="min-h-11 rounded-btn px-4 py-3 text-base font-medium text-navy hover:bg-teal-50"
+            onClick={() => setOpen(false)}
+          >
+            {item.label}
+          </Link>
+        ))}
+        <Link href="/auditoria-ia" className="mt-4" onClick={() => setOpen(false)}>
+          <Button intent="ai" className="w-full">
+            Auditoria IA grátis
+          </Button>
+        </Link>
+      </nav>
+    </div>
+  );
 
   return (
     <div className="lg:hidden">
@@ -97,31 +132,7 @@ function MobileNav() {
       >
         {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
       </Button>
-      <div
-        id="mobile-menu"
-        className={cn(
-          "fixed inset-0 top-[73px] z-40 bg-white transition-opacity",
-          open ? "visible opacity-100" : "invisible pointer-events-none opacity-0",
-        )}
-      >
-        <nav className="flex flex-col gap-1 border-t border-border p-4" aria-label="Mobile">
-          {flatNav.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="min-h-11 rounded-btn px-4 py-3 text-base font-medium text-navy hover:bg-teal-50"
-              onClick={() => setOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
-          <Link href="/auditoria-ia" className="mt-4" onClick={() => setOpen(false)}>
-            <Button intent="ai" className="w-full">
-              Auditoria IA grátis
-            </Button>
-          </Link>
-        </nav>
-      </div>
+      {mounted && createPortal(panel, document.body)}
     </div>
   );
 }
