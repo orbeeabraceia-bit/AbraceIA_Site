@@ -3,7 +3,7 @@ import type { LanguageModel } from "ai";
 
 // Modelo padrão (Cap. 4.1). Pode ser sobrescrito via AI_MODEL no formato
 // "provider/modelo" (AI Gateway) — o prefixo é removido no modo direto.
-const DEFAULT_MODEL = "anthropic/claude-sonnet-4-20250514";
+const DEFAULT_MODEL = "anthropic/claude-sonnet-4-6";
 
 export function isAiConfigured(): boolean {
   return Boolean(process.env.AI_GATEWAY_API_KEY || process.env.ANTHROPIC_API_KEY);
