@@ -24,18 +24,25 @@ export function hasAnalyticsConsent() {
   return localStorage.getItem("abraceia-cookie-consent") === "accepted";
 }
 
-// Sincroniza o Google Consent Mode com a escolha do usuário. Na revogação,
-// nega analytics_storage e descarta a fila local para o GTM/GA já carregado
-// parar de receber eventos.
-export function applyAnalyticsConsent(accepted: boolean) {
+// Consentimento de marketing (ad_storage) é separado do de analytics — LGPD
+// exige consentimento por finalidade (Cap. 9.1).
+export function hasMarketingConsent() {
+  if (typeof window === "undefined") return false;
+  return localStorage.getItem("abraceia-cookie-marketing") === "granted";
+}
+
+// Sincroniza o Google Consent Mode com a escolha do usuário, por finalidade.
+// Na revogação de analytics, descarta a fila local para o GTM/GA já carregado
+// parar de receber eventos. `marketing` controla o ad_storage.
+export function applyAnalyticsConsent(analytics: boolean, marketing = false) {
   if (typeof window === "undefined") return;
   if (window.gtag) {
     window.gtag("consent", "update", {
-      analytics_storage: accepted ? "granted" : "denied",
-      ad_storage: "denied",
+      analytics_storage: analytics ? "granted" : "denied",
+      ad_storage: marketing ? "granted" : "denied",
     });
   }
-  if (!accepted) {
+  if (!analytics) {
     window.dataLayer = [];
   }
 }

@@ -62,7 +62,7 @@
 | CMP-01 | **Filtrar a saída da IA** pelo `checkComplianceText` | Cap. 9.2 — todo material publicado deve passar pelo checklist; respostas de IA podem conter termo proibido. | No `/api/chat` e `/api/audit`, rodar `checkComplianceText` na resposta; se violar, sanitizar/substituir por fallback seguro. Teste com termo proibido injetado. | 🔴 P0 | S | [x] |
 | CMP-02 | **Estender termos proibidos para CFP e CFO** | Cap. 9.2 — CFP proíbe "preço social", "desconto", "pacote promocional", "valor acessível"; app atende psicólogo (case Eric Moreira) e odonto. | Ampliar `forbiddenTerms` em `compliance.ts` com termos CFP/CFO. Atualizar `compliance.test.ts`. | 🟡 P1 | S | [x] |
 | CMP-03 | **Processo de exclusão de dados (LGPD, 15 dias)** | Cap. 9.1 — exclusão documentada e funcional, atender em ≤15 dias. | Confirmar/escrever na `/privacidade` o canal e prazo; idealmente endpoint/rotina de exclusão por e-mail. | 🟡 P1 | M | [ ] |
-| CMP-04 | **Consentimentos separados por finalidade** (analytics vs marketing) | Cap. 9.1 — "consentimentos separados para cada finalidade". Hoje o banner é único (aceitar/rejeitar tudo). | Evoluir `CookieBanner` para toggles por finalidade (analytics / marketing). | 🟢 P2 | M | [ ] |
+| CMP-04 | **Consentimentos separados por finalidade** (analytics vs marketing) | Cap. 9.1 — "consentimentos separados para cada finalidade". Hoje o banner é único (aceitar/rejeitar tudo). | Evoluir `CookieBanner` para toggles por finalidade (analytics / marketing). | 🟢 P2 | M | [x] |
 | CMP-05 | **Revisão das páginas legais** (privacidade/termos/cookies/compliance) | Cap. 9.1 — política completa (dados coletados, finalidade, retenção, direitos). | Auditar as 4 páginas contra o checklist do Cap. 9 e completar lacunas. | 🟡 P1 | M | [ ] |
 
 ---
@@ -72,7 +72,7 @@
 | ID | Tarefa | Por quê (ref. guia) | Como / Critério de aceite | Prio | Esf | Status |
 |----|--------|---------------------|---------------------------|------|-----|--------|
 | LM-01 | **Calculadora ROI** (`/calculadora-roi`) | Cap. 2.4 / 6.6 / sitemap do guia — é um dos 2 lead magnets centrais; hoje ausente. | Página + componente interativo (estimativa de tráfego/leads/ROI a partir de inputs), com Schema `WebApplication`, evento GA4, disclaimer e CTA. TDD. Adicionar ao sitemap e ao nav. | 🟡 P1 | L | [x] |
-| LM-02 | **Schema + tracking nos lead magnets existentes** | Cap. 8 — eventos GA4 padronizados. | Garantir `webApplicationSchema` no Quiz/Auditorias e eventos consistentes (`generate_lead`, `view_item`). | 🟢 P2 | S | [ ] |
+| LM-02 | **Schema + tracking nos lead magnets existentes** | Cap. 8 — eventos GA4 padronizados. | Garantir `webApplicationSchema` no Quiz/Auditorias e eventos consistentes (`generate_lead`, `view_item`). | 🟢 P2 | S | [x] |
 
 ---
 

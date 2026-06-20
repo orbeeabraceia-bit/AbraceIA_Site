@@ -1,6 +1,12 @@
-import { applyAnalyticsConsent, hasAnalyticsConsent, trackEvent } from "@/lib/analytics";
+import {
+  applyAnalyticsConsent,
+  hasAnalyticsConsent,
+  hasMarketingConsent,
+  trackEvent,
+} from "@/lib/analytics";
 
 const CONSENT_KEY = "abraceia-cookie-consent";
+const MARKETING_KEY = "abraceia-cookie-marketing";
 
 describe("analytics — consentimento LGPD", () => {
   beforeEach(() => {
@@ -55,6 +61,22 @@ describe("analytics — consentimento LGPD", () => {
     expect(window.gtag).toHaveBeenCalledWith("consent", "update", {
       analytics_storage: "granted",
       ad_storage: "denied",
+    });
+  });
+
+  it("hasMarketingConsent reflete a escolha de marketing (separada de analytics)", () => {
+    expect(hasMarketingConsent()).toBe(false);
+    localStorage.setItem(MARKETING_KEY, "granted");
+    expect(hasMarketingConsent()).toBe(true);
+    // Marketing é independente do consentimento de analytics.
+    expect(hasAnalyticsConsent()).toBe(false);
+  });
+
+  it("applyAnalyticsConsent(true, true) concede ad_storage", () => {
+    applyAnalyticsConsent(true, true);
+    expect(window.gtag).toHaveBeenCalledWith("consent", "update", {
+      analytics_storage: "granted",
+      ad_storage: "granted",
     });
   });
 });
