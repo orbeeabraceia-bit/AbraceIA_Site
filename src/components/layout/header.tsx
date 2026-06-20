@@ -25,6 +25,7 @@ const nav: NavItem[] = [
       { href: "/servicos/sites-medicos", label: "Sites Médicos" },
       { href: "/servicos/seo-medico", label: "SEO Médico" },
       { href: "/auditoria-seo", label: "Auditoria SEO" },
+      { href: "/calculadora-roi", label: "Calculadora ROI" },
     ],
   },
   { href: "/cases", label: "Cases" },
@@ -35,9 +36,7 @@ const nav: NavItem[] = [
 ];
 
 // Lista achatada (para o menu mobile e para varredura)
-const flatNav: NavLink[] = nav.flatMap((item) =>
-  "children" in item ? item.children : [item],
-);
+const flatNav: NavLink[] = nav.flatMap((item) => ("children" in item ? item.children : [item]));
 
 function ServicesDropdown({ group }: { group: NavGroup }) {
   const [open, setOpen] = useState(false);
@@ -56,7 +55,10 @@ function ServicesDropdown({ group }: { group: NavGroup }) {
         className="flex items-center gap-1 text-base font-medium text-muted-foreground transition hover:text-care"
       >
         {group.label}
-        <ChevronDown className={cn("h-4 w-4 transition-transform", open && "rotate-180")} aria-hidden />
+        <ChevronDown
+          className={cn("h-4 w-4 transition-transform", open && "rotate-180")}
+          aria-hidden
+        />
       </button>
       <div
         className={cn(
@@ -81,7 +83,11 @@ function ServicesDropdown({ group }: { group: NavGroup }) {
 
 function MobileNav() {
   const [open, setOpen] = useState(false);
-  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
+  const mounted = useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  );
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -148,7 +154,15 @@ export function Header() {
       </a>
       <div className="mx-auto flex max-w-[1500px] items-center justify-between gap-4 px-4 py-4 md:px-6">
         <Link href="/" className="flex items-center gap-3">
-          <Image src="/logo.png" alt="" width={40} height={40} unoptimized aria-hidden className="h-10 w-10 shrink-0 object-contain" />
+          <Image
+            src="/logo.png"
+            alt=""
+            width={40}
+            height={40}
+            unoptimized
+            aria-hidden
+            className="h-10 w-10 shrink-0 object-contain"
+          />
           <span className="font-display text-xl font-bold text-navy">
             {siteConfig.name.split("—")[0].trim()}
           </span>
@@ -175,7 +189,11 @@ export function Header() {
             rel="noopener noreferrer"
             className="hidden lg:block"
           >
-            <Button intent="outline" size="sm" className="h-9 border-border text-xs font-semibold text-muted-foreground hover:text-navy hover:bg-muted">
+            <Button
+              intent="outline"
+              size="sm"
+              className="h-9 border-border text-xs font-semibold text-muted-foreground hover:text-navy hover:bg-muted"
+            >
               by Orbee Labs
             </Button>
           </a>

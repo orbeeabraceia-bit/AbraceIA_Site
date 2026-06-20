@@ -71,7 +71,7 @@
 
 | ID | Tarefa | Por quê (ref. guia) | Como / Critério de aceite | Prio | Esf | Status |
 |----|--------|---------------------|---------------------------|------|-----|--------|
-| LM-01 | **Calculadora ROI** (`/calculadora-roi`) | Cap. 2.4 / 6.6 / sitemap do guia — é um dos 2 lead magnets centrais; hoje ausente. | Página + componente interativo (estimativa de tráfego/leads/ROI a partir de inputs), com Schema `WebApplication`, evento GA4, disclaimer e CTA. TDD. Adicionar ao sitemap e ao nav. | 🟡 P1 | L | [ ] |
+| LM-01 | **Calculadora ROI** (`/calculadora-roi`) | Cap. 2.4 / 6.6 / sitemap do guia — é um dos 2 lead magnets centrais; hoje ausente. | Página + componente interativo (estimativa de tráfego/leads/ROI a partir de inputs), com Schema `WebApplication`, evento GA4, disclaimer e CTA. TDD. Adicionar ao sitemap e ao nav. | 🟡 P1 | L | [x] |
 | LM-02 | **Schema + tracking nos lead magnets existentes** | Cap. 8 — eventos GA4 padronizados. | Garantir `webApplicationSchema` no Quiz/Auditorias e eventos consistentes (`generate_lead`, `view_item`). | 🟢 P2 | S | [ ] |
 
 ---

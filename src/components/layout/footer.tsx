@@ -66,6 +66,11 @@ export function Footer() {
                   SEO Médico
                 </Link>
               </li>
+              <li>
+                <Link href="/calculadora-roi" className="hover:text-care">
+                  Calculadora ROI
+                </Link>
+              </li>
             </ul>
           </div>
           <div>
@@ -82,8 +87,7 @@ export function Footer() {
           </div>
         </div>
         <p className="mt-10 border-t border-border pt-6 text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} {siteConfig.org.name} · {siteConfig.city},{" "}
-          {siteConfig.state}
+          © {new Date().getFullYear()} {siteConfig.org.name} · {siteConfig.city}, {siteConfig.state}
         </p>
       </div>
     </footer>

@@ -15,6 +15,7 @@ const staticRoutes = [
   "/cases",
   "/auditoria-ia",
   "/auditoria-seo",
+  "/calculadora-roi",
   "/contato",
   "/faq",
   "/compliance",
