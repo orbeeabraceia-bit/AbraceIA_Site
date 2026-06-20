@@ -60,7 +60,7 @@
 | ID | Tarefa | Por quê (ref. guia) | Como / Critério de aceite | Prio | Esf | Status |
 |----|--------|---------------------|---------------------------|------|-----|--------|
 | CMP-01 | **Filtrar a saída da IA** pelo `checkComplianceText` | Cap. 9.2 — todo material publicado deve passar pelo checklist; respostas de IA podem conter termo proibido. | No `/api/chat` e `/api/audit`, rodar `checkComplianceText` na resposta; se violar, sanitizar/substituir por fallback seguro. Teste com termo proibido injetado. | 🔴 P0 | S | [x] |
-| CMP-02 | **Estender termos proibidos para CFP e CFO** | Cap. 9.2 — CFP proíbe "preço social", "desconto", "pacote promocional", "valor acessível"; app atende psicólogo (case Eric Moreira) e odonto. | Ampliar `forbiddenTerms` em `compliance.ts` com termos CFP/CFO. Atualizar `compliance.test.ts`. | 🟡 P1 | S | [ ] |
+| CMP-02 | **Estender termos proibidos para CFP e CFO** | Cap. 9.2 — CFP proíbe "preço social", "desconto", "pacote promocional", "valor acessível"; app atende psicólogo (case Eric Moreira) e odonto. | Ampliar `forbiddenTerms` em `compliance.ts` com termos CFP/CFO. Atualizar `compliance.test.ts`. | 🟡 P1 | S | [x] |
 | CMP-03 | **Processo de exclusão de dados (LGPD, 15 dias)** | Cap. 9.1 — exclusão documentada e funcional, atender em ≤15 dias. | Confirmar/escrever na `/privacidade` o canal e prazo; idealmente endpoint/rotina de exclusão por e-mail. | 🟡 P1 | M | [ ] |
 | CMP-04 | **Consentimentos separados por finalidade** (analytics vs marketing) | Cap. 9.1 — "consentimentos separados para cada finalidade". Hoje o banner é único (aceitar/rejeitar tudo). | Evoluir `CookieBanner` para toggles por finalidade (analytics / marketing). | 🟢 P2 | M | [ ] |
 | CMP-05 | **Revisão das páginas legais** (privacidade/termos/cookies/compliance) | Cap. 9.1 — política completa (dados coletados, finalidade, retenção, direitos). | Auditar as 4 páginas contra o checklist do Cap. 9 e completar lacunas. | 🟡 P1 | M | [ ] |
@@ -80,9 +80,9 @@
 
 | ID | Tarefa | Por quê (ref. guia) | Como / Critério de aceite | Prio | Esf | Status |
 |----|--------|---------------------|---------------------------|------|-----|--------|
-| QA-01 | **Prettier** | Cap. 4.3 — "Prettier configurado para formatação automática". | `.prettierrc` + script `format`; rodar no projeto. | 🟡 P1 | XS | [ ] |
-| QA-02 | **Husky + lint-staged** (pre-commit) | Cap. 4.3 — "Husky: git hooks para testes e lint antes de commits". | Hook `pre-commit` rodando lint+test nos arquivos staged. | 🟡 P1 | S | [ ] |
-| QA-03 | **Commitlint (Conventional Commits)** | Cap. 4.3. | `commitlint.config` + hook `commit-msg`. | 🟢 P2 | XS | [ ] |
+| QA-01 | **Prettier** | Cap. 4.3 — "Prettier configurado para formatação automática". | `.prettierrc` + script `format`; rodar no projeto. | 🟡 P1 | XS | [x] |
+| QA-02 | **Husky + lint-staged** (pre-commit) | Cap. 4.3 — "Husky: git hooks para testes e lint antes de commits". | Hook `pre-commit` rodando lint+test nos arquivos staged. | 🟡 P1 | S | [x] |
+| QA-03 | **Commitlint (Conventional Commits)** | Cap. 4.3. | `commitlint.config` + hook `commit-msg`. | 🟢 P2 | XS | [x] |
 | QA-04 | **CI no GitHub Actions** (lint + type-check + test + build) | Cap. 8.1 — verificação final antes de produção; PRs → preview. | `.github/workflows/ci.yml` rodando `pnpm lint`, `type-check`, `test`, `build` em cada PR. | 🔴 P0 | S | [x] |
 | QA-05 | **Threshold de cobertura de testes** | Cap. 6.2 — TDD rigoroso. Hoje sem `coverageThreshold`. | Definir limites mínimos em `jest.config.ts` (ex.: 70% global, 90% em `lib/`). | 🟢 P2 | XS | [ ] |
 | QA-06 | **Subir cobertura de testes** | Reforçar o diferencial D3/D4 ("nosso site tem N testes"). | Cobrir componentes/rotas ainda sem teste (ex.: `seo-audit-form`, `auditoria-form`, páginas de serviço). | 🟢 P2 | M | [ ] |
@@ -93,7 +93,7 @@
 
 | ID | Tarefa | Por quê (ref. guia) | Como / Critério de aceite | Prio | Esf | Status |
 |----|--------|---------------------|---------------------------|------|-----|--------|
-| GEO-01 | **`llms-full.txt`** além do `llms.txt` | Cap. 2.3 — "implementar llms.txt + llms-full.txt para não perder a vantagem". | Gerar versão completa (todo o conteúdo enciclopédico) na raiz. | 🟡 P1 | S | [ ] |
+| GEO-01 | **`llms-full.txt`** além do `llms.txt` | Cap. 2.3 — "implementar llms.txt + llms-full.txt para não perder a vantagem". | Gerar versão completa (todo o conteúdo enciclopédico) na raiz. | 🟡 P1 | S | [x] |
 | GEO-02 | **Validar todos os Schemas** (Rich Results Test) | Cap. 6.8 / A.3 — Schema completo é fator de citação por IA. | Rodar cada página no validador do Google; corrigir warnings. | 🟡 P1 | M | [ ] |
 | AEO-01 | **"Definição em caixa" + respostas em 40-60 palavras** nos artigos | Cap. 6.7 — táticas AEO para Featured Snippets. | Revisar `content/blog.ts`: 1ª resposta logo após o H2, em 40-60 palavras; bloco de definição destacado. | 🟢 P2 | M | [ ] |
 | AEO-02 | **Conteúdo Hub & Spoke no blog** | Cap. 7 — clusters (hub: Guia GEO; spokes: artigos). | Mapear e completar a estrutura de clusters do blog. | 🟢 P2 | L | [ ] |

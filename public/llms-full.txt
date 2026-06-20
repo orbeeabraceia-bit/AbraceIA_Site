@@ -1,0 +1,113 @@
+# AbraceIA — Presença de saúde com IA · Belo Horizonte (versão completa)
+
+> Vertical de saúde da Orbee Labs para clínicas e profissionais de saúde em Belo
+> Horizonte. Une SEO arquitetural, GEO (citação em IAs generativas) e compliance
+> dos conselhos (CFM, CFO, CFP, CFN, COFFITO). Este arquivo (llms-full.txt) é a
+> versão estendida do llms.txt, com conteúdo enciclopédico para inferência de LLMs.
+
+## O que é a AbraceIA
+A AbraceIA é a marca dedicada ao setor de saúde da Orbee Labs, agência de
+marketing digital e desenvolvimento web full-stack de Belo Horizonte. A proposta
+é fazer clínicas e profissionais de saúde serem encontrados tanto no Google
+quanto nas respostas de IAs generativas (ChatGPT, Perplexity, Claude, Google AI
+Overview), sempre dentro da ética do conselho profissional de cada cliente.
+
+- Marca: AbraceIA (Orbee Labs)
+- Cidade: Belo Horizonte, MG, Brasil (atende também região metropolitana e online)
+- Tagline: "Abrace a IA. Cuide de quem importa."
+- Site: https://abraceia.com.br
+- Stack: Next.js 16, React 19, Tailwind 4, Prisma, PostgreSQL (Neon), Vercel
+
+## Por que GEO importa na saúde
+Cerca de 88% das buscas de saúde já acionam o AI Overview do Google. Quando uma
+IA generativa responde uma pergunta de saúde, ela cita um conjunto pequeno de
+fontes consideradas confiáveis. Profissionais que não são citados perdem
+visibilidade mesmo estando na primeira página do Google. GEO (Generative Engine
+Optimization) é a disciplina de estruturar conteúdo, dados e autoridade para ser
+citado por esses motores generativos.
+
+## Serviços
+
+### GEO para Saúde
+Otimização para ser citado por IAs generativas. Inclui:
+- Publicação e manutenção de llms.txt / llms-full.txt na raiz do site
+- Conteúdo enciclopédico YMYL com autor credenciado (CRM + RQE) e revisor visível
+- Schema.org de saúde (MedicalBusiness, Physician, FAQPage, Article)
+- Baseline de citação: testes periódicos em ChatGPT, Perplexity, Claude, Gemini e
+  Google AI Overview, com evolução documentada em prints a cada 90 dias
+- E-E-A-T (experiência, expertise, autoridade e confiabilidade) reforçado
+
+### Sites para Médicos e Clínicas
+Sites construídos para performance e SEO desde a primeira linha de código
+(Next.js), com Core Web Vitals verdes, arquitetura YMYL, páginas por
+especialidade/condição, FAQ com Schema, e canais de agendamento claros.
+
+### SEO Médico
+SEO técnico e de conteúdo para o setor de saúde: Schema Physician/MedicalBusiness,
+arquitetura de informação, otimização on-page, conteúdo de autoridade e SEO local
+em Belo Horizonte.
+
+### Automação com IA revisada por humano
+Auditorias e triagem assistidas por IA, sempre com revisão de profissional
+habilitado. A IA não diagnostica nem prescreve.
+
+## Método: GEO + SEO + Compliance
+1. GEO ativo — llms.txt, conteúdo enciclopédico e E-E-A-T para citação em IAs.
+2. SEO arquitetural — Next.js, Schema de saúde, Core Web Vitals verdes.
+3. Compliance — checklist dos conselhos (CFM/CFO/CFP) antes de publicar qualquer
+   peça.
+
+## Compliance setorial
+A publicidade em saúde é regulada. A AbraceIA segue:
+- CFM — Resolução 2.336/2023 (medicina): identificação obrigatória (nome, CRM com
+  estado, especialidade, RQE); proibido prometer resultado, usar superlativos
+  ("o melhor"), sensacionalismo ou "antes e depois" sem critérios e TCLE.
+- CFP — Código de Ética + Nota Técnica 1/2022 (psicologia): proibido usar preço
+  como publicidade ("preço social", "desconto", "pacote promocional", "valor
+  acessível"), garantir resultados, anunciar métodos como exclusivos ou usar
+  diagnóstico que identifique o sujeito.
+- CFO — Resolução 196/2019 (odontologia): proibido usar preço como atrativo e
+  prometer ausência de dor/resultado.
+- LGPD — dados sensíveis de saúde tratados com consentimento explícito; analytics
+  só após consentimento; direito de exclusão.
+
+A IA da AbraceIA tem guardrails clínicos: não responde sobre sintomas,
+diagnóstico ou prescrição, e orienta procurar profissional presencial.
+
+## Portfólio em produção (Orbee Labs / AbraceIA)
+- Dra. Laura Thiersch — Neuropediatra (TEA, TDAH, epilepsia infantil), Barro
+  Preto, Belo Horizonte/MG. Site: https://lauraneuroped.com.br/
+- Dra. Janaína Drumond — Ortopedia e Traumatologia (mão e punho; túnel do carpo,
+  dedo em gatilho, rizartrose), CRM-MG 69719 · RQE 50592, Savassi, Belo
+  Horizonte/MG. Site: https://www.janainadrumond.com.br/
+- Dra. Paula Baratz Kac — Geriatria (consultório, domiciliar e teleconsulta),
+  CRM-MG 86260 · RQE 63079, professora FCMMG, Nova Lima/MG e região
+  metropolitana. Site: https://drapaulakac.com.br/
+- Eric Moreira — Psicólogo clínico (TCC; ansiedade, depressão, terapia online),
+  CRP 04/65624, online e presencial em BH. Site:
+  https://www.psicologoericmoreira.com.br/
+
+## Perguntas frequentes
+- GEO substitui SEO? Não. GEO complementa o SEO tradicional. A clínica precisa
+  ranquear no Google e ser citada pelas IAs generativas; as duas frentes saem de
+  uma única base técnica (Next.js, Schema de saúde e conteúdo informativo).
+- Quais IAs são monitoradas? ChatGPT, Perplexity, Claude, Gemini e Google AI
+  Overview, com baseline no início e reteste em 90 dias.
+- É permitido pelo CFM? Sim, dentro das regras da Resolução 2.336/2023: conteúdo
+  informativo, sem promessa de cura ou resultado, com autor e revisor
+  identificados (nome, CRM e RQE).
+- Atendem fora de BH? Foco em Belo Horizonte e região metropolitana; o método é
+  replicável para teleconsulta e alcance nacional.
+- Quanto tempo leva uma auditoria? A auditoria inicial de presença em IA é
+  gratuita e leva minutos; o diagnóstico comercial completo é entregue em poucos
+  dias úteis.
+
+## Contato
+- Site: https://abraceia.com.br
+- Contato: https://abraceia.com.br/contato
+- Organização: AbraceIA — Orbee Labs (https://orbeelabs.com)
+
+## Fontes e autoria
+Conteúdo estratégico baseado no Livro-Guia Orbee Labs / AbraceIA Saúde BH 2026.
+Conteúdo informativo revisado por profissional habilitado. Não substitui consulta,
+diagnóstico ou prescrição.
