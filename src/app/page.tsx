@@ -45,14 +45,7 @@ const differentials = [
   "Schema Markup de saúde validado",
 ];
 
-const homeFaq = [
-  siteFaq[2],
-  siteFaq[4],
-  siteFaq[8],
-  siteFaq[9],
-  siteFaq[0],
-  siteFaq[3],
-];
+const homeFaq = [siteFaq[2], siteFaq[4], siteFaq[8], siteFaq[9], siteFaq[0], siteFaq[3]];
 
 export default function HomePage() {
   return (
@@ -68,46 +61,58 @@ export default function HomePage() {
             <div className="inline-flex items-center rounded-full border border-care/20 bg-care/5 px-3 py-1 text-xs font-bold uppercase tracking-widest text-care backdrop-blur-sm">
               Orbee Labs · Belo Horizonte
             </div>
-            
+
             <p className="mt-6 font-serif text-xl italic leading-relaxed text-muted-foreground md:text-2xl">
               {emotionalLead}
             </p>
-            
+
             <h1 className="mt-4 font-display text-4xl font-extrabold tracking-tight text-navy md:text-5xl lg:text-[3.5rem] lg:leading-[1.1] text-balance">
-              Seu consultório citado pela <span className="bg-gradient-to-br from-care to-teal-700 bg-clip-text text-transparent">IA e no topo</span> do Google
-              <span className="mt-2 block text-2xl font-bold text-navy/80 md:text-3xl lg:text-[2.2rem]">dentro da ética do seu conselho.</span>
+              Seu consultório citado pela{" "}
+              <span className="bg-gradient-to-br from-care to-teal-700 bg-clip-text text-transparent">
+                IA e no topo
+              </span>{" "}
+              do Google
+              <span className="mt-2 block text-2xl font-bold text-navy/80 md:text-3xl lg:text-[2.2rem]">
+                dentro da ética do seu conselho.
+              </span>
             </h1>
-            
+
             <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground lg:mx-0">
-              Cuidamos da sua presença no Google, da reputação online e da citação em
-              ChatGPT e Perplexity — com Core Web Vitals verdes e a atenção que a
-              medicina pede.
+              Cuidamos da sua presença no Google, da reputação online e da citação em ChatGPT e
+              Perplexity — com Core Web Vitals verdes e a atenção que a medicina pede.
             </p>
-            
+
             <div className="mt-10">
               <HeroActions />
             </div>
-            
+
             <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
               {kpis.map((kpi) => (
-                <div key={kpi.label} className="group relative overflow-hidden rounded-2xl border border-border/60 bg-white/50 p-4 shadow-sm backdrop-blur-md transition-all hover:border-care/30 hover:shadow-md">
+                <div
+                  key={kpi.label}
+                  className="group relative overflow-hidden rounded-2xl border border-border/60 bg-white/50 p-4 shadow-sm backdrop-blur-md transition-all hover:border-care/30 hover:shadow-md"
+                >
                   <div className="absolute inset-0 bg-gradient-to-br from-white to-transparent opacity-50" />
-                  <p className="relative text-2xl font-black tracking-tight text-navy transition-colors group-hover:text-care">{kpi.value}</p>
-                  <p className="relative mt-1 text-xs font-medium text-muted-foreground">{kpi.label}</p>
+                  <p className="relative text-2xl font-black tracking-tight text-navy transition-colors group-hover:text-care">
+                    {kpi.value}
+                  </p>
+                  <p className="relative mt-1 text-xs font-medium text-muted-foreground">
+                    {kpi.label}
+                  </p>
                 </div>
               ))}
             </div>
           </FadeIn>
-          
+
           <FadeIn delay={0.2} className="relative hidden lg:block">
             {/* Decoração atrás da imagem (glow) */}
             <div className="absolute -inset-4 z-0 rounded-[2.5rem] bg-gradient-to-br from-care/15 to-transparent blur-2xl" />
-            
+
             {/* Imagem com efeito glass/borda */}
             <div className="relative z-10 overflow-hidden rounded-3xl border border-white/60 bg-white shadow-2xl shadow-navy/5 ring-1 ring-border/50 transition-transform duration-700 hover:-translate-y-1 hover:shadow-xl">
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/40 to-transparent" />
               <Image
-                src="/images/hero-ai-health.png"
+                src="/images/hero-ai-health.webp"
                 alt="Profissional de saúde em clínica moderna com elementos sutis de IA representando a solução AbraceIA"
                 width={800}
                 height={800}
@@ -127,8 +132,8 @@ export default function HomePage() {
             A IA domina a SERP de saúde
           </h2>
           <p className="mt-4 max-w-5xl text-muted-foreground">
-            Em BH, 88% das buscas de saúde acionam AI Overview. Quem não é citado,
-            desaparece — mesmo na 1ª página do Google.
+            Em BH, 88% das buscas de saúde acionam AI Overview. Quem não é citado, desaparece —
+            mesmo na 1ª página do Google.
           </p>
         </FadeIn>
       </section>
@@ -140,15 +145,30 @@ export default function HomePage() {
           </h2>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             {[
-              { title: "GEO", desc: "llms.txt, conteúdo enciclopédico e E-E-A-T.", href: "/servicos/geo-saude" },
-              { title: "SEO Arquitetural", desc: "Next.js 16, Schema de saúde, CWV verdes.", href: "/servicos/seo-medico" },
-              { title: "Compliance", desc: "Checklist CFM/CFO/CFP antes de publicar.", href: "/sobre" },
+              {
+                title: "GEO",
+                desc: "llms.txt, conteúdo enciclopédico e E-E-A-T.",
+                href: "/servicos/geo-saude",
+              },
+              {
+                title: "SEO Arquitetural",
+                desc: "Next.js 16, Schema de saúde, CWV verdes.",
+                href: "/servicos/seo-medico",
+              },
+              {
+                title: "Compliance",
+                desc: "Checklist CFM/CFO/CFP antes de publicar.",
+                href: "/sobre",
+              },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.08}>
                 <Card className="h-full">
                   <CardTitle>{item.title}</CardTitle>
                   <CardDescription>{item.desc}</CardDescription>
-                  <Link href={item.href} className="mt-4 inline-block text-sm font-semibold text-care hover:underline">
+                  <Link
+                    href={item.href}
+                    className="mt-4 inline-block text-sm font-semibold text-care hover:underline"
+                  >
                     Saiba mais
                   </Link>
                 </Card>
@@ -164,8 +184,13 @@ export default function HomePage() {
         <h2 className="font-display text-2xl font-bold text-navy">6 diferenciais verificáveis</h2>
         <ul className="mt-6 grid gap-3 md:grid-cols-2">
           {differentials.map((item) => (
-            <li key={item} className="flex items-center gap-2 rounded-lg border border-border bg-white p-4 text-sm text-navy shadow-sm">
-              <span className="text-care" aria-hidden>✓</span>
+            <li
+              key={item}
+              className="flex items-center gap-2 rounded-lg border border-border bg-white p-4 text-sm text-navy shadow-sm"
+            >
+              <span className="text-care" aria-hidden>
+                ✓
+              </span>
               {item}
             </li>
           ))}
@@ -194,8 +219,8 @@ export default function HomePage() {
               Auditoria de presença em IA
             </h2>
             <p className="mt-4 text-muted-foreground">
-              Descubra se ChatGPT e Perplexity já citam sua clínica — relatório
-              orientativo com checklist GEO.
+              Descubra se ChatGPT e Perplexity já citam sua clínica — relatório orientativo com
+              checklist GEO.
             </p>
             <Link href="/auditoria-ia" className="mt-6 inline-block">
               <Button intent="ai">Iniciar auditoria gratuita</Button>

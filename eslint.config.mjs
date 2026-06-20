@@ -15,6 +15,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Relatórios gerados (jest --coverage) não devem ser lintados.
+    "coverage/**",
   ]),
 ]);
 

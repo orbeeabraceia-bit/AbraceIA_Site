@@ -12,14 +12,14 @@ export function CrossParticles({
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    
+
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     let animationFrameId: number;
     let width = canvas.parentElement?.clientWidth || window.innerWidth;
     let height = canvas.parentElement?.clientHeight || window.innerHeight;
-    
+
     const dpr = window.devicePixelRatio || 1;
     canvas.width = width * dpr;
     canvas.height = height * dpr;
@@ -36,7 +36,7 @@ export function CrossParticles({
 
     const PARTICLE_COUNT = 1600; // Alta densidade para formar a bolha
     const particles: Particle[] = [];
-    
+
     // Rastreamento do mouse para girar a bolha
     let mouseRotX = 0;
     let targetMouseRotX = 0;
@@ -83,10 +83,16 @@ export function CrossParticles({
       size: number;
       angleOffset: number;
       // Plano 3D da cruz: eixos base (orientação aleatória) e suas projeções em tela após rotação
-      u0x: number; u0y: number; u0z: number;
-      v0x: number; v0y: number; v0z: number;
-      ux: number = 1; uy: number = 0; // eixo horizontal da cruz projetado
-      vx: number = 0; vy: number = 1; // eixo vertical da cruz projetado
+      u0x: number;
+      u0y: number;
+      u0z: number;
+      v0x: number;
+      v0y: number;
+      v0z: number;
+      ux: number = 1;
+      uy: number = 0; // eixo horizontal da cruz projetado
+      vx: number = 0;
+      vy: number = 1; // eixo vertical da cruz projetado
 
       constructor(index: number, total: number) {
         // Distribuição Fibonacci em uma Esfera (base estruturada que será deformada)
@@ -168,30 +174,30 @@ export function CrossParticles({
 
       draw(sphereRadius: number) {
         if (!ctx) return;
-        
+
         // Projeção 3D para 2D simples (perspectiva)
         const fov = 400;
         const scale = fov / (fov + this.z * sphereRadius);
-        
+
         const projX = centerX + this.x * sphereRadius * scale;
         const projY = centerY + this.y * sphereRadius * scale;
 
         // Oculta partículas que estão muito "atrás" ou fora da tela
         if (scale < 0.1) return;
-        
+
         // Fade in dependendo da profundidade (Z). O que está mais perto da câmera fica forte, o que está atrás da bolha fica fraco.
         // this.z vai de aprox -1.3 (mais perto) a +1.3 (mais longe)
-        const opacity = 1 - ((this.z + 1.5) / 3);
-        
+        const opacity = 1 - (this.z + 1.5) / 3;
+
         ctx.save();
         ctx.globalAlpha = Math.max(0.1, Math.min(1, opacity));
         ctx.translate(projX, projY);
-        
+
         // Rotação individual (opcional para dar dinamismo sem perder o formato da cruz)
-        // ctx.rotate(this.angleOffset); 
-        
+        // ctx.rotate(this.angleOffset);
+
         const currentSize = this.size * scale;
-        
+
         ctx.strokeStyle = this.color;
         ctx.lineWidth = Math.max(0.6, currentSize * 0.22);
         ctx.lineCap = "round";
@@ -206,8 +212,18 @@ export function CrossParticles({
         const vy = this.vy; // eixo vertical projetado
         // Vértices do contorno do "+" (sentido horário): a = horizontal, b = vertical
         const pts: [number, number][] = [
-          [-t, -s], [t, -s], [t, -t], [s, -t], [s, t], [t, t],
-          [t, s], [-t, s], [-t, t], [-s, t], [-s, -t], [-t, -t],
+          [-t, -s],
+          [t, -s],
+          [t, -t],
+          [s, -t],
+          [s, t],
+          [t, t],
+          [t, s],
+          [-t, s],
+          [-t, t],
+          [-s, t],
+          [-s, -t],
+          [-t, -t],
         ];
         ctx.beginPath();
         for (let i = 0; i < pts.length; i++) {
@@ -219,7 +235,7 @@ export function CrossParticles({
         }
         ctx.closePath();
         ctx.stroke();
-        
+
         ctx.restore();
       }
     }
@@ -289,7 +305,8 @@ export function CrossParticles({
         const w1 = 0.00018; // velocidade do círculo principal (lento)
         const w2 = 0.00031; // velocidade do círculo secundário
         const cx = width * 0.5 + (Math.cos(elapsed * w1) * 0.7 + Math.cos(elapsed * w2) * 0.3) * ax;
-        const cy = height * 0.5 + (Math.sin(elapsed * w1) * 0.7 + Math.sin(elapsed * w2 + 1.3) * 0.3) * ay;
+        const cy =
+          height * 0.5 + (Math.sin(elapsed * w1) * 0.7 + Math.sin(elapsed * w2 + 1.3) * 0.3) * ay;
         targetOffsetX = cx - baseCenterX();
         targetOffsetY = cy - height / 2;
       }
@@ -351,6 +368,26 @@ export function CrossParticles({
     };
 
     init();
+
+    // Acessibilidade (PERF-03): respeita prefers-reduced-motion — desenha um
+    // único quadro estático (a bolha aparece) sem loop de animação nem
+    // listeners de mouse, evitando movimento contínuo para quem pediu menos.
+    const reduceMotion =
+      typeof window !== "undefined" &&
+      window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduceMotion) {
+      const sphereRadius = Math.min(width, height) * sizeFactor;
+      centerX = baseCenterX();
+      centerY = height / 2;
+      ctx.clearRect(0, 0, width, height);
+      particles.sort((a, b) => b.z - a.z);
+      particles.forEach((p) => {
+        p.update(0);
+        p.draw(sphereRadius);
+      });
+      return;
+    }
+
     window.addEventListener("resize", resize);
     // Modo proteção de tela: sem listeners de mouse => lastMoveAt fica -Infinity,
     // então a bolha fica permanentemente no passeio (idle sempre true).

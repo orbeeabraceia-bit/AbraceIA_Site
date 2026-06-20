@@ -51,7 +51,7 @@
 | SEG-02 | **Rate-limit nos endpoints de IA** (`/api/chat`, `/api/audit`) e demais (`/api/quiz`, `/api/analyze-seo`) | Endpoints de IA custam tokens e estão expostos. `rate-limit.ts` já existe, usado só em `/api/contact`. | Aplicar `rateLimit(\`chat:\${ip}\`)` etc. com limites adequados por rota. Retornar 429 + `Retry-After`. Teste cobrindo o 429. | 🔴 P0 | S | [x] |
 | SEG-03 | **Parsing robusto da resposta da IA** em `/api/audit` | `JSON.parse(text)` quebra se o modelo devolver cercas ```` ```json ````; cai no fallback à toa. | Extrair JSON com regex/stripping de cercas antes do parse. Teste com resposta cercada. | 🟡 P1 | XS | [x] |
 | SEG-04 | **Rate-limit multi-instância (Upstash Redis)** | `rate-limit.ts` é em memória (por instância serverless) — o próprio comentário aponta isso. Guia (4.2) lista Upstash no free tier. | Migrar store para Upstash Redis quando `UPSTASH_*` definidas; manter fallback em memória. | 🟢 P2 | M | [ ] |
-| SEG-05 | **Monitoramento de CVEs / Dependabot** | Cap. 4.2.1 — "monitorar advisories semanalmente". | Habilitar Dependabot (`.github/dependabot.yml`) + alertas de segurança no GitHub. | 🟢 P2 | XS | [ ] |
+| SEG-05 | **Monitoramento de CVEs / Dependabot** | Cap. 4.2.1 — "monitorar advisories semanalmente". | Habilitar Dependabot (`.github/dependabot.yml`) + alertas de segurança no GitHub. | 🟢 P2 | XS | [x] |
 
 ---
 
@@ -84,7 +84,7 @@
 | QA-02 | **Husky + lint-staged** (pre-commit) | Cap. 4.3 — "Husky: git hooks para testes e lint antes de commits". | Hook `pre-commit` rodando lint+test nos arquivos staged. | 🟡 P1 | S | [x] |
 | QA-03 | **Commitlint (Conventional Commits)** | Cap. 4.3. | `commitlint.config` + hook `commit-msg`. | 🟢 P2 | XS | [x] |
 | QA-04 | **CI no GitHub Actions** (lint + type-check + test + build) | Cap. 8.1 — verificação final antes de produção; PRs → preview. | `.github/workflows/ci.yml` rodando `pnpm lint`, `type-check`, `test`, `build` em cada PR. | 🔴 P0 | S | [x] |
-| QA-05 | **Threshold de cobertura de testes** | Cap. 6.2 — TDD rigoroso. Hoje sem `coverageThreshold`. | Definir limites mínimos em `jest.config.ts` (ex.: 70% global, 90% em `lib/`). | 🟢 P2 | XS | [ ] |
+| QA-05 | **Threshold de cobertura de testes** | Cap. 6.2 — TDD rigoroso. Hoje sem `coverageThreshold`. | Definir limites mínimos em `jest.config.ts` (ex.: 70% global, 90% em `lib/`). | 🟢 P2 | XS | [x] |
 | QA-06 | **Subir cobertura de testes** | Reforçar o diferencial D3/D4 ("nosso site tem N testes"). | Cobrir componentes/rotas ainda sem teste (ex.: `seo-audit-form`, `auditoria-form`, páginas de serviço). | 🟢 P2 | M | [ ] |
 
 ---
@@ -106,9 +106,9 @@
 | ID | Tarefa | Por quê (ref. guia) | Como / Critério de aceite | Prio | Esf | Status |
 |----|--------|---------------------|---------------------------|------|-----|--------|
 | PERF-01 | **Medir Core Web Vitals reais** (Lighthouse/PSI) | Cap. 6.5 / 8.2 — metas LCP < 0,8s, INP < 200ms, CLS < 0,05; "Lighthouse > 95". | Rodar PageSpeed nas páginas-chave; registrar baseline; corrigir o que ficar fora da meta (peso do hero PNG é suspeito — ver pendência do diário). | 🔴 P0 | M | [ ] |
-| PERF-02 | **Otimizar imagem do hero** | Diário 2026-06-09 já lista "otimizar hero PNG" como pendência. | Converter para WebP/AVIF, dimensionar corretamente; confirmar ganho de LCP. | 🟡 P1 | S | [ ] |
+| PERF-02 | **Otimizar imagem do hero** | Diário 2026-06-09 já lista "otimizar hero PNG" como pendência. | Converter para WebP/AVIF, dimensionar corretamente; confirmar ganho de LCP. | 🟡 P1 | S | [x] |
 | A11Y-01 | **Auditoria de acessibilidade WCAG AA** | Cap. 8.1 — contraste AA, alt text, navegação por teclado, ARIA. | Rodar axe/Lighthouse a11y; corrigir achados. App já tem skip-link, font-size controls e ARIA — validar cobertura total. | 🟡 P1 | M | [ ] |
-| PERF-03 | **`prefers-reduced-motion`** nas animações | Boa prática a11y; o `CrossParticles` (1600 partículas) e Framer Motion são pesados em motion. | Respeitar `prefers-reduced-motion` (desligar/atenuar animações). | 🟢 P2 | S | [ ] |
+| PERF-03 | **`prefers-reduced-motion`** nas animações | Boa prática a11y; o `CrossParticles` (1600 partículas) e Framer Motion são pesados em motion. | Respeitar `prefers-reduced-motion` (desligar/atenuar animações). FadeIn já respeitava; faltava o CrossParticles. | 🟢 P2 | S | [x] |
 
 ---
 
