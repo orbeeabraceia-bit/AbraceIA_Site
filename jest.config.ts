@@ -11,14 +11,14 @@ const config: Config = {
   moduleNameMapper: {
     "^@/(.*)$": "<rootDir>/src/$1",
   },
-  // Trava de regressão (QA-05): limites um pouco abaixo da cobertura atual.
-  // Subir gradualmente conforme adicionamos testes (QA-06).
+  // Trava de regressão (QA-05/QA-06): limites um pouco abaixo da cobertura
+  // atual. Subir gradualmente conforme adicionamos testes.
   coverageThreshold: {
     global: {
-      statements: 65,
-      branches: 70,
-      functions: 65,
-      lines: 65,
+      statements: 72,
+      branches: 75,
+      functions: 68,
+      lines: 72,
     },
   },
 };

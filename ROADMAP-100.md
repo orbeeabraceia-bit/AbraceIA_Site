@@ -85,7 +85,7 @@
 | QA-03 | **Commitlint (Conventional Commits)** | Cap. 4.3. | `commitlint.config` + hook `commit-msg`. | 🟢 P2 | XS | [x] |
 | QA-04 | **CI no GitHub Actions** (lint + type-check + test + build) | Cap. 8.1 — verificação final antes de produção; PRs → preview. | `.github/workflows/ci.yml` rodando `pnpm lint`, `type-check`, `test`, `build` em cada PR. | 🔴 P0 | S | [x] |
 | QA-05 | **Threshold de cobertura de testes** | Cap. 6.2 — TDD rigoroso. Hoje sem `coverageThreshold`. | Definir limites mínimos em `jest.config.ts` (ex.: 70% global, 90% em `lib/`). | 🟢 P2 | XS | [x] |
-| QA-06 | **Subir cobertura de testes** | Reforçar o diferencial D3/D4 ("nosso site tem N testes"). | Cobrir componentes/rotas ainda sem teste (ex.: `seo-audit-form`, `auditoria-form`, páginas de serviço). | 🟢 P2 | M | [ ] |
+| QA-06 | **Subir cobertura de testes** | Reforçar o diferencial D3/D4 ("nosso site tem N testes"). | Cobrir componentes/rotas ainda sem teste (ex.: `seo-audit-form`, `auditoria-form`, páginas de serviço). | 🟢 P2 | M | [x] |
 
 ---
 
