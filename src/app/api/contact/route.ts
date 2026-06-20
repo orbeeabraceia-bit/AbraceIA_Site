@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { notifyCrmWebhook, sendLeadEmail } from "@/lib/integrations";
-import { rateLimit } from "@/lib/rate-limit";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 const contactSchema = z.object({
   name: z.string().min(2).max(120),
@@ -16,11 +16,7 @@ const contactSchema = z.object({
 
 export async function POST(request: Request) {
   // Rate-limit por IP: 5 envios a cada 10 minutos
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip") ||
-    "unknown";
-  const rl = rateLimit(`contact:${ip}`);
+  const rl = rateLimit(`contact:${clientIp(request)}`);
   if (!rl.ok) {
     return NextResponse.json(
       { error: "Muitas tentativas. Tente novamente em alguns minutos." },

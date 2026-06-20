@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.*
+# o gerenciador oficial é o pnpm — ignorar lockfile de npm para evitar conflito
+package-lock.json
 .yarn/*
 !.yarn/patches
 !.yarn/plugins

@@ -36,3 +36,13 @@ export function rateLimit(
   }
   return { ok: true, remaining: limit - hit.count };
 }
+
+// Extrai o IP do cliente a partir dos headers do proxy/Vercel. Fallback
+// "unknown" agrupa quem não envia o header — aceitável como 1ª barreira.
+export function clientIp(request: Request): string {
+  return (
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown"
+  );
+}

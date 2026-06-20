@@ -4,6 +4,22 @@ import { generateText } from "ai";
 import { getAiModel, isAiConfigured } from "@/lib/ai-model";
 import { siteConfig } from "@/lib/site-config";
 import { notifyCrmWebhook } from "@/lib/integrations";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
+import { checkComplianceText } from "@/lib/compliance";
+
+// Extrai um objeto JSON da resposta do modelo, tolerando cercas markdown
+// (```json … ```) e texto ao redor. Retorna null se não houver JSON válido.
+function extractJson(text: string): unknown {
+  const withoutFences = text.replace(/```(?:json)?/gi, "");
+  const start = withoutFences.indexOf("{");
+  const end = withoutFences.lastIndexOf("}");
+  if (start === -1 || end <= start) return null;
+  try {
+    return JSON.parse(withoutFences.slice(start, end + 1));
+  } catch {
+    return null;
+  }
+}
 
 const auditSchema = z.object({
   name: z.string().min(2).max(120),
@@ -31,6 +47,15 @@ function fallbackReport(name: string, specialty: string, city: string) {
 }
 
 export async function POST(request: Request) {
+  // Rate-limit por IP: a auditoria aciona a IA (custo por token). 5/10min.
+  const rl = rateLimit(`audit:${clientIp(request)}`);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: "Muitas tentativas. Tente novamente em alguns minutos." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfter) } },
+    );
+  }
+
   try {
     const body = await request.json();
     const parsed = auditSchema.safeParse(body);
@@ -63,27 +88,29 @@ Respeite CFM 2.336/2023 — sem promessa de resultado.`;
       maxOutputTokens: 800,
     });
 
-    try {
-      const ai = JSON.parse(text) as {
-        summary: string;
-        items: string[];
-        risks: string[];
-      };
-      return NextResponse.json({
-        mode: "ai" as const,
-        summary: ai.summary,
-        items: ai.items,
-        risks: ai.risks,
-        disclaimer: siteConfig.aiDisclaimer,
-      });
-    } catch {
-      return NextResponse.json({
-        mode: "ai" as const,
-        summary: text.slice(0, 500),
-        items: fallbackReport(name, specialty, city).items,
-        disclaimer: siteConfig.aiDisclaimer,
-      });
+    const ai = extractJson(text) as
+      | { summary?: string; items?: string[]; risks?: string[] }
+      | null;
+
+    // Sem JSON utilizável → checklist orientativo (não devolvemos texto cru).
+    if (!ai || typeof ai.summary !== "string" || !Array.isArray(ai.items)) {
+      return NextResponse.json(fallbackReport(name, specialty, city));
     }
+
+    // Compliance CFM (Cap. 9.2): se a IA escorregar num termo proibido,
+    // descartamos a saída e devolvemos o checklist seguro.
+    const combined = [ai.summary, ...(ai.items ?? []), ...(ai.risks ?? [])].join(" ");
+    if (!checkComplianceText(combined).ok) {
+      return NextResponse.json(fallbackReport(name, specialty, city));
+    }
+
+    return NextResponse.json({
+      mode: "ai" as const,
+      summary: ai.summary,
+      items: ai.items,
+      risks: ai.risks ?? [],
+      disclaimer: siteConfig.aiDisclaimer,
+    });
   } catch {
     return NextResponse.json({ error: "Erro na auditoria" }, { status: 500 });
   }

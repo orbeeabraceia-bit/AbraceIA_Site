@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { analyzeSeo, normalizeUrl, SsrfBlockedError } from "@/lib/seo-audit";
 import { notifyCrmWebhook } from "@/lib/integrations";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -25,6 +26,15 @@ const bodySchema = z.object({
 });
 
 export async function POST(request: Request) {
+  // Rate-limit por IP: a análise busca uma URL externa no servidor. 10/10min.
+  const rl = rateLimit(`analyze-seo:${clientIp(request)}`, 10);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: "Muitas tentativas. Tente novamente em alguns minutos." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfter) } },
+    );
+  }
+
   let parsed;
   try {
     parsed = bodySchema.safeParse(await request.json());

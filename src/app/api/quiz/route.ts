@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { notifyCrmWebhook } from "@/lib/integrations";
+import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 const quizSchema = z.object({
   score: z.number().int().min(0).max(100),
@@ -11,6 +12,15 @@ const quizSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  // Rate-limit por IP: 10 envios a cada 10 minutos.
+  const rl = rateLimit(`quiz:${clientIp(request)}`, 10);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: "Muitas tentativas. Tente novamente em alguns minutos." },
+      { status: 429, headers: { "Retry-After": String(rl.retryAfter) } },
+    );
+  }
+
   try {
     const body = await request.json();
     const parsed = quizSchema.safeParse(body);

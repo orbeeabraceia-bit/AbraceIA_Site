@@ -2,7 +2,7 @@ export const defaultAuthor = {
   name: "Diana Camila",
   role: "Estrategista de Saúde Digital · Orbee Labs",
   credentials: "Responsável técnica editorial AbraceIA",
-  url: "https://orbee.com.br",
+  url: "https://orbeelabs.com",
 } as const;
 
 export const medicalReviewer = {
