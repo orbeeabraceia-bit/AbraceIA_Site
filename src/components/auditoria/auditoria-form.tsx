@@ -27,9 +27,7 @@ export function AuditoriaForm() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AuditResult | null>(null);
   const [adText, setAdText] = useState("");
-  const [compliance, setCompliance] = useState<{ ok: boolean; violations: string[] } | null>(
-    null,
-  );
+  const [compliance, setCompliance] = useState<{ ok: boolean; violations: string[] } | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
   async function handleAuditSubmit(e: FormEvent) {
@@ -112,6 +110,7 @@ export function AuditoriaForm() {
           value={adText}
           onChange={(e) => setAdText(e.target.value)}
           rows={4}
+          aria-label="Texto do anúncio para verificação de compliance"
           className="mt-4 w-full rounded-btn border border-border p-3 text-sm"
           placeholder="Cole o texto do anúncio ou post…"
         />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -91,10 +91,14 @@ function Select({
   placeholder: string;
   options: { value: string; label: string }[];
 }) {
+  const selectId = useId();
   return (
     <div className="space-y-1.5">
-      <label className="block text-sm font-medium text-navy">{label}</label>
+      <label htmlFor={selectId} className="block text-sm font-medium text-navy">
+        {label}
+      </label>
       <select
+        id={selectId}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="flex h-11 w-full rounded-btn border border-border bg-white px-3 py-2 text-base text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-care focus-visible:ring-offset-1"
@@ -207,14 +211,21 @@ export function SeoAuditForm() {
                   {done ? <CheckCircle2 className="h-5 w-5" /> : s.id}
                 </span>
                 <div className="hidden sm:block">
-                  <p className={cn("text-sm font-semibold", active ? "text-navy" : "text-muted-foreground")}>
+                  <p
+                    className={cn(
+                      "text-sm font-semibold",
+                      active ? "text-navy" : "text-muted-foreground",
+                    )}
+                  >
                     {s.title}
                   </p>
                   <p className="text-xs text-muted-foreground">{s.description}</p>
                 </div>
               </div>
               {i < STEPS.length - 1 && (
-                <span className={cn("h-0.5 flex-1 rounded", step > s.id ? "bg-care" : "bg-muted")} />
+                <span
+                  className={cn("h-0.5 flex-1 rounded", step > s.id ? "bg-care" : "bg-muted")}
+                />
               )}
             </li>
           );
@@ -229,8 +240,8 @@ export function SeoAuditForm() {
             <h2 className="font-display text-xl font-bold">URL do Site</h2>
           </div>
           <p className="text-sm text-muted-foreground">
-            Descubra o potencial do seu site nos mecanismos de busca e receba um relatório completo com
-            recomendações personalizadas.
+            Descubra o potencial do seu site nos mecanismos de busca e receba um relatório completo
+            com recomendações personalizadas.
           </p>
           <Input
             label="URL do Site"
@@ -349,7 +360,9 @@ export function SeoAuditForm() {
           {loading && (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <Loader2 className="h-10 w-10 animate-spin text-ai-500" />
-              <p className="mt-4 font-display text-lg font-bold text-navy">Analisando seu site...</p>
+              <p className="mt-4 font-display text-lg font-bold text-navy">
+                Analisando seu site...
+              </p>
               <p className="mt-1 text-sm text-muted-foreground">
                 Estamos verificando mais de 50 fatores de SEO.
               </p>
@@ -391,4 +404,3 @@ export function SeoAuditForm() {
     </div>
   );
 }
-
