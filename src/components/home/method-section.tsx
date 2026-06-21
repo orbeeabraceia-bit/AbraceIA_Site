@@ -10,8 +10,7 @@ export function MethodSection() {
           Quatro etapas. Um abraço completo.
         </h2>
         <p className="mt-4 max-w-5xl text-muted-foreground">
-          Um processo claro e previsível, do diagnóstico à escala, para você acompanhar
-          cada passo.{" "}
+          Um processo claro e previsível, do diagnóstico à escala, para você acompanhar cada passo.{" "}
           <Link href="/metodo" className="font-semibold text-care hover:underline">
             Ver método completo
           </Link>
@@ -19,18 +18,18 @@ export function MethodSection() {
       </FadeIn>
       <ol className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {methodSteps.map((step, i) => (
-          <FadeIn key={step.title} delay={i * 0.06}>
-            <li className="relative rounded-card border border-border bg-white p-6 shadow-sm">
-              <span
-                className="font-display text-3xl font-extrabold text-care/30"
-                aria-hidden
-              >
+          <li
+            key={step.title}
+            className="relative rounded-card border border-border bg-white p-6 shadow-sm"
+          >
+            <FadeIn delay={i * 0.06}>
+              <span className="font-display text-3xl font-extrabold text-care/30" aria-hidden>
                 {step.step}
               </span>
               <h3 className="mt-2 font-display text-lg font-bold text-navy">{step.title}</h3>
               <p className="mt-2 text-sm text-muted-foreground">{step.description}</p>
-            </li>
-          </FadeIn>
+            </FadeIn>
+          </li>
         ))}
       </ol>
     </section>
