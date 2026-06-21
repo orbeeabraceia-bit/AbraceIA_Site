@@ -69,6 +69,7 @@ describe("schema.org generators", () => {
     });
     expect(s["@type"]).toBe("Article");
     expect(s.headline).toBe("T");
+    expect(s.image).toContain("/opengraph-image");
     expect(s.author).toMatchObject({ "@type": "Person" });
     expect(s.reviewer).toMatchObject({ "@type": "Person" });
     expect(s.mainEntityOfPage).toBe(`${siteConfig.url}/blog/x`);

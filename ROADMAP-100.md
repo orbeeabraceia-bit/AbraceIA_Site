@@ -94,7 +94,7 @@
 | ID | Tarefa | Por quê (ref. guia) | Como / Critério de aceite | Prio | Esf | Status |
 |----|--------|---------------------|---------------------------|------|-----|--------|
 | GEO-01 | **`llms-full.txt`** além do `llms.txt` | Cap. 2.3 — "implementar llms.txt + llms-full.txt para não perder a vantagem". | Gerar versão completa (todo o conteúdo enciclopédico) na raiz. | 🟡 P1 | S | [x] |
-| GEO-02 | **Validar todos os Schemas** (Rich Results Test) | Cap. 6.8 / A.3 — Schema completo é fator de citação por IA. | Rodar cada página no validador do Google; corrigir warnings. | 🟡 P1 | M | [ ] |
+| GEO-02 | **Validar todos os Schemas** (Rich Results Test) | Cap. 6.8 / A.3 — Schema completo é fator de citação por IA. | Rodar cada página no validador do Google; corrigir warnings. **Parcial:** 78 JSON-LD validados estruturalmente no servidor (0 inválidos); `Article` ganhou `image`/`dateModified`. Falta o Rich Results Test (semântico) no preview. | 🟡 P1 | M | [~] |
 | AEO-01 | **"Definição em caixa" + respostas em 40-60 palavras** nos artigos | Cap. 6.7 — táticas AEO para Featured Snippets. | Revisar `content/blog.ts`: 1ª resposta logo após o H2, em 40-60 palavras; bloco de definição destacado. | 🟢 P2 | M | [ ] |
 | AEO-02 | **Conteúdo Hub & Spoke no blog** | Cap. 7 — clusters (hub: Guia GEO; spokes: artigos). | Mapear e completar a estrutura de clusters do blog. | 🟢 P2 | L | [ ] |
 | GEO-03 | **Rotina de baseline de citação em IA** | Cap. 6.8 — testar perguntas no ChatGPT/Perplexity/AI Overview e registrar evolução. | Documentar perguntas-baseline e cadência de reteste (operacional + possível dashboard). | 🟢 P2 | M | [ ] |

@@ -159,7 +159,10 @@ export function articleSchema(input: {
     "@type": "Article",
     headline: input.title,
     description: input.description,
+    // Imagem é recomendada pelo Google para rich results de Article.
+    image: `${siteConfig.url}/opengraph-image`,
     datePublished: input.datePublished,
+    dateModified: input.datePublished,
     inLanguage: "pt-BR",
     author: {
       "@type": "Person",
@@ -251,11 +254,7 @@ export function blogSchema(posts: { title: string; slug: string; publishedAt: st
   };
 }
 
-export function webApplicationSchema(input: {
-  name: string;
-  description: string;
-  path: string;
-}) {
+export function webApplicationSchema(input: { name: string; description: string; path: string }) {
   return {
     "@context": "https://schema.org",
     "@type": "WebApplication",
