@@ -68,6 +68,13 @@ export default async function BlogPostPage({ params }: Props) {
         </p>
         <p className="mt-4 text-lg text-muted-foreground">{post.excerpt}</p>
 
+        {post.summary && (
+          <div className="mt-6 rounded-card border border-care/20 bg-cream/60 p-5">
+            <p className="text-xs font-bold uppercase tracking-wide text-care">Em resumo</p>
+            <p className="mt-2 leading-relaxed text-navy">{post.summary}</p>
+          </div>
+        )}
+
         {post.sections.map((section) => (
           <section key={section.heading} className="mt-10">
             <h2 className="text-xl font-semibold text-navy">{section.heading}</h2>

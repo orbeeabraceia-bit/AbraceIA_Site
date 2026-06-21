@@ -7,6 +7,8 @@ export type BlogPost = {
   keyword: string;
   publishedAt: string;
   readMinutes: number;
+  /** Resposta direta (40–60 palavras) para Featured Snippets — "definição em caixa" (AEO). */
+  summary?: string;
   sections: { heading: string; paragraphs: string[] }[];
   faq?: { question: string; answer: string }[];
   relatedCaseSlugs?: string[];
@@ -16,9 +18,10 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "como-aparecer-no-chatgpt-saude",
     title: "Como aparecer no ChatGPT sem infringir o CFM",
-    excerpt:
-      "Guia prático de GEO para médicos: llms.txt, E-E-A-T e Res. CFM 2.336/2023.",
+    excerpt: "Guia prático de GEO para médicos: llms.txt, E-E-A-T e Res. CFM 2.336/2023.",
     keyword: "como aparecer no ChatGPT saúde",
+    summary:
+      "Para aparecer no ChatGPT sem infringir o CFM, publique um llms.txt na raiz do site, libere os bots de IA no robots.txt e produza conteúdo educativo com autor credenciado (CRM/RQE) e revisor visível — tudo dentro da Resolução 2.336/2023, sem promessa de resultado, superlativos ou antes/depois sem TCLE.",
     publishedAt: "2026-03-15",
     readMinutes: 8,
     relatedCaseSlugs: ["dra-janaina-drumond-ortopedia", "dra-paula-kac-geriatria"],
@@ -63,6 +66,8 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "LCP ≤ 0,8s, INP ≤ 200ms e CLS ≤ 0,05 — como sites médicos podem atingir o verde no mobile.",
     keyword: "Core Web Vitals site médico",
+    summary:
+      "Em 2026, as metas de Core Web Vitals para sites médicos são LCP ≤ 0,8s, INP ≤ 200ms e CLS ≤ 0,05 no mobile. Sites em Next.js atingem esses números nativamente, sem plugins de cache. Meça com o PageSpeed Insights e o relatório do Google Search Console, sempre priorizando o mobile.",
     publishedAt: "2026-03-01",
     readMinutes: 6,
     relatedCaseSlugs: ["dra-janaina-drumond-ortopedia"],
@@ -90,6 +95,8 @@ export const blogPosts: BlogPost[] = [
     excerpt:
       "Neuropediatria, ortopedia, geriatria e psicologia TCC — o que cada arquitetura entrega em SEO, compliance e conversão.",
     keyword: "site médico Orbee Labs Belo Horizonte",
+    summary:
+      "A Orbee Labs administra hoje quatro sites de saúde em BH: Dra. Laura Thiersch (neuropediatria), Dra. Janaína Drumond (ortopedia), Dra. Paula Kac (geriatria) e Eric Moreira (psicologia TCC). Todos em produção, com CRM ou CRP visível, compliance do conselho e arquitetura focada em SEO, performance e conversão.",
     publishedAt: "2026-06-01",
     readMinutes: 7,
     relatedCaseSlugs: [
@@ -129,16 +136,18 @@ export const blogPosts: BlogPost[] = [
     faq: [
       {
         question: "Posso visitar os sites?",
-        answer:
-          "Sim. Todos estão públicos e linkados na página /cases do AbraceIA.",
+        answer: "Sim. Todos estão públicos e linkados na página /cases do AbraceIA.",
       },
     ],
   },
   {
     slug: "schema-markup-saude",
     title: "Schema JSON-LD para clínicas: guia prático",
-    excerpt: "Physician, MedicalBusiness, FAQPage e MedicalProcedure — como implementar no Next.js.",
+    excerpt:
+      "Physician, MedicalBusiness, FAQPage e MedicalProcedure — como implementar no Next.js.",
     keyword: "schema markup site médico",
+    summary:
+      "Para clínicas, os principais schemas JSON-LD são Physician, MedicalBusiness, FAQPage e MedicalProcedure. Eles ajudam Google e IAs a identificar autor, especialidade e serviços, aumentando o CTR com rich snippets. O ideal é implementá-los direto no código — não via plugin tardio — em cada página do sitemap.",
     publishedAt: "2026-02-20",
     readMinutes: 7,
     sections: [
@@ -156,6 +165,8 @@ export const blogPosts: BlogPost[] = [
     title: "Como criar llms.txt para clínicas",
     excerpt: "Arquivo na raiz do site que orienta IAs generativas sobre sua clínica e autoridade.",
     keyword: "llms.txt saúde",
+    summary:
+      "llms.txt é um arquivo Markdown na raiz do site (padrão llmstxt.org) que orienta IAs generativas sobre a clínica, os serviços, o compliance e as fontes credenciadas. Para clínicas, ele complementa o robots.txt que libera bots como GPTBot, ClaudeBot e PerplexityBot, ajudando o profissional a ser citado nas respostas.",
     publishedAt: "2026-02-10",
     readMinutes: 5,
     sections: [
@@ -171,8 +182,11 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "seo-local-clinicas-bh",
     title: "SEO local para clínicas em Belo Horizonte",
-    excerpt: "Google Business Profile, NAP consistente e páginas regionais para Savassi, Funcionários e RM.",
+    excerpt:
+      "Google Business Profile, NAP consistente e páginas regionais para Savassi, Funcionários e RM.",
     keyword: "SEO local clínica BH",
+    summary:
+      "SEO local para clínicas em BH começa com um Google Business Profile otimizado: nome com palavra-chave, categorias corretas e mais de 20 fotos com geo-tag. Mantenha o NAP (nome, endereço e telefone) idêntico em todos os canais e crie páginas regionais para Savassi, Funcionários e a região metropolitana.",
     publishedAt: "2026-01-28",
     readMinutes: 6,
     sections: [
@@ -190,6 +204,8 @@ export const blogPosts: BlogPost[] = [
     title: "AEO: como conquistar Featured Snippets em saúde",
     excerpt: "Respostas de 40–60 palavras, FAQ estruturado e Schema FAQPage para posição zero.",
     keyword: "AEO saúde featured snippet",
+    summary:
+      "Para conquistar Featured Snippets em saúde, responda à pergunta de forma direta nas primeiras 40 a 60 palavras, logo após um H2 que repete a dúvida. Use listas e tabelas, transforme cada item do 'As pessoas também perguntam' em um H2 e marque o conteúdo com Schema FAQPage.",
     publishedAt: "2026-01-15",
     readMinutes: 6,
     sections: [
@@ -205,8 +221,11 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "marketing-ia-cfm-permitido",
     title: "Marketing com IA é permitido pelo CFM?",
-    excerpt: "Res. 2.336/2023: o que mudou na publicidade médica digital e como usar IA com responsabilidade.",
+    excerpt:
+      "Res. 2.336/2023: o que mudou na publicidade médica digital e como usar IA com responsabilidade.",
     keyword: "marketing IA CFM permitido",
+    summary:
+      "Sim, o marketing com IA é permitido pelo CFM (Res. 2.336/2023), desde que a IA seja ferramenta — auxiliando redação, análise de dados e triagem comercial, nunca diagnóstico ou prescrição. Todo conteúdo publicado precisa de revisão por profissional habilitado e identificado, seguindo os princípios de E-E-A-T para temas YMYL.",
     publishedAt: "2026-01-05",
     readMinutes: 8,
     sections: [
@@ -224,6 +243,8 @@ export const blogPosts: BlogPost[] = [
     title: "Next.js vs WordPress para sites médicos",
     excerpt: "Performance, segurança CVE e SEO arquitetural — comparativo para clínicas em 2026.",
     keyword: "Next.js site médico vs WordPress",
+    summary:
+      "Para sites médicos, o Next.js supera o WordPress em performance (LCP ≤ 0,8s contra, muitas vezes, mais de 3s no Elementor), segurança (sem o histórico de CVEs de plugins) e SEO arquitetural. Como saúde é YMYL, um site lento perde posição e confiança — por isso a escolha da stack importa.",
     publishedAt: "2025-12-20",
     readMinutes: 7,
     sections: [
@@ -239,8 +260,11 @@ export const blogPosts: BlogPost[] = [
   {
     slug: "eeat-conteudo-medico",
     title: "E-E-A-T em conteúdo médico: autor e revisor",
-    excerpt: "Experience, Expertise, Authoritativeness, Trust — requisitos para ranquear e ser citado por IAs.",
+    excerpt:
+      "Experience, Expertise, Authoritativeness, Trust — requisitos para ranquear e ser citado por IAs.",
     keyword: "E-E-A-T conteúdo médico",
+    summary:
+      "E-E-A-T (Experience, Expertise, Authoritativeness, Trust) em conteúdo médico exige autor credenciado visível — nome, CRM, RQE e formação no byline — e um revisor especialista em bloco separado. Páginas sem esses sinais de autoria e revisão são excluídas de citações em IAs para temas de saúde.",
     publishedAt: "2025-12-10",
     readMinutes: 6,
     sections: [
@@ -258,6 +282,8 @@ export const blogPosts: BlogPost[] = [
     title: "WhatsApp como canal de conversão para clínicas",
     excerpt: "Botão flutuante, eventos GA4 e copy compliance para agendamentos via WhatsApp.",
     keyword: "WhatsApp clínica conversão",
+    summary:
+      "Para usar o WhatsApp como canal de conversão em clínicas, combine um botão flutuante com mensagem pré-preenchida e meça os cliques com um evento GA4 (click_whatsapp) via GTM. A mensagem pronta reduz a fricção e qualifica o lead antes da conversa, sempre com copy dentro do compliance do conselho.",
     publishedAt: "2025-11-28",
     readMinutes: 5,
     sections: [
