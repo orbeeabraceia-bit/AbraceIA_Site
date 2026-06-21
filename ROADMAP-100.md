@@ -107,7 +107,7 @@
 |----|--------|---------------------|---------------------------|------|-----|--------|
 | PERF-01 | **Medir Core Web Vitals reais** (Lighthouse/PSI) | Cap. 6.5 / 8.2 — metas LCP < 0,8s, INP < 200ms, CLS < 0,05; "Lighthouse > 95". | Rodar PageSpeed nas páginas-chave; registrar baseline; corrigir o que ficar fora da meta (peso do hero PNG é suspeito — ver pendência do diário). | 🔴 P0 | M | [ ] |
 | PERF-02 | **Otimizar imagem do hero** | Diário 2026-06-09 já lista "otimizar hero PNG" como pendência. | Converter para WebP/AVIF, dimensionar corretamente; confirmar ganho de LCP. | 🟡 P1 | S | [x] |
-| A11Y-01 | **Auditoria de acessibilidade WCAG AA** | Cap. 8.1 — contraste AA, alt text, navegação por teclado, ARIA. | Rodar axe/Lighthouse a11y; corrigir achados. **Parcial:** revisão estática feita — `Input` associa label via `useId`, `<select>` e `<textarea>` rotulados. Falta rodar axe no preview. | 🟡 P1 | M | [~] |
+| A11Y-01 | **Auditoria de acessibilidade WCAG AA** | Cap. 8.1 — contraste AA, alt text, navegação por teclado, ARIA. | Lighthouse/axe rodado (Chrome local) → home **a11y 97**, SEO 100, best-practices 100. Corrigidos: labels (`useId`), `<select>`/`<textarea>` rotulados, semântica de lista no método. **Falta:** color-contrast das cores de marca (`text-care`/`text-ai` em texto pequeno) — decisão do cliente. | 🟡 P1 | M | [~] |
 | PERF-03 | **`prefers-reduced-motion`** nas animações | Boa prática a11y; o `CrossParticles` (1600 partículas) e Framer Motion são pesados em motion. | Respeitar `prefers-reduced-motion` (desligar/atenuar animações). FadeIn já respeitava; faltava o CrossParticles. | 🟢 P2 | S | [x] |
 
 ---
