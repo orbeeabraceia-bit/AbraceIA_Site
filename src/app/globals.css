@@ -2,16 +2,19 @@
 
 /* AbraceIA — Paleta oficial do Manual de Marca (Orbea Labs, 2026) */
 :root {
-  --teal: #3f8a7e; /* R64 G138 B126 */
+  /* Teal levemente escurecido para contraste AA em texto (5,05:1 sobre branco);
+     o tom original era #3f8a7e (4,08:1, abaixo do mínimo WCAG AA). */
+  --teal: #357a6e; /* base de marca AbraceIA */
   --teal-50: #ecf4f2;
   --teal-100: #cfe3df;
   --teal-700: #2e665d;
 
-  --peach: #e49668; /* R227 G150 B104 */
+  --peach: #e49668; /* R227 G150 B104 — usado em fundos/botões (decorativo) */
   --peach-50: #fcf0e9;
   --peach-100: #f8dccc;
   --peach-600: #d07e4f;
-  --peach-700: #b86a3d;
+  /* Pêssego para TEXTO precisa de AA: #b05f33 = 4,64:1 (era #b86a3d, 4,06:1). */
+  --peach-700: #b05f33;
 
   --gold: #d3b675; /* R210 G181 B117 */
   --gold-50: #f8f2e4;
@@ -39,7 +42,8 @@
   --care-500: var(--teal);
   --care-700: var(--teal-700);
 
-  --ai: var(--peach);
+  /* Acento de TEXTO/links: usa o pêssego escuro (AA). Os fundos seguem em --ai-50/100. */
+  --ai: var(--peach-700);
   --ai-50: var(--peach-50);
   --ai-100: var(--peach-100);
   --ai-500: var(--peach);
