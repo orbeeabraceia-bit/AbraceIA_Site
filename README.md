@@ -62,24 +62,32 @@ pnpm run link     # terminal 2 → URL *.trycloudflare.com (sem senha)
 | `pnpm test` | Testes (TDD — Cap. 4.7) |
 | `pnpm type-check` | Verificação TypeScript |
 | `pnpm lint` | ESLint |
+| `pnpm format` | Formata com Prettier |
+| `pnpm test:coverage` | Testes com cobertura (threshold mínimo) |
+
+> **Qualidade:** git hooks (Husky) — `pre-commit` roda lint-staged (Prettier + ESLint)
+> e `commit-msg` valida Conventional Commits. CI no GitHub Actions roda
+> lint + type-check + test + build em cada push/PR.
 
 ## Páginas (Sitemap — Cap. 5.1)
 
 - `/` — Home (Hero, diferenciais, quiz, FAQ)
 - `/servicos/geo-saude` · `/servicos/sites-medicos` · `/servicos/seo-medico`
-- `/sobre` · `/metodo` · `/guia/geo-para-saude` · `/blog` · `/cases` · `/auditoria-ia` · `/contato`
+- `/sobre` · `/metodo` · `/guia/geo-para-saude` · `/blog` · `/cases` · `/auditoria-ia` · `/auditoria-seo` · `/calculadora-roi` · `/contato`
 - `/faq` · `/compliance` · `/cookies` · `/privacidade` · `/termos`
 
 ## Lead magnets (Cap. 5.3)
 
 - **Quiz prontidão IA** — home + persistência via `POST /api/quiz`
 - **Auditoria de presença em IA** — `/auditoria-ia` + `POST /api/audit`
+- **Auditoria SEO** — `/auditoria-seo` + `POST /api/analyze-seo` (análise on-page, anti-SSRF)
+- **Calculadora de ROI** — `/calculadora-roi` (simulação de potencial, client-side)
 - **Chat de triagem** — `/contato` + `POST /api/chat` (guardrails clínicos)
 - **Formulário de contato** — `POST /api/contact` (Prisma quando `DATABASE_URL` definida)
 
 ## GEO (Cap. 6.3)
 
-- `public/llms.txt` — orientação para LLMs
+- `public/llms.txt` e `public/llms-full.txt` — orientação para LLMs (resumo + versão completa)
 - `src/app/robots.ts` — bots de IA permitidos
 - `src/app/sitemap.ts` — sitemap automático
 - Schema.org completo (Organization, Service, FAQ, Article, Physician…)
