@@ -34,7 +34,8 @@ export function CrossParticles({
       "#D3B675", // Ouro
     ];
 
-    const PARTICLE_COUNT = 1600; // Alta densidade para formar a bolha
+    // Densidade adaptativa (perf): teto menor e ainda menos no mobile.
+    const PARTICLE_COUNT = width < 768 ? 450 : 800;
     const particles: Particle[] = [];
 
     // Rastreamento do mouse para girar a bolha
@@ -285,7 +286,17 @@ export function CrossParticles({
 
     const startTime = performance.now();
 
+    // Performance: limita a ~30fps (animação ambiente) e pausa quando o canvas
+    // está fora da viewport — corta drasticamente o trabalho de main-thread.
+    const FRAME_INTERVAL = 1000 / 30;
+    let lastRender = 0;
+    let isVisible = true;
+
     const animate = (now: number) => {
+      animationFrameId = requestAnimationFrame(animate);
+      if (!isVisible) return;
+      if (now - lastRender < FRAME_INTERVAL) return;
+      lastRender = now;
       ctx.clearRect(0, 0, width, height);
 
       // Lerp (suavização) da rotação do mouse
@@ -363,8 +374,6 @@ export function CrossParticles({
         p.update(elapsed);
         p.draw(sphereRadius);
       });
-
-      animationFrameId = requestAnimationFrame(animate);
     };
 
     init();
@@ -395,12 +404,18 @@ export function CrossParticles({
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseleave", handleMouseLeave);
     }
+    // Pausa a animação quando o canvas sai da tela (economiza CPU/bateria).
+    const io = new IntersectionObserver(([entry]) => {
+      isVisible = entry.isIntersecting;
+    });
+    io.observe(canvas);
     animationFrameId = requestAnimationFrame(animate);
 
     return () => {
       window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
+      io.disconnect();
       cancelAnimationFrame(animationFrameId);
     };
   }, [screensaverOnly, sizeFactor, bounce]);

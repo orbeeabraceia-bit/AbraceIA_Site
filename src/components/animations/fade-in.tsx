@@ -7,9 +7,12 @@ type FadeInProps = {
   children: ReactNode;
   className?: string;
   delay?: number;
+  /** Renderiza o conteúdo já visível (sem opacity:0 inicial). Use acima da
+   *  dobra para não atrasar o LCP — o elemento conta como pintado de imediato. */
+  eager?: boolean;
 };
 
-export function FadeIn({ children, className, delay = 0 }: FadeInProps) {
+export function FadeIn({ children, className, delay = 0, eager = false }: FadeInProps) {
   const reduceMotion = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(reduceMotion);
@@ -31,7 +34,8 @@ export function FadeIn({ children, className, delay = 0 }: FadeInProps) {
     return () => observer.disconnect();
   }, [reduceMotion]);
 
-  if (reduceMotion) {
+  // eager/reduced-motion: conteúdo visível imediatamente (bom para LCP/a11y).
+  if (reduceMotion || eager) {
     return <div className={className}>{children}</div>;
   }
 

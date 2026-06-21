@@ -57,7 +57,7 @@ export default function HomePage() {
         <div className="absolute left-1/2 top-0 -z-10 h-[40rem] w-[40rem] -translate-x-1/2 rounded-full bg-care/5 opacity-50 blur-3xl md:left-1/3" />
 
         <div className="relative z-10 mx-auto grid max-w-[1500px] items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <FadeIn className="text-center lg:text-left">
+          <FadeIn eager className="text-center lg:text-left">
             <div className="inline-flex items-center rounded-full border border-care/20 bg-care/5 px-3 py-1 text-xs font-bold uppercase tracking-widest text-care backdrop-blur-sm">
               Orbee Labs · Belo Horizonte
             </div>
@@ -104,7 +104,7 @@ export default function HomePage() {
             </div>
           </FadeIn>
 
-          <FadeIn delay={0.2} className="relative hidden lg:block">
+          <FadeIn eager delay={0.2} className="relative hidden lg:block">
             {/* Decoração atrás da imagem (glow) */}
             <div className="absolute -inset-4 z-0 rounded-[2.5rem] bg-gradient-to-br from-care/15 to-transparent blur-2xl" />
 
