@@ -14,6 +14,48 @@ export type BlogPost = {
 
 export const blogPosts: BlogPost[] = [
   {
+    slug: "google-ai-overviews-clinicas",
+    title: "Google AI Overviews para clínicas: como ser citado",
+    excerpt:
+      "As respostas geradas por IA no topo do Google mudam a busca em saúde — como conquistar a citação sem ferir o CFM.",
+    keyword: "Google AI Overview saúde",
+    publishedAt: "2026-06-20",
+    readMinutes: 7,
+    relatedCaseSlugs: ["dra-laura-thiersch-neuropediatra", "dra-paula-kac-geriatria"],
+    sections: [
+      {
+        heading: "O que são os AI Overviews",
+        paragraphs: [
+          "AI Overviews são as respostas geradas por IA que o Google exibe acima dos links tradicionais. Em consultas de saúde, elas resumem várias fontes e citam as que o algoritmo considera mais confiáveis.",
+          "Diferente do ChatGPT ou do Perplexity, o AI Overview puxa do índice do Google em tempo real — então autoridade técnica e Schema corretos pesam diretamente na chance de ser citado.",
+        ],
+      },
+      {
+        heading: "Como aumentar a chance de citação (sem ferir o CFM)",
+        paragraphs: [
+          "1. Responda à intenção logo no primeiro parágrafo, em 40–60 palavras, no formato citável — o mesmo padrão que usamos para Featured Snippets.",
+          "2. Estruture Schema de saúde (Physician, MedicalBusiness, FAQPage) para o Google identificar autor, especialidade e RQE.",
+          "3. Mantenha E-E-A-T visível: autor credenciado e revisor habilitado em todo conteúdo YMYL.",
+          "4. Nada de promessa de resultado ou superlativo — a Res. CFM 2.336/2023 vale também para o conteúdo que a IA cita.",
+        ],
+      },
+      {
+        heading: "Medir e iterar em 90 dias",
+        paragraphs: [
+          "Registre um baseline: pesquise suas keywords-alvo e anote se a clínica aparece no AI Overview. Reteste em 90 dias após publicar conteúdo enciclopédico.",
+          "Sites Orbee Labs como lauraneuroped.com.br e drapaulakac.com.br já nascem com a arquitetura técnica e o compliance que essas respostas exigem.",
+        ],
+      },
+    ],
+    faq: [
+      {
+        question: "AI Overview é o mesmo que SEO tradicional?",
+        answer:
+          "Não. É uma camada generativa acima dos links: você precisa ranquear bem E ter autoridade e Schema que a IA reconheça como fonte confiável para ser citado.",
+      },
+    ],
+  },
+  {
     slug: "como-aparecer-no-chatgpt-saude",
     title: "Como aparecer no ChatGPT sem infringir o CFM",
     excerpt:
