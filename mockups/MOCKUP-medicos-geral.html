@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AbraceIA · Mockup — Landing para Médicos (geral)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    /* paleta roxa (violeta → magenta) — esquema dos psicólogos */
+    --navy:#0b0c0d; --muted:#5b6473; --border:#e6e0f2; --cream:#f7f5fc;
+    --teal:#7c3aed; --teal-700:#6d28d9; --peach:#c026d3; --gold:#a855f7;
+    --c1:#7c3aed; --c2:#c026d3; --solid:#6d28d9; --tint:rgba(124,58,237,.12);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:"Hanken Grotesk",system-ui,sans-serif;color:var(--navy);background:#fff;overflow-x:hidden;}
+  h1,h2,h3,.display{font-family:"Bricolage Grotesque",sans-serif;letter-spacing:-.02em;}
+  .serif{font-family:"Newsreader",Georgia,serif;font-style:italic;}
+  a{color:inherit;text-decoration:none;}
+  .grad{background:linear-gradient(135deg,var(--teal),var(--peach));-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+  /* CHROME */
+  #chrome{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  #chrome .brand{font-family:"Bricolage Grotesque";font-weight:800;font-size:15px;}
+  #chrome .brand b{color:var(--solid);}
+  #chrome .tag{font-size:11px;color:var(--muted);background:#eef4f2;border-radius:999px;padding:3px 10px;font-weight:600;}
+  #chrome .cta-mini{margin-left:auto;background:linear-gradient(135deg,var(--teal),var(--peach));color:#fff;border-radius:999px;padding:8px 17px;font-size:13px;font-weight:700;cursor:pointer;}
+
+  .wrap{max-width:1240px;margin:0 auto;padding:0 28px;}
+  .brand-logo{height:30px;width:30px;object-fit:contain;display:block;}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;background:linear-gradient(to bottom,rgba(245,250,248,.7),#fff 72%);}
+  #hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.66;pointer-events:none;}
+  .hero .glow{position:absolute;left:50%;top:-6rem;transform:translateX(-50%);width:42rem;height:42rem;border-radius:50%;background:var(--tint);filter:blur(70px);z-index:0;}
+  .hero .inner{position:relative;z-index:2;display:grid;grid-template-columns:1.02fr .98fr;gap:52px;align-items:center;padding:64px 0 78px;}
+  @media(max-width:980px){.hero .inner{grid-template-columns:1fr;gap:38px;padding:48px 0 56px;}}
+  .chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--tint);background:rgba(255,255,255,.72);border-radius:999px;padding:5px 13px;font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--solid);backdrop-filter:blur(6px);}
+  .lead{margin:22px 0 0;font-size:clamp(18px,2vw,23px);line-height:1.45;color:var(--muted);}
+  h1.hero-h1{margin:14px 0 0;font-size:clamp(34px,5vw,56px);font-weight:800;line-height:1.04;color:var(--navy);max-width:16ch;}
+  .hero-sub{margin:22px 0 0;font-size:clamp(16px,1.5vw,18px);line-height:1.6;color:var(--muted);max-width:48ch;}
+  .cta-row{display:flex;flex-wrap:wrap;gap:13px;margin-top:30px;}
+  .btn{border-radius:999px;padding:13px 26px;font-weight:600;font-size:15px;cursor:pointer;transition:transform .15s,box-shadow .15s;display:inline-flex;align-items:center;gap:8px;border:none;font-family:inherit;}
+  .btn:hover{transform:translateY(-1px);}
+  .btn-grad{background:linear-gradient(135deg,var(--teal),var(--peach));color:#fff;box-shadow:0 8px 22px var(--tint);}
+  .btn-grad:hover{box-shadow:0 12px 28px var(--tint);}
+  .btn-outline{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 2px var(--solid);}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:40px;}
+  @media(max-width:520px){.kpis{grid-template-columns:repeat(2,1fr);}}
+  .kpi{position:relative;overflow:hidden;border:1px solid rgba(220,232,228,.8);background:rgba(255,255,255,.55);backdrop-filter:blur(10px);border-radius:16px;padding:14px;transition:.2s;}
+  .kpi:hover{border-color:var(--solid);transform:translateY(-2px);}
+  .kpi b{display:block;font-family:"Bricolage Grotesque";font-weight:800;font-size:21px;color:var(--navy);}
+  .kpi span{display:block;margin-top:3px;font-size:11px;color:var(--muted);font-weight:500;line-height:1.3;}
+
+  /* ====== PLAYER DE VÍDEO EXPLICATIVO + MÉDICO ANIMADO ====== */
+  .player-shell{position:relative;}
+  .player-shell .halo{position:absolute;inset:-22px;border-radius:40px;background:linear-gradient(135deg,var(--tint),rgba(228,150,104,.14),transparent);filter:blur(28px);z-index:0;}
+  .player{position:relative;z-index:1;border-radius:26px;overflow:hidden;border:1px solid rgba(255,255,255,.7);box-shadow:0 34px 70px -24px rgba(46,16,101,.45);background:#1b1136;}
+  .stage{position:relative;aspect-ratio:16/10;background:
+      radial-gradient(120% 90% at 50% 8%, #a855f7 0%, #7c3aed 42%, #4c1d95 100%);
+    overflow:hidden;}
+  /* decoração do "estúdio" */
+  .stage .bg-cross{position:absolute;color:rgba(255,255,255,.10);font-weight:800;font-family:"Bricolage Grotesque";}
+  .stage .floor{position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(to top,rgba(11,12,13,.28),transparent);}
+  /* balão de fala */
+  .speech{position:absolute;top:7%;left:6%;max-width:50%;background:rgba(255,255,255,.96);color:#0b1f1c;border-radius:16px;border-bottom-left-radius:5px;padding:12px 15px;font-size:14px;line-height:1.4;font-weight:600;box-shadow:0 12px 30px rgba(0,0,0,.22);opacity:0;transform:translateY(8px) scale(.96);transition:opacity .35s,transform .35s;}
+  .speech.show{opacity:1;transform:none;}
+  .speech .who{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--teal-700);font-weight:800;margin-bottom:4px;}
+  @media(max-width:520px){.speech{max-width:62%;font-size:12.5px;}}
+
+  /* médico SVG */
+  .doc-wrap{position:absolute;right:3%;bottom:0;width:62%;max-width:340px;}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  #doc{display:block;width:100%;height:auto;animation:bob 4.5s ease-in-out infinite;transform-origin:50% 100%;}
+  #doc g,#doc path,#doc ellipse,#doc circle,#doc rect{transform-box:fill-box;}
+  /* piscar */
+  @keyframes blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+  .eye{transform-origin:center;animation:blink 4.2s infinite;}
+  /* boca falando (só quando .playing) */
+  .mouth-open{transform-origin:center;opacity:0;}
+  .mouth-smile{transform-origin:center;opacity:1;transition:opacity .2s;}
+  .playing .mouth-smile{opacity:0;}
+  .playing .mouth-open{opacity:1;animation:talk .26s ease-in-out infinite;}
+  @keyframes talk{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+  /* sobrancelhas animadas ao falar */
+  .playing .brows{animation:brows 1.5s ease-in-out infinite;}
+  @keyframes brows{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+  /* estetoscópio pulsando */
+  .chestpiece{transform-origin:center;animation:pulse 1.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+  /* braço acenando */
+  .arm-wave{transform-origin:88% 6%;animation:wave 3.6s ease-in-out infinite;}
+  @keyframes wave{0%,72%,100%{transform:rotate(0deg)}80%{transform:rotate(-17deg)}88%{transform:rotate(-4deg)}96%{transform:rotate(-13deg)}}
+  .playing .arm-wave{animation:gesture 1.9s ease-in-out infinite;}
+  @keyframes gesture{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(-13deg)}}
+
+  /* play overlay (poster) */
+  .poster{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:5;cursor:pointer;background:radial-gradient(60% 60% at 50% 50%,rgba(11,31,28,.18),rgba(11,31,28,.42));transition:opacity .4s;}
+  .poster.hide{opacity:0;pointer-events:none;}
+  .play-btn{width:74px;height:74px;border-radius:50%;background:rgba(255,255,255,.94);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 36px rgba(0,0,0,.34);transition:transform .2s;}
+  .poster:hover .play-btn{transform:scale(1.08);}
+  .play-btn::after{content:"";margin-left:5px;border-style:solid;border-width:13px 0 13px 22px;border-color:transparent transparent transparent var(--teal-700);}
+  .poster .ptxt{position:absolute;bottom:13%;color:#fff;font-weight:700;font-size:14px;text-shadow:0 2px 10px rgba(0,0,0,.4);letter-spacing:.01em;}
+
+  /* barra de controles */
+  .controls{display:flex;align-items:center;gap:13px;padding:11px 15px;background:#14092b;color:#ddd2f5;}
+  .controls .ic{cursor:pointer;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:.15s;flex:none;color:#eaf5f1;}
+  .controls .ic:hover{background:rgba(255,255,255,.1);}
+  .controls .time{font-size:12px;font-variant-numeric:tabular-nums;color:#9ec3ba;flex:none;}
+  .pbar{flex:1;height:6px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden;cursor:pointer;}
+  .pfill{height:100%;width:0%;background:linear-gradient(90deg,var(--peach),var(--gold));transition:width .15s linear;}
+  .cc{font-size:10px;font-weight:800;letter-spacing:.06em;border:1px solid rgba(255,255,255,.3);border-radius:5px;padding:2px 5px;color:#cfe3df;flex:none;}
+  .cc.on{background:rgba(255,255,255,.92);color:#14092b;border-color:transparent;}
+
+  /* SECTIONS */
+  section.block{padding:70px 0;}
+  .kick{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--solid);}
+  h2.sec{font-size:clamp(26px,3.4vw,40px);font-weight:700;margin:10px 0 0;line-height:1.1;}
+  .sec-lead{margin:14px 0 0;color:var(--muted);font-size:17px;max-width:62ch;line-height:1.6;}
+  .grid3{display:grid;gap:20px;grid-template-columns:repeat(3,1fr);margin-top:38px;}
+  @media(max-width:880px){.grid3{grid-template-columns:1fr;}}
+  .card{position:relative;border:1px solid var(--border);background:#fff;border-radius:22px;padding:26px;transition:transform .18s,border-color .18s,box-shadow .18s;}
+  .card:hover{transform:translateY(-4px);border-color:var(--solid);box-shadow:0 18px 40px -16px rgba(15,30,28,.16);}
+  .card h3{font-size:19px;font-weight:700;margin:0;}
+  .card p{color:var(--muted);line-height:1.6;margin:11px 0 0;}
+  .num{display:flex;width:46px;height:46px;align-items:center;justify-content:center;border-radius:15px;font-family:"Bricolage Grotesque";font-weight:800;font-size:16px;margin-bottom:18px;background:var(--tint);color:var(--solid);}
+
+  /* GALERIA SITES MÉDICOS */
+  .sites-grid{display:grid;gap:22px;grid-template-columns:repeat(3,1fr);margin-top:40px;}
+  @media(max-width:920px){.sites-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.sites-grid{grid-template-columns:1fr;}}
+  .site-card{border:1px solid var(--border);border-radius:22px;overflow:hidden;background:#fff;transition:transform .2s,box-shadow .2s,border-color .2s;display:flex;flex-direction:column;}
+  .site-card:hover{transform:translateY(-5px);border-color:var(--solid);box-shadow:0 22px 48px -18px rgba(15,30,28,.22);}
+  .shot{position:relative;aspect-ratio:16/10;background:linear-gradient(135deg,var(--cream),#e7f1ee);overflow:hidden;}
+  .browser-bar{position:absolute;top:0;left:0;right:0;height:26px;background:#1b1136;display:flex;align-items:center;gap:5px;padding:0 10px;z-index:2;}
+  .browser-bar i{width:8px;height:8px;border-radius:50%;display:block;}
+  .browser-bar .u{margin-left:8px;font-size:9.5px;color:#9ec3ba;font-family:"Hanken Grotesk";overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+  .shot img{position:absolute;top:26px;left:0;width:100%;height:calc(100% - 26px);object-fit:cover;object-position:top;display:block;opacity:0;transition:opacity .5s;}
+  .shot img.loaded{opacity:1;}
+  .shot .ph{position:absolute;inset:26px 0 0;display:flex;align-items:center;justify-content:center;color:var(--solid);font-weight:700;font-size:13px;gap:8px;}
+  .shot .spin{width:15px;height:15px;border:2px solid var(--tint);border-top-color:var(--solid);border-radius:50%;animation:spin 1s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .live-badge{position:absolute;top:33px;right:10px;z-index:3;background:rgba(11,33,30,.82);color:#7ee0c6;font-size:10px;font-weight:800;letter-spacing:.05em;border-radius:999px;padding:3px 9px;display:flex;align-items:center;gap:6px;backdrop-filter:blur(4px);}
+  .live-badge .led{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 0 0 rgba(52,211,153,.7);animation:led 1.8s infinite;}
+  @keyframes led{0%{box-shadow:0 0 0 0 rgba(52,211,153,.6)}70%{box-shadow:0 0 0 7px rgba(52,211,153,0)}100%{box-shadow:0 0 0 0 rgba(52,211,153,0)}}
+  .site-meta{padding:17px 19px 19px;display:flex;flex-direction:column;flex:1;}
+  .site-meta .sp{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--peach);}
+  .site-meta h3{font-size:18px;font-weight:700;margin:6px 0 0;}
+  .site-meta .cred{color:var(--muted);font-size:13px;margin:5px 0 0;line-height:1.45;}
+  .site-meta .visit{margin-top:14px;font-size:13.5px;font-weight:700;color:var(--solid);display:inline-flex;align-items:center;gap:6px;}
+
+  .compliance{display:flex;gap:22px;align-items:center;border:1px solid var(--border);background:var(--cream);border-radius:26px;padding:32px;flex-wrap:wrap;}
+  .compliance .seal{width:60px;height:60px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:27px;flex:none;background:var(--tint);color:var(--solid);}
+  .compliance h2{font-size:23px;font-weight:700;margin:0;}
+  .compliance p{color:var(--muted);line-height:1.6;margin:8px 0 0;max-width:64ch;}
+
+  .faq-item{border-bottom:1px solid var(--border);}
+  .faq-q{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:21px 0;font-size:17px;font-weight:600;color:var(--navy);display:flex;justify-content:space-between;gap:16px;align-items:center;font-family:"Hanken Grotesk";}
+  .faq-q .chev{flex:none;font-size:24px;color:var(--solid);transition:transform .2s;line-height:1;}
+  .faq-item.open .chev{transform:rotate(45deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .28s ease;color:var(--muted);line-height:1.65;font-size:15.5px;}
+  .faq-item.open .faq-a{max-height:340px;padding-bottom:21px;}
+
+  .cta-card{position:relative;overflow:hidden;border-radius:32px;border:1px solid var(--border);background:linear-gradient(135deg,var(--cream),#fff);padding:64px 32px;text-align:center;}
+  .cta-card .glow2{position:absolute;left:50%;bottom:-12rem;transform:translateX(-50%);width:40rem;height:40rem;border-radius:50%;background:var(--tint);filter:blur(60px);z-index:0;}
+  .cta-card .ct{position:relative;z-index:1;}
+  .cta-card h2{font-size:clamp(26px,3.4vw,40px);font-weight:700;margin:0;}
+  .cta-card p{color:var(--muted);font-size:18px;max-width:56ch;margin:16px auto 0;line-height:1.55;}
+
+  .footnote{color:var(--muted);font-size:12.5px;padding:30px 0 60px;line-height:1.6;}
+
+  /* fade-in */
+  .fade{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+  .fade.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<div id="chrome">
+  <img class="brand-logo" src="../public/logo.png" alt="AbraceIA" onerror="this.style.display='none'" />
+  <div class="brand">Abrace<b>IA</b></div>
+  <span class="tag">MOCKUP · Landing para médicos (geral)</span>
+  <div class="cta-mini">Auditoria gratuita</div>
+</div>
+
+<main>
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="glow"></div>
+    <div class="wrap">
+      <div class="inner">
+        <div>
+          <span class="chip">AbraceIA · Marketing médico em BH</span>
+          <p class="lead serif fade">Seu próximo paciente está perguntando — ao Google e à IA — por um bom médico.</p>
+          <h1 class="hero-h1 fade">O médico que a <span class="grad">inteligência artificial</span> recomenda</h1>
+          <p class="hero-sub fade">Site próprio, SEO local e citação em IA para médicos de Belo Horizonte — qualquer que seja a sua área de atuação. Apareça com autoridade, sempre dentro da Resolução CFM 2.336/2023.</p>
+          <div class="cta-row fade">
+            <button class="btn btn-grad">Quero atrair pacientes</button>
+            <button class="btn btn-outline">Ver auditoria gratuita</button>
+          </div>
+          <div class="kpis fade">
+            <div class="kpi"><b data-count="88" data-suffix="%">0%</b><span>das buscas de saúde já passam por IA</span></div>
+            <div class="kpi"><b>≤ 0,8s</b><span>meta de LCP no mobile</span></div>
+            <div class="kpi"><b>CFM 2.336</b><span>compliance em todo conteúdo</span></div>
+            <div class="kpi"><b data-count="3" data-suffix="">0</b><span>sites médicos no ar agora</span></div>
+          </div>
+        </div>
+
+        <!-- ===== PLAYER DE VÍDEO EXPLICATIVO COM MÉDICO ANIMADO ===== -->
+        <div class="player-shell fade">
+          <div class="halo"></div>
+          <div class="player" id="player">
+            <div class="stage" id="stage">
+              <span class="bg-cross" style="top:12%;left:10%;font-size:34px;">+</span>
+              <span class="bg-cross" style="top:62%;left:18%;font-size:22px;">+</span>
+              <span class="bg-cross" style="top:24%;right:30%;font-size:18px;">+</span>
+              <div class="floor"></div>
+
+              <!-- balão de fala (legenda do "vídeo") -->
+              <div class="speech" id="speech"><span class="who">Dr. Abraço · AbraceIA</span><span id="speech-txt"></span></div>
+
+              <!-- MÉDICO ANIMADO (SVG) -->
+              <div class="doc-wrap">
+                <svg id="doc" viewBox="0 0 240 280" xmlns="http://www.w3.org/2000/svg" aria-label="Médico animado">
+                  <!-- braço que acena -->
+                  <g class="arm-wave">
+                    <path d="M180 150 q34 -6 44 -44" fill="none" stroke="#fff" stroke-width="26" stroke-linecap="round"/>
+                    <circle cx="226" cy="104" r="15" fill="#f2c9a8"/>
+                  </g>
+                  <!-- jaleco / ombros -->
+                  <path d="M58 280 Q60 188 120 178 Q180 188 182 280 Z" fill="#ffffff"/>
+                  <path d="M120 178 L104 210 L120 240 L136 210 Z" fill="#eef4f2"/>
+                  <!-- gola + camisa -->
+                  <path d="M104 182 L120 206 L102 222 Z" fill="#cfe3df"/>
+                  <path d="M136 182 L120 206 L138 222 Z" fill="#cfe3df"/>
+                  <!-- estetoscópio -->
+                  <path d="M108 188 C100 224 96 244 120 250 C144 244 140 224 132 188" fill="none" stroke="#6d28d9" stroke-width="5" stroke-linecap="round"/>
+                  <circle class="chestpiece" cx="120" cy="252" r="11" fill="#6d28d9"/>
+                  <circle class="chestpiece" cx="120" cy="252" r="5" fill="#a855f7"/>
+                  <!-- crachá + -->
+                  <rect x="150" y="206" width="20" height="26" rx="4" fill="#7c3aed"/>
+                  <text x="160" y="225" font-size="16" font-weight="800" fill="#fff" text-anchor="middle" font-family="Bricolage Grotesque">+</text>
+                  <!-- pescoço -->
+                  <rect x="108" y="150" width="24" height="34" rx="10" fill="#f2c9a8"/>
+                  <!-- cabeça -->
+                  <circle cx="120" cy="118" r="46" fill="#f7d4b4"/>
+                  <!-- orelhas -->
+                  <circle cx="74" cy="120" r="9" fill="#f2c9a8"/>
+                  <circle cx="166" cy="120" r="9" fill="#f2c9a8"/>
+                  <!-- cabelo -->
+                  <path d="M74 110 Q78 70 120 68 Q162 70 166 110 Q150 92 120 92 Q90 92 74 110 Z" fill="#3a2e28"/>
+                  <!-- sobrancelhas -->
+                  <g class="brows">
+                    <rect x="96" y="104" width="20" height="5" rx="2.5" fill="#3a2e28"/>
+                    <rect x="124" y="104" width="20" height="5" rx="2.5" fill="#3a2e28"/>
+                  </g>
+                  <!-- olhos -->
+                  <g class="eye"><circle cx="106" cy="118" r="6" fill="#2a2320"/><circle cx="108" cy="116" r="2" fill="#fff"/></g>
+                  <g class="eye"><circle cx="134" cy="118" r="6" fill="#2a2320"/><circle cx="136" cy="116" r="2" fill="#fff"/></g>
+                  <!-- bochechas -->
+                  <circle cx="96" cy="134" r="6" fill="#f6b48f" opacity=".55"/>
+                  <circle cx="144" cy="134" r="6" fill="#f6b48f" opacity=".55"/>
+                  <!-- boca sorrindo (parado) -->
+                  <path class="mouth-smile" d="M104 138 Q120 154 136 138" fill="none" stroke="#9c4a3a" stroke-width="4" stroke-linecap="round"/>
+                  <!-- boca aberta (falando) -->
+                  <ellipse class="mouth-open" cx="120" cy="142" rx="9" ry="7" fill="#9c4a3a"/>
+                </svg>
+              </div>
+
+              <!-- POSTER / PLAY -->
+              <div class="poster" id="poster">
+                <div class="play-btn"></div>
+                <div class="ptxt">▶ Vídeo · Como a AbraceIA coloca seu nome na resposta da IA · 0:48</div>
+              </div>
+            </div>
+
+            <!-- CONTROLES -->
+            <div class="controls">
+              <div class="ic" id="btn-play" title="Reproduzir / pausar">▶</div>
+              <span class="time" id="t-cur">0:00</span>
+              <div class="pbar" id="pbar"><div class="pfill" id="pfill"></div></div>
+              <span class="time" id="t-tot">0:48</span>
+              <span class="cc on" id="btn-cc" title="Legendas">CC</span>
+              <div class="ic" id="btn-mute" title="Som (mockup)">🔇</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <!-- ===================== SITES MÉDICOS REAIS ===================== -->
+    <section class="block">
+      <div class="fade">
+        <span class="kick">Portfólio ao vivo</span>
+        <h2 class="sec">Nossos sites médicos <span class="grad">no ar agora</span></h2>
+        <p class="sec-lead">Médicos reais de Belo Horizonte que a Orbee Labs / AbraceIA já posiciona — capturas ao vivo dos sites em produção. Cada um com Schema de saúde, SEO local e credenciais (CRM) visíveis em todo o funil.</p>
+      </div>
+      <div class="sites-grid" id="sites"></div>
+    </section>
+
+    <!-- ===================== PROBLEMA ===================== -->
+    <section class="block" style="padding-top:0">
+      <div class="fade"><span class="kick">O problema</span><h2 class="sec">O que freia o médico no digital hoje</h2>
+        <p class="sec-lead">As dores que mais ouvimos de médicos de BH — mapeadas no nosso Livro-Guia de Saúde.</p></div>
+      <div class="grid3">
+        <div class="card fade"><h3>“Pago agência e a agenda não enche”</h3><p>Você investe todo mês em anúncio, mas não consegue ligar o gasto ao paciente que sentou na cadeira. Falta o caminho claro — e auditável — do clique ao agendamento.</p></div>
+        <div class="card fade"><h3>Invisível quando perguntam à IA</h3><p>88% das buscas de saúde já trazem resposta de IA. Quem não tem presença estruturada não é citado — e nenhum concorrente de BH posiciona isso ainda. É a janela aberta agora.</p></div>
+        <div class="card fade"><h3>O paciente escapa pela secretária</h3><p>O WhatsApp responde diferente a cada vez e a dúvida fica sem resposta. O paciente certo chega ao seu nome e some antes de marcar.</p></div>
+      </div>
+    </section>
+
+    <!-- ===================== SOLUÇÃO ===================== -->
+    <section class="block" style="padding-top:0">
+      <div class="fade"><span class="kick">A solução</span><h2 class="sec">O que a AbraceIA constrói para você</h2></div>
+      <div class="grid3">
+        <div class="card fade"><span class="num">01</span><h3>Site médico próprio</h3><p>Páginas de autoridade, FAQ estruturado, blog educativo e agendamento claro (WhatsApp + Doctoralia). Stack Next.js, rápido e seguro — e cada conteúdo dentro da régua do CFM.</p></div>
+        <div class="card fade"><span class="num">02</span><h3>SEO local em BH + prova de ROI</h3><p>Google Meu Negócio e SEO para o seu nome e a sua área, por bairro de BH. E o caminho do clique ao agendamento medido — retorno auditável, mês a mês, não métrica de vaidade.</p></div>
+        <div class="card fade"><span class="num">03</span><h3>Citação em IA (GEO)</h3><p>Otimização generativa para que ChatGPT, Gemini e Google AI citem seu nome como referência — dentro da resposta, não escondido nos links. O diferencial que ninguém em BH oferece.</p></div>
+      </div>
+    </section>
+
+    <!-- ===================== COMPLIANCE ===================== -->
+    <section class="block" style="padding-top:0">
+      <div class="compliance fade">
+        <div class="seal">✓</div>
+        <div>
+          <h2>Dentro da régua do CFM</h2>
+          <p>Tudo conforme a Resolução CFM nº 2.336/2023: identificação com CRM e RQE, conteúdo educativo, sem promessa de resultado, sem sensacionalismo e sem antes/depois como chamariz. Conteúdo YMYL revisado por profissional habilitado.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FAQ ===================== -->
+    <section class="block" style="padding-top:0">
+      <div class="fade"><span class="kick">Dúvidas</span><h2 class="sec">Perguntas frequentes</h2></div>
+      <div class="fade" style="max-width:800px;margin-top:24px" id="faq">
+        <div class="faq-item"><button class="faq-q">Médico pode fazer marketing digital? <span class="chev">+</span></button><div class="faq-a">Pode. A Resolução CFM 2.336/2023 permite a divulgação com identificação (CRM e RQE quando houver) e caráter informativo/educativo. O que ela veda é promessa de resultado, sensacionalismo, autopromoção exagerada e o uso de imagens de antes/depois como isca — não a presença digital em si.</div></div>
+        <div class="faq-item"><button class="faq-q">O que é "citação em IA" e por que importa? <span class="chev">+</span></button><div class="faq-a">Cada vez mais pacientes perguntam diretamente a assistentes de IA por recomendações de médicos. GEO (Generative Engine Optimization) estrutura seu site e suas evidências de autoridade para que essas IAs citem seu nome na resposta — um canal que o SEO tradicional sozinho não cobre.</div></div>
+        <div class="faq-item"><button class="faq-q">Em quanto tempo apareço no Google? <span class="chev">+</span></button><div class="faq-a">Com Google Meu Negócio otimizado e SEO local bem feito, os primeiros sinais surgem em semanas. O ranqueamento competitivo amadurece em alguns meses — sempre com métricas auditáveis e sem promessa de posição.</div></div>
+        <div class="faq-item"><button class="faq-q">Funciona seja qual for a minha área de atuação? <span class="chev">+</span></button><div class="faq-a">Sim. A arquitetura é a mesma para qualquer médico — muda o conteúdo, as condições atendidas e as palavras-chave do seu nicho. Veja no portfólio acima sites de médicos reais de BH, todos em produção, construídos sobre a mesma base.</div></div>
+      </div>
+    </section>
+
+    <!-- ===================== CTA ===================== -->
+    <section class="block" style="padding-top:0">
+      <div class="cta-card fade">
+        <div class="glow2"></div>
+        <div class="ct">
+          <h2>Pronto para encher a agenda com o <span class="grad">paciente certo</span>?</h2>
+          <p>Comece por uma auditoria gratuita da sua presença digital e em IA. Sem promessa de resultado — só método, dados e compliance.</p>
+          <div class="cta-row" style="justify-content:center;margin-top:32px">
+            <button class="btn btn-grad">Falar com a AbraceIA</button>
+            <button class="btn btn-outline">Auditoria de SEO</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p class="footnote">Mockup estático para avaliação de direção criativa. O personagem <b>Dr. Abraço</b> é uma animação SVG/CSS e o player simula um vídeo explicativo (legendado, sem áudio). As capturas do portfólio são <b>screenshots ao vivo dos sites em produção</b> via api.microlink.io. A esfera de cruzes 3D ao fundo do hero é o motor real do site, recolorido com a paleta oficial. Botões e dados de exemplo são ilustrativos. Rota sugerida: <b>/marketing/medicos-bh</b>.</p>
+  </div>
+</main>
+
+<script>
+/* ===================== SITES MÉDICOS REAIS (do portfólio) ===================== */
+const SITES = [
+  {name:"Dra. Laura Thiersch", url:"https://lauraneuroped.com.br/", sp:"Médica · Belo Horizonte", cred:"Site em produção · Barro Preto, BH"},
+  {name:"Dra. Janaína Drumond", url:"https://www.janainadrumond.com.br/", sp:"Médica · Belo Horizonte", cred:"CRM-MG 69719 · Savassi, BH"},
+  {name:"Dra. Paula Baratz Kac", url:"https://drapaulakac.com.br/", sp:"Médica · Belo Horizonte", cred:"CRM-MG 86260 · Belo Horizonte/MG"},
+];
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+function shotURL(u){ return "https://api.microlink.io/?url="+encodeURIComponent(u)+"&screenshot=true&meta=false&embed=screenshot.url&viewport.width=1280&viewport.height=800"; }
+function host(u){ return u.replace(/^https?:\/\//,"").replace(/\/$/,""); }
+
+(function buildSites(){
+  const wrap = document.getElementById("sites");
+  wrap.innerHTML = SITES.map(s=>`
+    <a class="site-card fade" href="${s.url}" target="_blank" rel="noopener">
+      <div class="shot">
+        <div class="browser-bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="u">${esc(host(s.url))}</span></div>
+        <div class="live-badge"><span class="led"></span>NO AR</div>
+        <div class="ph"><span class="spin"></span> carregando captura…</div>
+        <img alt="Site de ${esc(s.name)}" loading="lazy"
+             src="${shotURL(s.url)}"
+             onload="this.classList.add('loaded'); const p=this.parentElement.querySelector('.ph'); if(p)p.style.display='none';"
+             onerror="const p=this.parentElement.querySelector('.ph'); if(p)p.innerHTML='Abrir site ao vivo →';" />
+      </div>
+      <div class="site-meta">
+        <span class="sp">${esc(s.sp)}</span>
+        <h3>${esc(s.name)}</h3>
+        <p class="cred">${esc(s.cred)}</p>
+        <span class="visit" style="margin-top:auto">Visitar site ao vivo →</span>
+      </div>
+    </a>`).join("");
+})();
+
+/* ===================== PLAYER DE VÍDEO EXPLICATIVO ===================== */
+const SCRIPT = [
+  {t:5,  s:"Oi! Sou o Dr. Abraço. Deixa eu te mostrar uma coisa rápida. 👋"},
+  {t:8,  s:"Hoje o paciente não pergunta só ao Google — pergunta também à inteligência artificial."},
+  {t:8,  s:"E a IA recomenda quem tem presença bem estruturada: site, conteúdo e autoridade."},
+  {t:8,  s:"A AbraceIA constrói o seu site médico, faz o SEO local de BH…"},
+  {t:8,  s:"…e otimiza tudo para que a IA cite o seu nome na resposta. Isso é GEO."},
+  {t:7,  s:"Sempre dentro da Resolução CFM 2.336/2023 — sem promessa, sem sensacionalismo."},
+  {t:4,  s:"Resultado: a agenda certa, com quem procura o seu trabalho. Bora? 🩺"},
+];
+const TOTAL = SCRIPT.reduce((a,b)=>a+b.t,0); // segundos
+const player = document.getElementById("player");
+const poster = document.getElementById("poster");
+const speech = document.getElementById("speech");
+const speechTxt = document.getElementById("speech-txt");
+const pfill = document.getElementById("pfill");
+const tCur = document.getElementById("t-cur");
+const btnPlay = document.getElementById("btn-play");
+const btnCC = document.getElementById("btn-cc");
+const pbar = document.getElementById("pbar");
+let playing=false, elapsed=0, lastTs=0, raf=null, ccOn=true;
+
+document.getElementById("t-tot").textContent = fmt(TOTAL);
+function fmt(s){ s=Math.max(0,Math.round(s)); return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+function lineAt(e){ let acc=0; for(let i=0;i<SCRIPT.length;i++){ acc+=SCRIPT[i].t; if(e<acc) return i; } return SCRIPT.length-1; }
+
+let shownLine=-1;
+function showLine(i){
+  if(i===shownLine) return; shownLine=i;
+  speech.classList.remove("show");
+  setTimeout(()=>{ if(!ccOn){ return; } speechTxt.textContent=SCRIPT[i].s; speech.classList.add("show"); }, 120);
+}
+function tick(ts){
+  if(!playing) return;
+  if(!lastTs) lastTs=ts;
+  elapsed += (ts-lastTs)/1000; lastTs=ts;
+  if(elapsed>=TOTAL){ elapsed=0; shownLine=-1; } // loop
+  pfill.style.width=(elapsed/TOTAL*100).toFixed(1)+"%";
+  tCur.textContent=fmt(elapsed);
+  showLine(lineAt(elapsed));
+  raf=requestAnimationFrame(tick);
+}
+function play(){
+  playing=true; lastTs=0; player.classList.add("playing");
+  poster.classList.add("hide"); btnPlay.textContent="❚❚";
+  if(ccOn){ shownLine=-1; showLine(lineAt(elapsed)); }
+  raf=requestAnimationFrame(tick);
+}
+function pause(){
+  playing=false; player.classList.remove("playing");
+  btnPlay.textContent="▶"; cancelAnimationFrame(raf); lastTs=0;
+}
+function toggle(){ playing?pause():play(); }
+poster.addEventListener("click",play);
+btnPlay.addEventListener("click",toggle);
+btnCC.addEventListener("click",()=>{ ccOn=!ccOn; btnCC.classList.toggle("on",ccOn); if(!ccOn) speech.classList.remove("show"); else { shownLine=-1; showLine(lineAt(elapsed)); }});
+pbar.addEventListener("click",(e)=>{ const r=pbar.getBoundingClientRect(); elapsed=Math.min(TOTAL-0.1,Math.max(0,(e.clientX-r.left)/r.width*TOTAL)); pfill.style.width=(elapsed/TOTAL*100)+"%"; tCur.textContent=fmt(elapsed); shownLine=-1; showLine(lineAt(elapsed)); });
+
+/* ===================== FAQ ===================== */
+document.querySelectorAll(".faq-item").forEach(item=>{
+  item.querySelector(".faq-q").addEventListener("click",()=>{
+    const open=item.classList.contains("open");
+    document.querySelectorAll(".faq-item").forEach(x=>x.classList.remove("open"));
+    if(!open) item.classList.add("open");
+  });
+});
+
+/* ===================== FADE-IN + COUNT-UP ===================== */
+const io = new IntersectionObserver((ents)=>{ ents.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }); },{threshold:.12});
+document.querySelectorAll(".fade").forEach(el=>io.observe(el));
+document.querySelectorAll(".hero .fade").forEach((el,k)=> setTimeout(()=>el.classList.add("in"), 80+k*90));
+function countUp(el,target,suffix,dur){ const start=performance.now(); (function step(now){ const t=Math.min(1,(now-start)/dur); el.textContent=Math.round(target*(t*(2-t)))+suffix; if(t<1) requestAnimationFrame(step); })(performance.now()); }
+const cio=new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ countUp(e.target, parseInt(e.target.dataset.count), e.target.dataset.suffix||"", 1100); cio.unobserve(e.target);} }); },{threshold:.6});
+document.querySelectorAll("[data-count]").forEach(el=>cio.observe(el));
+
+/* tilt 3D nos cards */
+document.querySelectorAll(".card").forEach(c=>{
+  c.addEventListener("mousemove",e=>{ const r=c.getBoundingClientRect(); const px=(e.clientX-r.left)/r.width-0.5, py=(e.clientY-r.top)/r.height-0.5; c.style.transform=`perspective(800px) rotateX(${-py*6}deg) rotateY(${px*6}deg) translateY(-4px)`; });
+  c.addEventListener("mouseleave",()=>{ c.style.transform=""; });
+});
+
+/* ===================== ESFERA DE CRUZES 3D (motor do hero) ===================== */
+(function(){
+  const canvas=document.getElementById("hero-canvas"); if(!canvas) return;
+  const ctx=canvas.getContext("2d");
+  const colors=["#7c3aed","#a855f7","#c026d3","#d946ef"];
+  const hexA=(h,a)=>{const n=parseInt(h.slice(1),16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;};
+  const dpr=window.devicePixelRatio||1; let w,h;
+  function size(){const p=canvas.parentElement;w=p.clientWidth;h=p.clientHeight;canvas.width=w*dpr;canvas.height=h*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);}
+  size();
+  const N=1500,P=[];
+  for(let i=0;i<N;i++){
+    const phi=Math.acos(1-(2*i)/N),theta=Math.PI*(1+Math.sqrt(5))*i;
+    const dx=Math.cos(theta)*Math.sin(phi),dy=Math.cos(phi),dz=Math.sin(theta)*Math.sin(phi);
+    const a=Math.random()*Math.PI*2,b=Math.acos(2*Math.random()-1);
+    const u0=[Math.sin(b)*Math.cos(a),Math.sin(b)*Math.sin(a),Math.cos(b)];
+    let rx=Math.random()*2-1,ry=Math.random()*2-1,rz=Math.random()*2-1;
+    const d=rx*u0[0]+ry*u0[1]+rz*u0[2];rx-=d*u0[0];ry-=d*u0[1];rz-=d*u0[2];
+    const ln=Math.hypot(rx,ry,rz)||1;
+    // vetor de explosão: direção aleatória (spread) + empurrão radial para fora
+    const ea=Math.random()*Math.PI*2, eb=Math.acos(2*Math.random()-1);
+    const burst=[Math.sin(eb)*Math.cos(ea)*0.8+dx*1.5, Math.sin(eb)*Math.sin(ea)*0.8+dy*1.5, Math.cos(eb)*0.8+dz*1.5];
+    P.push({dx,dy,dz,u0,v0:[rx/ln,ry/ln,rz/ln],color:colors[i%colors.length],size:Math.random()*1.8+0.9,r:1+Math.random()*0.16,burst,mag:1.0+Math.random()*2.2,x:0,y:0,z:0,ux:1,uy:0,vx:0,vy:1});
+  }
+  let mrx=0,mry=0,tmrx=0,tmry=0,lastMove=performance.now();
+  window.addEventListener("mousemove",e=>{tmrx=((e.clientX-innerWidth/2)/(innerWidth/2))*0.4;tmry=((e.clientY-innerHeight/2)/(innerHeight/2))*0.4;lastMove=performance.now();});
+  window.addEventListener("resize",size);
+  const t0=performance.now();
+  function frame(now){
+    ctx.clearRect(0,0,w,h);
+    // proteção de tela: passeio circular em repouso
+    if(now-lastMove>1500){const e2=now*0.00018;tmrx=Math.cos(e2)*0.4;tmry=Math.sin(e2*0.8)*0.34;}
+    mrx+=(tmrx-mrx)*0.012; mry+=(tmry-mry)*0.012;
+    const R=Math.min(w,h)*0.22, cx=w*(w>=980?0.34:0.5), cy=h*0.46, el=now-t0;
+    const rotY=el*0.00025+mrx, rotX=el*0.00018+mry, cosY=Math.cos(rotY),sinY=Math.sin(rotY),cosX=Math.cos(rotX),sinX=Math.sin(rotX);
+    const rot=(vx,vy,vz)=>{const ax=vx*cosY-vz*sinY,az=vz*cosY+vx*sinY,ay=vy*cosX-az*sinX;return[ax,ay];};
+    // ciclo: montada -> EXPLODE -> espalhada -> REGENERA (loop)
+    const T=7000, ph=el%T; let expl=0;
+    if(ph<4000) expl=0;
+    else if(ph<4900){ const t=(ph-4000)/900; expl=1-Math.pow(1-t,3); }   // estouro: dá pra ver voando
+    else if(ph<5300) expl=1;                                             // espalhada
+    else { const t=(ph-5300)/(T-5300); expl=1-t*t*(3-2*t); }            // regeneração suave
+    // aura colorida que envolve a esfera e pulsa na explosão
+    const aura=R*(1.8+expl*1.7);ctx.save();ctx.globalCompositeOperation="lighter";
+    for(let ci=0;ci<colors.length;ci++){const ang=el*0.0004+ci*1.57,ox=Math.cos(ang)*R*0.5,oy=Math.sin(ang)*R*0.5;const g=ctx.createRadialGradient(cx+ox,cy+oy,0,cx+ox,cy+oy,aura);g.addColorStop(0,hexA(colors[ci],0.18));g.addColorStop(0.55,hexA(colors[ci],0.05));g.addColorStop(1,hexA(colors[ci],0));ctx.fillStyle=g;ctx.fillRect(0,0,w,h);}
+    ctx.restore();
+    for(const p of P){
+      const e=expl*p.mag;
+      const bX=p.dx*p.r+p.burst[0]*e, bY=p.dy*p.r+p.burst[1]*e, bZ=p.dz*p.r+p.burst[2]*e;
+      const x1=bX*cosY-bZ*sinY, z1=bZ*cosY+bX*sinY;
+      p.x=x1; p.y=bY*cosX-z1*sinX; p.z=z1*cosX+bY*sinX;
+      [p.ux,p.uy]=rot(p.u0[0],p.u0[1],p.u0[2]);[p.vx,p.vy]=rot(p.v0[0],p.v0[1],p.v0[2]);
+    }
+    P.sort((a,b)=>b.z-a.z);
+    for(const p of P){const fov=400,sc=fov/(fov+p.z*R);if(sc<0.1)continue;const px=cx+p.x*R*sc,py=cy+p.y*R*sc,op=1-((p.z+1.5)/3);
+      ctx.save();ctx.globalAlpha=Math.max(0.08,Math.min(1,op));ctx.translate(px,py);
+      const s=p.size*sc,tt=s*0.38;ctx.strokeStyle=p.color;ctx.lineWidth=Math.max(0.6,s*0.22);ctx.lineCap="round";ctx.lineJoin="round";
+      const pts=[[-tt,-s],[tt,-s],[tt,-tt],[s,-tt],[s,tt],[tt,tt],[tt,s],[-tt,s],[-tt,tt],[-s,tt],[-s,-tt],[-tt,-tt]];
+      ctx.beginPath();for(let i=0;i<pts.length;i++){const a=pts[i][0],b=pts[i][1],sx=a*p.ux+b*p.vx,sy=a*p.uy+b*p.vy;i?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy);}ctx.closePath();ctx.stroke();ctx.restore();}
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
