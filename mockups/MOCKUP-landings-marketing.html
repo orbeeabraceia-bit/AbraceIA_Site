@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AbraceIA · Mockup — Landing Pages por Especialidade</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --navy:#0b0c0d; --muted:#5a6b66; --border:#dce8e4; --cream:#f5faf8;
+    --c1:#0891b2; --c2:#0d9488; --solid:#0e7490; --tint:rgba(14,116,144,.10);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:"Hanken Grotesk",system-ui,sans-serif;color:var(--navy);background:#fff;overflow-x:hidden;}
+  h1,h2,h3,.display{font-family:"Bricolage Grotesque",sans-serif;letter-spacing:-.02em;}
+  .serif{font-family:"Newsreader",Georgia,serif;font-style:italic;}
+  a{color:inherit;text-decoration:none;}
+  .grad{background:linear-gradient(135deg,var(--c1),var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+
+  /* CHROME */
+  #chrome{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  #chrome .brand{font-family:"Bricolage Grotesque";font-weight:800;font-size:15px;}
+  #chrome .brand b{color:var(--solid);}
+  #chrome .tag{font-size:11px;color:var(--muted);background:#f1f5f9;border-radius:999px;padding:3px 10px;font-weight:600;}
+  .tabs{display:flex;gap:7px;flex-wrap:wrap;margin-left:auto;}
+  .tab{cursor:pointer;border:1px solid var(--border);background:#fff;border-radius:999px;padding:6px 13px;font-size:12.5px;font-weight:700;color:#334155;transition:.15s;display:flex;align-items:center;gap:7px;}
+  .tab:hover{background:#f8fafc;}
+  .tab .sw{width:10px;height:10px;border-radius:50%;}
+  .tab.active{color:#fff;border-color:transparent;}
+
+  .wrap{max-width:1240px;margin:0 auto;padding:0 28px;}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;background:linear-gradient(to bottom,rgba(245,250,248,.65),#fff 70%);}
+  #hero-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;opacity:.72;pointer-events:none;}
+  .hero .glow{position:absolute;left:50%;top:-6rem;transform:translateX(-50%);width:42rem;height:42rem;border-radius:50%;background:var(--tint);filter:blur(70px);z-index:0;}
+  .hero .inner{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;padding:72px 0 84px;}
+  @media(max-width:920px){.hero .inner{grid-template-columns:1fr;gap:40px;padding:52px 0 60px;}}
+  .chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--tint);background:rgba(255,255,255,.7);border-radius:999px;padding:5px 13px;font-size:11px;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--solid);backdrop-filter:blur(6px);}
+  .lead{margin:22px 0 0;font-size:clamp(18px,2vw,23px);line-height:1.45;color:var(--muted);}
+  h1.hero-h1{margin:14px 0 0;font-size:clamp(34px,5.2vw,58px);font-weight:800;line-height:1.04;color:var(--navy);max-width:15ch;}
+  .hero-sub{margin:22px 0 0;font-size:clamp(16px,1.5vw,18px);line-height:1.6;color:var(--muted);max-width:46ch;}
+  .cta-row{display:flex;flex-wrap:wrap;gap:13px;margin-top:30px;}
+  .btn{border-radius:999px;padding:13px 26px;font-weight:600;font-size:15px;cursor:pointer;transition:transform .15s,box-shadow .15s;display:inline-flex;align-items:center;gap:8px;}
+  .btn:hover{transform:translateY(-1px);}
+  .btn-grad{background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;box-shadow:0 8px 22px var(--tint);}
+  .btn-grad:hover{box-shadow:0 12px 28px var(--tint);}
+  .btn-outline{background:#fff;color:var(--navy);box-shadow:inset 0 0 0 2px var(--solid);}
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:42px;}
+  @media(max-width:520px){.kpis{grid-template-columns:repeat(2,1fr);}}
+  .kpi{position:relative;overflow:hidden;border:1px solid rgba(230,234,238,.8);background:rgba(255,255,255,.55);backdrop-filter:blur(10px);border-radius:16px;padding:14px;transition:.2s;}
+  .kpi:hover{border-color:var(--solid);transform:translateY(-2px);}
+  .kpi b{display:block;font-family:"Bricolage Grotesque";font-weight:800;font-size:21px;color:var(--navy);}
+  .kpi span{display:block;margin-top:3px;font-size:11px;color:var(--muted);font-weight:500;line-height:1.3;}
+
+  /* CITATION CARD (glass) */
+  .citation{position:relative;}
+  .citation .halo{position:absolute;inset:-18px;border-radius:36px;background:linear-gradient(135deg,var(--tint),transparent);filter:blur(26px);z-index:0;}
+  .cit-card{position:relative;z-index:1;border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.85);backdrop-filter:blur(14px);border-radius:26px;box-shadow:0 30px 60px -20px rgba(15,23,42,.25);ring:1px solid var(--border);padding:22px;}
+  .cit-head{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:700;color:var(--muted);}
+  .cit-head .dot{width:9px;height:9px;border-radius:50%;background:var(--solid);box-shadow:0 0 0 4px var(--tint);}
+  .bubble{margin-top:16px;border-radius:16px;padding:13px 15px;font-size:14.5px;line-height:1.5;}
+  .bubble.q{background:#f1f5f9;color:#334155;border-bottom-left-radius:4px;max-width:85%;}
+  .bubble.a{margin-top:12px;margin-left:auto;background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;border-bottom-right-radius:4px;max-width:92%;box-shadow:0 10px 24px var(--tint);}
+  .bubble.a .src{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;background:rgba(255,255,255,.22);border-radius:6px;padding:2px 7px;}
+  .cit-foot{margin-top:16px;display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--muted);}
+  .cit-foot .pill{background:var(--tint);color:var(--solid);font-weight:700;border-radius:999px;padding:3px 9px;}
+
+  /* SECTIONS */
+  section.block{padding:70px 0;}
+  .kick{font-size:12px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--solid);}
+  h2.sec{font-size:clamp(26px,3.4vw,40px);font-weight:700;margin:10px 0 0;line-height:1.1;}
+  .sec-lead{margin:14px 0 0;color:var(--muted);font-size:17px;max-width:60ch;line-height:1.6;}
+  .grid3{display:grid;gap:20px;grid-template-columns:repeat(3,1fr);margin-top:38px;}
+  @media(max-width:880px){.grid3{grid-template-columns:1fr;}}
+  .card{position:relative;border:1px solid var(--border);background:#fff;border-radius:22px;padding:26px;transition:transform .18s,border-color .18s,box-shadow .18s;}
+  .card:hover{transform:translateY(-4px);border-color:var(--solid);box-shadow:0 18px 40px -16px rgba(15,23,42,.16);}
+  .card h3{font-size:19px;font-weight:700;margin:0;}
+  .card p{color:var(--muted);line-height:1.6;margin:11px 0 0;}
+  .num{display:flex;width:46px;height:46px;align-items:center;justify-content:center;border-radius:15px;font-family:"Bricolage Grotesque";font-weight:800;font-size:16px;margin-bottom:18px;background:var(--tint);color:var(--solid);}
+
+  .compliance{display:flex;gap:22px;align-items:center;border:1px solid var(--border);background:var(--cream);border-radius:26px;padding:32px;flex-wrap:wrap;}
+  .compliance .seal{width:60px;height:60px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:27px;flex:none;background:var(--tint);color:var(--solid);}
+  .compliance h2{font-size:23px;font-weight:700;margin:0;}
+  .compliance p{color:var(--muted);line-height:1.6;margin:8px 0 0;max-width:62ch;}
+
+  .proof{border:1px solid var(--border);border-radius:26px;padding:32px;background:#fff;}
+  .proof .k{font-size:11px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);}
+  .proof h3{font-size:23px;margin:10px 0 0;font-weight:700;}
+
+  .faq-item{border-bottom:1px solid var(--border);}
+  .faq-q{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:21px 0;font-size:17px;font-weight:600;color:var(--navy);display:flex;justify-content:space-between;gap:16px;align-items:center;font-family:"Hanken Grotesk";}
+  .faq-q .chev{flex:none;font-size:24px;color:var(--solid);transition:transform .2s;line-height:1;}
+  .faq-item.open .chev{transform:rotate(45deg);}
+  .faq-a{max-height:0;overflow:hidden;transition:max-height .28s ease;color:var(--muted);line-height:1.65;font-size:15.5px;}
+  .faq-item.open .faq-a{max-height:320px;padding-bottom:21px;}
+
+  /* CTA premium */
+  .cta-card{position:relative;overflow:hidden;border-radius:32px;border:1px solid var(--border);background:linear-gradient(135deg,var(--cream),#fff);padding:64px 32px;text-align:center;}
+  .cta-card .glow2{position:absolute;left:50%;bottom:-12rem;transform:translateX(-50%);width:40rem;height:40rem;border-radius:50%;background:var(--tint);filter:blur(60px);z-index:0;}
+  .cta-card .ct{position:relative;z-index:1;}
+  .cta-card h2{font-size:clamp(26px,3.4vw,40px);font-weight:700;margin:0;}
+  .cta-card p{color:var(--muted);font-size:18px;max-width:54ch;margin:16px auto 0;line-height:1.55;}
+
+  .others{padding:54px 0 70px;}
+  .others h2{font-size:19px;font-weight:700;margin:0 0 18px;}
+  .opill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border);background:#fff;border-radius:999px;padding:9px 17px;font-size:14px;font-weight:700;margin:0 8px 8px 0;cursor:pointer;transition:.15s;}
+  .opill:hover{background:var(--cream);transform:translateY(-1px);}
+  .opill .sw{width:10px;height:10px;border-radius:50%;}
+
+  .footnote{color:var(--muted);font-size:12.5px;padding:0 0 60px;line-height:1.6;}
+
+  .brand-logo{height:30px;width:30px;object-fit:contain;display:block;}
+  /* cursor de digitação */
+  .cursor{display:inline-block;width:2px;height:1em;background:#fff;margin-left:2px;vertical-align:-2px;animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .cit-src{opacity:0;transition:opacity .45s;}
+  .cit-src.show{opacity:1;}
+  /* seção diferença + toggle */
+  .diff{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center;border:1px solid var(--border);border-radius:28px;background:linear-gradient(135deg,var(--cream),#fff);padding:34px;}
+  @media(max-width:880px){.diff{grid-template-columns:1fr;}}
+  .toggle{display:inline-flex;background:#eef2f6;border-radius:999px;padding:4px;gap:4px;}
+  .toggle button{border:none;background:none;cursor:pointer;font-family:"Hanken Grotesk";font-weight:700;font-size:13.5px;color:var(--muted);padding:9px 17px;border-radius:999px;transition:.2s;}
+  .toggle button.on{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(15,23,42,.12);}
+  .toggle button.on.good{color:var(--solid);}
+  .ans{margin-top:22px;border-radius:18px;border:1px solid var(--border);background:#fff;padding:19px;min-height:178px;}
+  .ans .who{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--muted);}
+  .ans .who .d{width:8px;height:8px;border-radius:50%;}
+  .ans p{margin:13px 0 0;font-size:15px;line-height:1.55;color:#334155;}
+  .ans .rank{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+  .ans .row{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);}
+  .ans .row .pos{width:22px;height:22px;border-radius:6px;background:#eef2f6;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:#94a3b8;flex:none;}
+  .ans .row.you{color:var(--navy);font-weight:700;}
+  .ans .row.you .pos{background:var(--solid);color:#fff;}
+  .tag-cited{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:12px;font-weight:800;color:var(--solid);background:var(--tint);padding:5px 11px;border-radius:999px;}
+  .gauge{display:flex;flex-direction:column;align-items:center;text-align:center;}
+  .gauge .ring{position:relative;width:184px;height:184px;}
+  .gauge svg{transform:rotate(-90deg);}
+  .gauge .center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+  .gauge .val{font-family:"Bricolage Grotesque";font-weight:800;font-size:40px;color:var(--navy);}
+  .gauge .lab{font-size:12.5px;font-weight:600;color:var(--muted);margin-top:10px;max-width:20ch;line-height:1.4;}
+
+  /* fade-in */
+  .fade{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+  .fade.in{opacity:1;transform:none;}
+</style>
+</head>
+<body>
+
+<div id="chrome">
+  <img class="brand-logo" src="../public/logo.png" alt="AbraceIA" />
+  <div class="brand">Abrace<b>IA</b></div>
+  <span class="tag">MOCKUP · Landing por especialidade</span>
+  <div class="tabs" id="tabs"></div>
+</div>
+
+<main id="app"></main>
+
+<script>
+const DATA = [
+  {
+    slug:"odontologico-bh", short:"Odontologia", c1:"#0891b2", c2:"#0d9488", solid:"#0e7490",
+    particles:["#0891b2","#06b6d4","#0d9488"],
+    council:"CFO 196/2019",
+    chip:"AbraceIA · Belo Horizonte",
+    lead:"Cada novo sorriso começa com uma busca no Google.",
+    h1:["Seu consultório citado pela ","IA"," — e no topo do Google"],
+    sub:"Site próprio, SEO local e citação em IA para clínicas e consultórios odontológicos de BH. Quem busca implante ou dentista no bairro encontra você primeiro.",
+    cite:{q:"Qual a melhor clínica de implante perto da Savassi?",a:"A Clínica Sorriso Integral é uma referência em implantes na região da Savassi, em BH.",src:"fonte · CRO-MG"},
+    pains:[
+      ["Refém do boca a boca","Sem site e SEO local, você é invisível para quem procura um dentista agora, no Google e no Maps."],
+      ["Instagram não vira cadeira","Seguidor não é paciente. Falta o caminho claro do post até o agendamento."],
+      ["Medo de infringir o CFO","Antes/depois e promessa assustam — mas dá para divulgar com segurança e atrair mais."],
+    ],
+    deliver:[
+      ["Apareça no Google Maps","SEO local + Google Meu Negócio para 'dentista [bairro] BH', 'implante BH' e urgências."],
+      ["Uma página por procedimento","Implante, ortodontia, clareamento, urgência — cada um com sua página, keyword e Schema."],
+      ["Citação em IA (GEO)","Quando o paciente pergunta ao ChatGPT ou ao Google AI, sua clínica entra na resposta."],
+    ],
+    compliance:"Tudo dentro da Res. CFO 196/2019: identificação com CRO, conteúdo educativo, sem promessa de resultado e sem antes/depois como chamariz.",
+    proof:null,
+    faq:[
+      ["Dentista pode anunciar no Google e no Instagram?","Pode, com identificação (CRO) e conteúdo educativo. A Res. CFO 196/2019 proíbe promessa de resultado, sensacionalismo e antes/depois como isca — não a presença digital em si."],
+      ["Em quanto tempo apareço no Google Maps?","Com Google Meu Negócio otimizado e SEO local bem feito, os primeiros sinais surgem em semanas. O ranqueamento competitivo amadurece em alguns meses, sempre com métricas documentadas."],
+    ],
+  },
+  {
+    slug:"psicologos-bh", short:"Psicologia", c1:"#7c3aed", c2:"#c026d3", solid:"#7c3aed",
+    particles:["#7c3aed","#a855f7","#c026d3"],
+    council:"CFP 23/2022",
+    chip:"AbraceIA · Belo Horizonte",
+    lead:"Quem precisa de acolhimento procura primeiro no silêncio da busca.",
+    h1:["Atraia o paciente certo, com ","ética"," e presença sólida"],
+    sub:"Site, SEO e conteúdo que respeitam a Res. CFP 23/2022 e o sigilo — e ainda assim lotam sua agenda, em BH ou na teleconsulta.",
+    cite:{q:"Psicólogo para ansiedade com abordagem TCC em BH?",a:"O psicólogo Eric Moreira atende ansiedade com Terapia Cognitivo-Comportamental em Belo Horizonte.",src:"fonte · CRP-04"},
+    pains:[
+      ["Captação só por indicação","Sem presença própria, você depende de quem já te conhece — e perde quem busca ajuda agora."],
+      ["Receio do que o CFP permite","Muita gente trava com medo de errar. Dá para comunicar com autoridade e dentro da norma."],
+      ["Site que não transmite confiança","Em saúde mental, confiança é tudo. Um site genérico afasta em vez de acolher."],
+    ],
+    deliver:[
+      ["Páginas por demanda","Ansiedade, pânico, burnout, terapia de casal — conteúdo que acolhe e ranqueia."],
+      ["Autoridade e E-E-A-T","CRP visível, abordagem (TCC e outras) e prova de autoridade, sem expor o paciente."],
+      ["Online + presencial","Estrutura pronta para teleconsulta e para o atendimento presencial em BH."],
+    ],
+    compliance:"Conforme a Res. CFP 23/2022: identificação com CRP, sem promessa de cura, sem sensacionalismo e com o sigilo no centro de tudo.",
+    proof:{name:"Eric Moreira — Psicologia (TCC)",href:"https://psicologoericmoreira.com.br"},
+    faq:[
+      ["Psicólogo pode fazer marketing digital?","Sim. A Res. CFP 23/2022 permite divulgação com identificação (CRP) e conteúdo informativo. O que ela veda é promessa de cura, sensacionalismo e qualquer captação que banalize o sofrimento."],
+      ["Posso usar depoimentos de pacientes?","Com muita cautela: o sigilo é central. Em vez de depoimento clínico, priorizamos prova de autoridade — formação, abordagem e conteúdo educativo — que gera confiança sem expor ninguém."],
+    ],
+  },
+  {
+    slug:"nutricao-bh", short:"Nutrição", c1:"#059669", c2:"#0d9488", solid:"#047857",
+    particles:["#059669","#10b981","#0d9488"],
+    council:"CFN 856/2026",
+    chip:"AbraceIA · Belo Horizonte",
+    lead:"Ciência também se comunica — e, bem feita, converte.",
+    h1:["Autoridade que separa você das ","dietas milagrosas"],
+    sub:"Presença digital com base científica para nutricionistas de BH. Atraia quem valoriza ciência — sem prometer resultado, dentro das normas do CFN.",
+    cite:{q:"Nutricionista esportivo em Belo Horizonte?",a:"A nutricionista Marina Alves atua com nutrição esportiva baseada em evidências, em BH.",src:"fonte · CRN-9"},
+    pains:[
+      ["Disputa com promessas vazias","Enquanto perfis prometem emagrecimento mágico, quem faz sério precisa de autoridade visível."],
+      ["Instagram cheio, agenda vazia","Engajamento não paga conta. Falta converter audiência em consulta."],
+      ["Sem site, sem autoridade","Sem uma base própria, é difícil ranquear e provar especialização."],
+    ],
+    deliver:[
+      ["Conteúdo de autoridade","Educação nutricional com base científica que ranqueia e separa você das promessas."],
+      ["Nichos e abordagens","Esportiva, clínica, materno-infantil, comportamental — páginas específicas por foco."],
+      ["Conversão real","Do conteúdo ao agendamento por WhatsApp, com tracking do que funciona."],
+    ],
+    compliance:"Dentro das normas do CFN (Res. CFN 856/2026): identificação com CRN, base científica e sem promessa de resultado ou de perda de peso.",
+    proof:null,
+    faq:[
+      ["Nutricionista pode prometer emagrecimento no anúncio?","Não. As normas do CFN vedam promessa de resultado e de perda de peso. O que funciona — e é permitido — é autoridade: conteúdo educativo com base científica e identificação (CRN)."],
+      ["Como me diferenciar de quem promete milagre?","Justamente pela seriedade: conteúdo que explica o porquê, prova de formação e foco numa abordagem. Isso atrai o paciente que valoriza ciência e tende a aderir mais ao acompanhamento."],
+    ],
+  },
+  {
+    slug:"fisioterapia-bh", short:"Fisioterapia", c1:"#f59e0b", c2:"#ea580c", solid:"#c2410c",
+    particles:["#f59e0b","#fb923c","#f97316"],
+    council:"COFFITO 532/2021",
+    chip:"AbraceIA · Belo Horizonte",
+    lead:"Movimento começa antes da primeira sessão: na busca.",
+    h1:["Pacientes que buscam você ","direto"," — não só por encaminhamento"],
+    sub:"Site, SEO local e conteúdo para fisioterapeutas de BH: pilates clínico, RPG, esportiva e domiciliar. Captação direta, conforme a Res. COFFITO 532/2021.",
+    cite:{q:"Fisioterapeuta domiciliar em BH?",a:"A Clínica Movimento oferece fisioterapia domiciliar em Belo Horizonte e região metropolitana.",src:"fonte · CREFITO-4"},
+    pains:[
+      ["Dependência de encaminhamento","Esperar o médico indicar limita o crescimento. Muita gente já busca fisioterapeuta direto no Google."],
+      ["Invisível na busca local","Sem SEO local, você perde o paciente que digita 'fisioterapeuta domiciliar BH'."],
+      ["Antes/depois é arriscado","Comunicar evolução sem ferir o COFFITO exige método — e funciona melhor que sensacionalismo."],
+    ],
+    deliver:[
+      ["Páginas por especialidade","Pilates clínico, RPG, esportiva, domiciliar, pélvica — cada foco com sua página."],
+      ["SEO local + domiciliar","Captação para bairros de BH e para o serviço domiciliar, de alta intenção."],
+      ["Método em vez de promessa","Conteúdo que comunica evidência e processo, gerando confiança dentro da norma."],
+    ],
+    compliance:"Conforme a Res. COFFITO 532/2021: identificação com CREFITO, conteúdo educativo, sem sensacionalismo nem promessa de cura.",
+    proof:null,
+    faq:[
+      ["Fisioterapeuta pode divulgar antes/depois?","Com muita cautela. A Res. COFFITO 532/2021 veda sensacionalismo e promessa de resultado. Imagens só com consentimento e finalidade educativa — preferimos comunicar método e evidência."],
+      ["Vale a pena ter site se atendo por convênio?","Sim. Mesmo no convênio, o site capta o particular, o domiciliar e o paciente que pesquisa antes de escolher. É o ativo que ranqueia e converte no seu WhatsApp, sem intermediário."],
+    ],
+  },
+  {
+    slug:"clinicas-multidisciplinares", short:"Clínicas multi", c1:"#e11d48", c2:"#db2777", solid:"#be123c",
+    particles:["#e11d48","#f43f5e","#db2777"],
+    council:"CFM · CFO · CFP · CFN · COFFITO",
+    chip:"AbraceIA · Belo Horizonte",
+    lead:"Uma marca. Muitas especialidades. Zero ruído.",
+    h1:["Várias especialidades, ","uma marca forte"," — cada uma em compliance"],
+    sub:"Arquitetura digital que dá a cada especialidade sua página e seu funil, sob uma marca coesa, respeitando a norma de cada conselho.",
+    cite:{q:"Clínica multidisciplinar de confiança em BH?",a:"A Clínica Saúde Integral reúne várias especialidades em BH, cada uma com seu registro profissional.",src:"fonte · CFM · CFP · COFFITO"},
+    pains:[
+      ["Muitas áreas, marca confusa","Quando tudo cabe numa página só, nenhuma especialidade ranqueia e a marca não fixa."],
+      ["Cada um puxa pra um lado","Sem padrão, o site vira colcha de retalhos e o paciente se perde."],
+      ["Compliance multiplicado","Cada conselho tem sua régua. Errar em uma área expõe a clínica inteira."],
+    ],
+    deliver:[
+      ["Arquitetura por especialidade","Cada área com sua página, Schema e palavras-chave, sob uma marca e navegação coesas."],
+      ["SEO local forte","Captação para o nome da clínica e para cada serviço, no Google e no Maps."],
+      ["Compliance multi-conselho","CFM, CFO, CFP, CFN, COFFITO — cada conteúdo na régua certa, sem violar nenhuma."],
+    ],
+    compliance:"Cada especialidade segue a norma do seu conselho (CFM, CFO, CFP, CFN, COFFITO). Centralizamos a marca sem violar nenhuma delas.",
+    proof:null,
+    faq:[
+      ["Como organizar uma clínica com várias especialidades no site?","Cada especialidade ganha sua própria página, com Schema e palavras-chave próprias, todas sob uma marca e navegação coesas. Isso melhora o SEO de cada serviço e mantém a identidade da clínica."],
+      ["Dá para manter o compliance de todos os conselhos num site só?","Sim. Tratamos cada área conforme a norma do seu conselho (CFM, CFO, CFP, CFN, COFFITO), com revisão por profissional habilitado. A marca é única; as regras, específicas por especialidade."],
+    ],
+  },
+];
+
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const KPIS = [["88%","das buscas de saúde com IA"],["≤ 0,8s","meta de LCP mobile"],["",""],["Next.js 16","stack 2026"]];
+
+/* ---------- Cross-particles (esfera 3D que explode e regenera) ---------- */
+let curIdx = 0;
+let stopParticles = null;
+function startParticles(colors){
+  const canvas = document.getElementById("hero-canvas");
+  if(!canvas) return null;
+  const ctx = canvas.getContext("2d");
+  const hexA=(h,a)=>{ const n=parseInt(h.slice(1),16); return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`; };
+  const dpr = window.devicePixelRatio || 1;
+  let w, h;
+  function size(){ const p=canvas.parentElement; w=p.clientWidth; h=p.clientHeight; canvas.width=w*dpr; canvas.height=h*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+  size();
+  const N = 1800, P = [];
+  for(let i=0;i<N;i++){
+    const phi=Math.acos(1-(2*i)/N), theta=Math.PI*(1+Math.sqrt(5))*i;
+    const dx=Math.cos(theta)*Math.sin(phi), dy=Math.cos(phi), dz=Math.sin(theta)*Math.sin(phi);
+    const a=Math.random()*Math.PI*2, b=Math.acos(2*Math.random()-1);
+    const u0=[Math.sin(b)*Math.cos(a),Math.sin(b)*Math.sin(a),Math.cos(b)];
+    let rx=Math.random()*2-1, ry=Math.random()*2-1, rz=Math.random()*2-1;
+    const d=rx*u0[0]+ry*u0[1]+rz*u0[2]; rx-=d*u0[0]; ry-=d*u0[1]; rz-=d*u0[2];
+    const ln=Math.hypot(rx,ry,rz)||1;
+    // vetor de explosão: direção aleatória (spread) + empurrão radial para fora
+    const ea=Math.random()*Math.PI*2, eb=Math.acos(2*Math.random()-1);
+    const burst=[Math.sin(eb)*Math.cos(ea)*0.8+dx*1.5, Math.sin(eb)*Math.sin(ea)*0.8+dy*1.5, Math.cos(eb)*0.8+dz*1.5];
+    P.push({dx,dy,dz,u0,v0:[rx/ln,ry/ln,rz/ln],color:colors[i%colors.length],size:Math.random()*1.9+0.9,r:1+Math.random()*0.16,burst,mag:1.0+Math.random()*2.2,x:0,y:0,z:0,ux:1,uy:0,vx:0,vy:1});
+  }
+  let mrx=0,mry=0,tmrx=0,tmry=0;
+  const onMove=e=>{ tmrx=((e.clientX-innerWidth/2)/(innerWidth/2))*0.45; tmry=((e.clientY-innerHeight/2)/(innerHeight/2))*0.45; };
+  window.addEventListener("mousemove",onMove); window.addEventListener("resize",size);
+  const t0=performance.now(); let raf;
+  function frame(now){
+    ctx.clearRect(0,0,w,h);
+    mrx+=(tmrx-mrx)*0.05; mry+=(tmry-mry)*0.05;
+    const R=Math.min(w,h)*0.23, cx=w*(w>=920?0.32:0.5), cy=h*0.46, el=now-t0;
+    const rotY=el*0.0003+mrx, rotX=el*0.0002+mry, cosY=Math.cos(rotY),sinY=Math.sin(rotY),cosX=Math.cos(rotX),sinX=Math.sin(rotX);
+    const rot=(vx,vy,vz)=>{const ax=vx*cosY-vz*sinY, az=vz*cosY+vx*sinY, ay=vy*cosX-az*sinX; return [ax,ay];};
+    // ciclo: montada -> EXPLODE -> espalhada -> REGENERA (loop)
+    const T=7000, ph=el%T; let expl=0;
+    if(ph<4000) expl=0;
+    else if(ph<4900){ const t=(ph-4000)/900; expl=1-Math.pow(1-t,3); }  // estouro mais lento: dá pra ver voando
+    else if(ph<5300) expl=1;                                            // espalhada
+    else { const t=(ph-5300)/(T-5300); expl=1-t*t*(3-2*t); }           // regeneração suave
+    // atmosfera colorida (nebulosa aditiva) que envolve a esfera e pulsa na explosão
+    const aura=R*(1.8+expl*1.7);
+    ctx.save(); ctx.globalCompositeOperation="lighter";
+    for(let ci=0;ci<colors.length;ci++){
+      const ang=el*0.00045+ci*2.0944, ox=Math.cos(ang)*R*0.5, oy=Math.sin(ang)*R*0.5;
+      const g=ctx.createRadialGradient(cx+ox,cy+oy,0,cx+ox,cy+oy,aura);
+      g.addColorStop(0,hexA(colors[ci],0.24)); g.addColorStop(0.55,hexA(colors[ci],0.07)); g.addColorStop(1,hexA(colors[ci],0));
+      ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+    }
+    ctx.restore();
+    for(const p of P){
+      const e=expl*p.mag;
+      const bX=p.dx*p.r+p.burst[0]*e, bY=p.dy*p.r+p.burst[1]*e, bZ=p.dz*p.r+p.burst[2]*e;
+      const x1=bX*cosY-bZ*sinY, z1=bZ*cosY+bX*sinY;
+      p.x=x1; p.y=bY*cosX-z1*sinX; p.z=z1*cosX+bY*sinX;
+      [p.ux,p.uy]=rot(p.u0[0],p.u0[1],p.u0[2]); [p.vx,p.vy]=rot(p.v0[0],p.v0[1],p.v0[2]);
+    }
+    P.sort((a,b)=>b.z-a.z);
+    for(const p of P){
+      const fov=400, sc=fov/(fov+p.z*R); if(sc<0.1) continue;
+      const px=cx+p.x*R*sc, py=cy+p.y*R*sc, op=1-((p.z+1.5)/3);
+      ctx.save(); ctx.globalAlpha=Math.max(0.08,Math.min(1,op)); ctx.translate(px,py);
+      const s=p.size*sc, t=s*0.38;
+      ctx.strokeStyle=p.color; ctx.lineWidth=Math.max(0.6,s*0.22); ctx.lineCap="round"; ctx.lineJoin="round";
+      const pts=[[-t,-s],[t,-s],[t,-t],[s,-t],[s,t],[t,t],[t,s],[-t,s],[-t,t],[-s,t],[-s,-t],[-t,-t]];
+      ctx.beginPath();
+      for(let i=0;i<pts.length;i++){const a=pts[i][0],b=pts[i][1],sx=a*p.ux+b*p.vx,sy=a*p.uy+b*p.vy; i?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy);}
+      ctx.closePath(); ctx.stroke(); ctx.restore();
+    }
+    raf=requestAnimationFrame(frame);
+  }
+  raf=requestAnimationFrame(frame);
+  return ()=>{ cancelAnimationFrame(raf); window.removeEventListener("mousemove",onMove); window.removeEventListener("resize",size); };
+}
+
+function tint(hex){ return hex+"1a"; }
+
+function render(i){
+  curIdx = i;
+  const d = DATA[i];
+  document.documentElement.style.setProperty("--c1",d.c1);
+  document.documentElement.style.setProperty("--c2",d.c2);
+  document.documentElement.style.setProperty("--solid",d.solid);
+  document.documentElement.style.setProperty("--tint",tint(d.solid));
+  const kpis = KPIS.map((k,idx)=> idx===2 ? [d.council.split(" · ")[0], "compliance"] : k);
+
+  const app = document.getElementById("app");
+  app.innerHTML = `
+    <section class="hero">
+      <canvas id="hero-canvas"></canvas>
+      <div class="glow"></div>
+      <div class="wrap">
+        <div class="inner">
+          <div>
+            <span class="chip">${esc(d.chip)}</span>
+            <p class="lead serif fade">${esc(d.lead)}</p>
+            <h1 class="hero-h1 fade">${esc(d.h1[0])}<span class="grad">${esc(d.h1[1])}</span>${d.h1[2]?esc(d.h1[2]):""}</h1>
+            <p class="hero-sub fade">${esc(d.sub)}</p>
+            <div class="cta-row fade">
+              <a class="btn btn-grad">Quero atrair pacientes</a>
+              <a class="btn btn-outline">Auditoria gratuita de IA</a>
+            </div>
+            <div class="kpis fade">
+              ${kpis.map(k=>{ const m=String(k[0]).match(/^(\d+)%$/); const bv=m?`<b data-count="${m[1]}" data-suffix="%">0%</b>`:`<b>${esc(k[0])}</b>`; return `<div class="kpi">${bv}<span>${esc(k[1])}</span></div>`; }).join("")}
+            </div>
+          </div>
+          <div class="citation fade">
+            <div class="halo"></div>
+            <div class="cit-card">
+              <div class="cit-head"><span class="dot"></span> Resposta de IA generativa</div>
+              <div class="bubble q">${esc(d.cite.q)}</div>
+              <div class="bubble a"><span id="typed"></span><span class="cursor" id="cur"></span><span class="src cit-src" id="citsrc">↳ ${esc(d.cite.src)}</span></div>
+              <div class="cit-foot"><span class="pill">GEO ativo</span> sua clínica citada na resposta, não escondida nos links</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="wrap">
+      <section class="block">
+        <div class="fade"><span class="kick">O problema</span><h2 class="sec">O que trava ${esc(d.short.toLowerCase())} em BH hoje</h2></div>
+        <div class="grid3">
+          ${d.pains.map(p=>`<div class="card fade"><h3>${esc(p[0])}</h3><p>${esc(p[1])}</p></div>`).join("")}
+        </div>
+      </section>
+
+      <section class="block" style="padding-top:0">
+        <div class="fade"><span class="kick">A solução</span><h2 class="sec">O que a AbraceIA constrói para você</h2></div>
+        <div class="grid3">
+          ${d.deliver.map((p,idx)=>`<div class="card fade"><span class="num">${String(idx+1).padStart(2,"0")}</span><h3>${esc(p[0])}</h3><p>${esc(p[1])}</p></div>`).join("")}
+        </div>
+      </section>
+
+      <section class="block" style="padding-top:0">
+        <div class="fade"><span class="kick">Veja a diferença</span><h2 class="sec">O que a IA responde sobre você <span class="grad">hoje</span></h2></div>
+        <div class="diff fade" style="margin-top:32px">
+          <div>
+            <div class="toggle">
+              <button id="tg-no" class="on" onclick="setDiff(false)">Sem AbraceIA</button>
+              <button id="tg-yes" onclick="setDiff(true)">Com AbraceIA</button>
+            </div>
+            <div class="ans" id="ansbox"></div>
+          </div>
+          <div class="gauge">
+            <div class="ring">
+              <svg width="184" height="184" viewBox="0 0 184 184">
+                <circle cx="92" cy="92" r="76" fill="none" stroke="#eef2f6" stroke-width="16"/>
+                <circle id="gauge-arc" cx="92" cy="92" r="76" fill="none" stroke="var(--solid)" stroke-width="16" stroke-linecap="round" stroke-dasharray="477.5" stroke-dashoffset="477.5" style="transition:stroke-dashoffset .9s ease,stroke .4s"/>
+              </svg>
+              <div class="center"><span class="val" id="gauge-val">0%</span></div>
+            </div>
+            <div class="lab">Visibilidade da sua clínica em IA generativa</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="block" style="padding-top:0">
+        <div class="compliance fade">
+          <div class="seal">✓</div>
+          <div><h2>Dentro da régua do conselho</h2><p>${esc(d.compliance)}</p></div>
+        </div>
+      </section>
+
+      ${d.proof?`<section class="block" style="padding-top:0">
+        <div class="proof fade">
+          <div class="k">Prova real no portfólio</div>
+          <h3>${esc(d.proof.name)}</h3>
+          <div style="margin-top:18px"><a style="color:var(--solid);font-weight:700">Ver o case →</a> &nbsp;·&nbsp; <a href="${d.proof.href}" target="_blank" rel="noopener" style="color:var(--muted)">Visitar o site ao vivo</a></div>
+        </div>
+      </section>`:""}
+
+      <section class="block" style="padding-top:0">
+        <div class="fade"><span class="kick">Dúvidas</span><h2 class="sec">Perguntas frequentes</h2></div>
+        <div class="fade" style="max-width:780px;margin-top:24px">
+          ${d.faq.map(f=>`<div class="faq-item"><button class="faq-q">${esc(f[0])}<span class="chev">+</span></button><div class="faq-a">${esc(f[1])}</div></div>`).join("")}
+        </div>
+      </section>
+
+      <section class="block" style="padding-top:0">
+        <div class="cta-card fade">
+          <div class="glow2"></div>
+          <div class="ct">
+            <h2>Pronto para encher a agenda com o <span class="grad">paciente certo</span>?</h2>
+            <p>Comece por uma auditoria gratuita da sua presença digital e em IA. Sem promessa de resultado — só método e dados.</p>
+            <div class="cta-row" style="justify-content:center;margin-top:32px">
+              <a class="btn btn-grad">Falar com a AbraceIA</a>
+              <a class="btn btn-outline">Auditoria de SEO</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="others fade">
+        <h2>Marketing para outras especialidades em BH</h2>
+        ${DATA.map((o,oi)=> oi===i?"":`<span class="opill" onclick="select(${oi})"><span class="sw" style="background:${o.solid}"></span>${esc(o.short)}</span>`).join("")}
+      </section>
+
+      <p class="footnote">Mockup estático para avaliação de direção criativa — a esfera de cruzes 3D (motor real do hero do site, recolorido por especialidade) <b>explode e se regenera em ciclo</b>; a resposta de IA é digitada ao vivo e o comparativo Sem/Com é interativo. Rota real: <b>/marketing/${d.slug}</b> (escrita em Next, uncommitted, aguardando aprovação). Botões e dados de exemplo são ilustrativos.</p>
+    </div>
+  `;
+
+  if(stopParticles) stopParticles();
+  stopParticles = startParticles(d.particles);
+
+  // fade-in on scroll
+  const io = new IntersectionObserver((ents)=>{ ents.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} }); },{threshold:.12});
+  app.querySelectorAll(".fade").forEach(el=>io.observe(el));
+  // hero fades visible immediately
+  app.querySelectorAll(".hero .fade").forEach((el,k)=> setTimeout(()=>el.classList.add("in"), 80+k*90));
+
+  // faq
+  app.querySelectorAll(".faq-item").forEach(item=>{
+    item.querySelector(".faq-q").addEventListener("click",()=>{
+      const open=item.classList.contains("open");
+      app.querySelectorAll(".faq-item").forEach(x=>x.classList.remove("open"));
+      if(!open) item.classList.add("open");
+    });
+  });
+
+  // ✦ resposta de IA digitando no hero
+  setTimeout(()=>{
+    typeWriter(document.getElementById("typed"), d.cite.a, ()=>{
+      const c=document.getElementById("cur"); if(c) c.remove();
+      const s=document.getElementById("citsrc"); if(s) s.classList.add("show");
+    });
+  }, 650);
+
+  // ✦ tilt 3D nos cards
+  app.querySelectorAll(".card").forEach(c=>{
+    c.addEventListener("mousemove",e=>{ const r=c.getBoundingClientRect(); const px=(e.clientX-r.left)/r.width-0.5, py=(e.clientY-r.top)/r.height-0.5; c.style.transform=`perspective(800px) rotateX(${-py*6}deg) rotateY(${px*6}deg) translateY(-4px)`; });
+    c.addEventListener("mouseleave",()=>{ c.style.transform=""; });
+  });
+
+  // ✦ count-up dos KPIs ao aparecer
+  const cio=new IntersectionObserver((es)=>{ es.forEach(e=>{ if(e.isIntersecting){ countUp(e.target, parseInt(e.target.dataset.count), e.target.dataset.suffix||"", 1100); cio.unobserve(e.target);} }); },{threshold:.6});
+  app.querySelectorAll("[data-count]").forEach(el=>cio.observe(el));
+
+  // ✦ estado inicial do comparativo Sem/Com
+  setDiff(false);
+}
+
+let diffOn=false;
+function setDiff(yes){
+  diffOn=yes; const d=DATA[curIdx];
+  document.getElementById("tg-no").classList.toggle("on",!yes);
+  const yb=document.getElementById("tg-yes"); yb.classList.toggle("on",yes); yb.classList.toggle("good",yes);
+  const box=document.getElementById("ansbox");
+  if(yes){
+    box.innerHTML=`<div class="who"><span class="d" style="background:var(--solid)"></span>Resposta da IA · com AbraceIA</div>
+      <p>${esc(d.cite.a)}</p>
+      <span class="tag-cited">✓ citada como fonte · ${esc(d.cite.src)}</span>`;
+  } else {
+    box.innerHTML=`<div class="who"><span class="d" style="background:#f43f5e"></span>Resposta da IA · hoje</div>
+      <p>Não encontrei uma clínica de ${esc(d.short.toLowerCase())} específica em BH nas minhas fontes. Veja diretórios gerais para comparar:</p>
+      <div class="rank">
+        <div class="row"><span class="pos">1</span> Doctoralia · diretório genérico</div>
+        <div class="row"><span class="pos">2</span> Portal de saúde nacional</div>
+        <div class="row you"><span class="pos">9</span> Sua clínica — 1ª página do Google, mas fora da resposta da IA</div>
+      </div>`;
+  }
+  setGauge(yes?87:12, yes);
+}
+function setGauge(pct,good){
+  const arc=document.getElementById("gauge-arc"); if(!arc) return;
+  arc.style.strokeDashoffset=477.5*(1-pct/100);
+  arc.style.stroke=good?"var(--solid)":"#f43f5e";
+  countUp(document.getElementById("gauge-val"),pct,"%",900);
+}
+function countUp(el,target,suffix,dur){
+  if(!el) return; const start=performance.now();
+  (function step(now){ const t=Math.min(1,(now-start)/dur); el.textContent=Math.round(target*(t*(2-t)))+suffix; if(t<1) requestAnimationFrame(step); })(performance.now());
+}
+function typeWriter(el,text,done){
+  if(!el) return; let i=0;
+  (function tick(){ if(i<=text.length){ el.textContent=text.slice(0,i); i++; setTimeout(tick,16+Math.random()*26);} else if(done) done(); })();
+}
+
+function select(i){
+  render(i);
+  document.querySelectorAll(".tab").forEach((t,ti)=>{ const on=ti===i; t.classList.toggle("active",on); t.style.background=on?DATA[i].solid:"#fff"; });
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function buildTabs(){
+  document.getElementById("tabs").innerHTML = DATA.map((d,i)=>`<div class="tab" onclick="select(${i})"><span class="sw" style="background:${d.solid}"></span>${esc(d.short)}</div>`).join("");
+}
+buildTabs();
+select(0);
+</script>
+</body>
+</html>
