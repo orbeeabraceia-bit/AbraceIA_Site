@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AbraceIA — Organograma-Checklist Mestre de Execução</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #f3f7fa;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --card: #ffffff;
+
+    /* Cores de marca AbraceIA (Teal · Pêssego · Ouro · Ônix · Creme) */
+    --color-p1: #0f766e; /* Estratégia & Marca — Teal */
+    --color-p2: #b07d1f; /* Produto & Engenharia — Ouro */
+    --color-p3: #d97757; /* Marketing & Aquisição — Pêssego */
+    --color-p4: #475569; /* Infra & Operação — Ônix */
+
+    /* Status (FIXAS) */
+    --st-concluido: #10B981;
+    --st-progresso: #f59e0b;
+    --st-roadmap: #6366f1;
+    --st-pendente: #94a3b8;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+  }
+
+  /* ===== TOP BAR ===== */
+  #topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 18px;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px;
+    box-shadow: 0 2px 12px rgba(15,23,42,0.05);
+  }
+  #brand { display: flex; align-items: center; gap: 12px; min-width: 230px; }
+  #brand .logo {
+    width: 40px; height: 40px; border-radius: 11px;
+    background: #fff; overflow: hidden;
+    display: grid; place-items: center; color: #fff; flex: none;
+    box-shadow: 0 4px 12px rgba(15,118,110,0.18);
+  }
+  #brand .logo img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  #brand h1 { font-family: "Sora", sans-serif; font-weight: 800; font-size: 17px; margin: 0; line-height: 1.1; }
+  #brand p { margin: 2px 0 0; font-size: 11px; color: var(--muted); font-weight: 500; }
+
+  .legend { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .legend .group-label { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); font-weight: 700; margin-right: 2px; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #334155; cursor: pointer; user-select: none; padding: 3px 7px; border-radius: 999px; border: 1px solid transparent; transition: all .15s; }
+  .chip:hover { background: #f1f5f9; }
+  .chip.dim { opacity: .35; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+  .dot.concluido { background: var(--st-concluido); }
+  .dot.progresso { background: var(--st-progresso); }
+  .dot.roadmap   { background: var(--st-roadmap); }
+  .dot.pendente  { background: var(--st-pendente); }
+
+  .phase-chip { font-size: 11px; font-weight: 700; color: #fff; padding: 3px 9px; border-radius: 999px; cursor: pointer; user-select: none; border: 2px solid transparent; transition: all .15s; }
+  .phase-chip.dim { opacity: .3; }
+  .phase-chip.active { outline: 2px solid #1e293b; outline-offset: 1px; }
+
+  #progress-wrap { display: flex; align-items: center; gap: 9px; min-width: 220px; flex: 1; }
+  #progress-bar { flex: 1; height: 10px; background: #e2e8f0; border-radius: 999px; overflow: hidden; min-width: 120px; }
+  #progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--color-p1), var(--st-concluido)); transition: width .4s ease; border-radius: 999px; }
+  #progress-label { font-size: 12px; font-weight: 700; font-family: "Sora", sans-serif; white-space: nowrap; }
+
+  .controls { display: flex; gap: 6px; }
+  .controls button { font-family: "Inter"; font-size: 12px; font-weight: 600; color: #334155; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; cursor: pointer; transition: all .15s; }
+  .controls button:hover { background: #f1f5f9; border-color: #cbd5e1; }
+
+  /* ===== CANVAS ===== */
+  #viewport { position: fixed; inset: 0; top: 0; overflow: hidden; cursor: grab; }
+  #viewport.grabbing { cursor: grabbing; }
+  #canvas { position: absolute; top: 0; left: 0; transform-origin: 0 0; padding: 60px; will-change: transform; }
+
+  .tree { display: flex; flex-direction: column; align-items: center; }
+
+  /* Root */
+  .root-node {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff; border-radius: 18px; padding: 18px 30px; text-align: center;
+    box-shadow: 0 14px 36px rgba(15,23,42,0.28); position: relative; z-index: 2;
+    min-width: 320px;
+  }
+  .root-node .root-logo { width: 56px; height: 56px; border-radius: 14px; background: #fff; padding: 7px; object-fit: contain; display: block; margin: 0 auto 10px; box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+  .root-node .eyebrow { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: #5eead4; font-weight: 700; }
+  .root-node h2 { font-family: "Sora"; font-weight: 800; font-size: 22px; margin: 5px 0 4px; }
+  .root-node p { margin: 0; font-size: 12px; color: #cbd5e1; }
+  .root-stats { display: flex; gap: 16px; justify-content: center; margin-top: 11px; }
+  .root-stats div { text-align: center; }
+  .root-stats b { font-family: "Sora"; font-size: 18px; display: block; }
+  .root-stats span { font-size: 9.5px; color: #94a3b8; text-transform: uppercase; letter-spacing: .05em; }
+
+  /* connectors */
+  .v-line { width: 3px; height: 34px; background: var(--border); }
+  .pillars-row { display: flex; gap: 36px; align-items: flex-start; position: relative; }
+  .pillars-row::before { content: ""; position: absolute; top: -34px; left: 0; right: 0; height: 3px; background: var(--border); }
+
+  .pillar-col { display: flex; flex-direction: column; align-items: center; position: relative; }
+  .pillar-col::before { content: ""; position: absolute; top: -34px; left: 50%; width: 3px; height: 34px; background: var(--border); transform: translateX(-50%); }
+
+  /* L2 pillar card */
+  .pillar {
+    --c: var(--color-p1);
+    background: var(--card); border-radius: 16px; width: 360px; position: relative; z-index: 2;
+    box-shadow: 0 8px 24px rgba(15,23,42,0.10); overflow: hidden; border: 1px solid var(--border);
+  }
+  .pillar .banner {
+    background: var(--c); color: #fff; padding: 16px 20px 22px; position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% 72%, 0 100%);
+  }
+  .pillar .banner .num { position: absolute; top: 12px; right: 18px; font-family: "Sora"; font-weight: 800; font-size: 30px; opacity: .35; }
+  .pillar .banner .ico { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,.18); display: grid; place-items: center; margin-bottom: 8px; }
+  .pillar .banner h3 { font-family: "Sora"; font-weight: 700; font-size: 16px; margin: 0; }
+  .pillar .banner small { font-size: 11px; opacity: .9; }
+
+  .subs-row { display: flex; gap: 22px; padding: 26px 16px 16px; position: relative; }
+  .subs-row::before { content: ""; position: absolute; top: 0; left: 50%; width: 3px; height: 14px; background: var(--border); transform: translateX(-50%); }
+
+  .sub-col { display: flex; flex-direction: column; align-items: center; position: relative; flex: 1; }
+  .sub-col::before { content: ""; position: absolute; top: -12px; left: 50%; width: 3px; height: 12px; background: var(--border); transform: translateX(-50%); }
+
+  /* L3 subgroup */
+  .subgroup { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 9px 12px; width: 100%; text-align: center; position: relative; z-index: 2; }
+  .subgroup h4 { font-family: "Sora"; font-weight: 600; font-size: 12.5px; margin: 0; color: #334155; }
+  .subgroup small { font-size: 10px; color: var(--muted); }
+  .subgroup .count { display: inline-block; margin-top: 4px; font-size: 10px; font-weight: 700; color: #fff; background: var(--c, #64748b); padding: 1px 8px; border-radius: 999px; }
+
+  /* L4 leaves */
+  .l4 { display: flex; flex-direction: column; gap: 9px; margin-top: 14px; position: relative; width: 100%; }
+  .l4::before { content: ""; position: absolute; top: -14px; left: 50%; width: 3px; height: 14px; background: var(--border); transform: translateX(-50%); }
+
+  .leaf {
+    background: var(--card); border: 1px solid var(--border); border-left: 4px solid var(--c, #64748b);
+    border-radius: 10px; padding: 9px 11px; display: flex; gap: 9px; align-items: flex-start;
+    cursor: pointer; transition: box-shadow .15s, transform .1s, border-color .15s; position: relative;
+  }
+  .leaf:hover { box-shadow: 0 6px 18px rgba(15,23,42,0.12); transform: translateY(-1px); }
+  .leaf.hidden-phase { display: none; }
+  .leaf.dim-status { opacity: .28; filter: grayscale(.4); }
+
+  .leaf .check {
+    width: 19px; height: 19px; border-radius: 50%; border: 2.5px solid var(--st-pendente);
+    flex: none; margin-top: 1px; cursor: pointer; display: grid; place-items: center; transition: all .2s; background: #fff;
+  }
+  .leaf.s-concluido .check { background: var(--st-concluido); border-color: var(--st-concluido); }
+  .leaf.s-progresso .check { background: var(--st-progresso); border-color: var(--st-progresso); }
+  .leaf.s-roadmap   .check { background: var(--st-roadmap);   border-color: var(--st-roadmap); }
+  .leaf.s-pendente  .check { background: #fff; border-color: var(--st-pendente); }
+  .leaf .check svg { width: 11px; height: 11px; color: #fff; opacity: 0; }
+  .leaf.s-concluido .check svg { opacity: 1; }
+
+  .leaf .body { flex: 1; min-width: 0; }
+  .leaf .titlerow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .leaf .prio { font-size: 9.5px; font-weight: 800; font-family: "Sora"; color: #fff; background: #334155; padding: 0 5px; border-radius: 5px; line-height: 16px; }
+  .leaf .phase-badge { font-size: 9px; font-weight: 800; color: #fff; padding: 0 5px; border-radius: 5px; line-height: 16px; }
+  .leaf .key-badge { font-size: 11px; line-height: 16px; cursor: help; }
+  .leaf:has(.key-badge) { border-left-style: dashed; }
+  .leaf h5 { font-size: 12.5px; font-weight: 600; margin: 0; line-height: 1.3; color: var(--text); white-space: normal; overflow: visible; }
+  .leaf .sub { font-size: 10px; color: var(--muted); margin-top: 2px; display: block; }
+
+  /* ===== DRAWER ===== */
+  #backdrop { position: fixed; inset: 0; background: rgba(15,23,42,.4); backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 80; }
+  #backdrop.open { opacity: 1; pointer-events: auto; }
+  #drawer {
+    position: fixed; top: 0; right: 0; height: 100%; width: 440px; max-width: 92vw; background: #fff; z-index: 90;
+    box-shadow: -16px 0 48px rgba(15,23,42,.22); transform: translateX(100%); transition: transform .28s cubic-bezier(.4,0,.2,1);
+    display: flex; flex-direction: column;
+  }
+  #drawer.open { transform: translateX(0); }
+  #drawer .dh { padding: 20px 22px 16px; border-bottom: 1px solid var(--border); }
+  #drawer .dh .cat { font-size: 10.5px; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; color: var(--muted); }
+  #drawer .dh h3 { font-family: "Sora"; font-weight: 700; font-size: 19px; margin: 6px 0 10px; line-height: 1.25; }
+  #drawer .badges { display: flex; gap: 7px; flex-wrap: wrap; }
+  .badge { font-size: 10.5px; font-weight: 700; padding: 3px 9px; border-radius: 999px; display: inline-flex; align-items: center; gap: 5px; }
+  .badge.status-b { color: #fff; }
+  .badge.ref-b { background: #f1f5f9; color: #475569; }
+  .badge.phase-b { color: #fff; }
+  #drawer .dbody { padding: 18px 22px; overflow-y: auto; flex: 1; }
+  #drawer .dbody .desc { font-size: 13.5px; line-height: 1.55; color: #334155; }
+  #drawer .dbody h6 { font-family: "Sora"; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin: 20px 0 7px; }
+  #drawer .rich { font-size: 13px; line-height: 1.6; color: #475569; white-space: pre-wrap; }
+  #drawer .deps { font-size: 12px; color: #475569; line-height: 1.5; }
+  #drawer .deps b { color: #1e293b; }
+  #drawer pre { background: #0f172a; color: #e2e8f0; padding: 14px; border-radius: 10px; font-size: 11.5px; line-height: 1.5; overflow-x: auto; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .status-picker { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+  .status-picker button { font-family: "Inter"; font-size: 12px; font-weight: 600; padding: 9px; border-radius: 9px; border: 2px solid var(--border); background: #fff; cursor: pointer; display: flex; align-items: center; gap: 7px; justify-content: center; transition: all .15s; }
+  .status-picker button:hover { border-color: #94a3b8; }
+  .status-picker button.active { color: #fff; border-color: transparent; }
+  .status-picker button.active.b-concluido { background: var(--st-concluido); }
+  .status-picker button.active.b-progresso { background: var(--st-progresso); }
+  .status-picker button.active.b-roadmap   { background: var(--st-roadmap); }
+  .status-picker button.active.b-pendente  { background: var(--st-pendente); }
+  #drawer .close { position: absolute; top: 16px; right: 16px; background: #f1f5f9; border: none; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; font-size: 16px; color: #475569; }
+
+  .hint { position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--muted); background: rgba(255,255,255,.9); padding: 5px 14px; border-radius: 999px; border: 1px solid var(--border); z-index: 40; }
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <div id="brand">
+    <div class="logo">
+      <img src="data:image/png;base64,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" alt="AbraceIA" />
+    </div>
+    <div>
+      <h1>AbraceIA</h1>
+      <p>Checklist Mestre de Execução (100% Granular)</p>
+    </div>
+  </div>
+
+  <div class="legend" id="status-legend">
+    <span class="group-label">Status</span>
+    <span class="chip" data-status="CONCLUÍDO"><span class="dot concluido"></span>Concluído</span>
+    <span class="chip" data-status="EM PROGRESSO"><span class="dot progresso"></span>Em progresso</span>
+    <span class="chip" data-status="ROADMAP"><span class="dot roadmap"></span>Roadmap</span>
+    <span class="chip" data-status="PENDENTE"><span class="dot pendente"></span>Pendente</span>
+  </div>
+
+  <div class="legend" id="phase-legend">
+    <span class="group-label">Fases</span>
+  </div>
+
+  <div id="progress-wrap">
+    <div id="progress-bar"><div id="progress-fill"></div></div>
+    <span id="progress-label">0%</span>
+  </div>
+
+  <div class="controls">
+    <button onclick="resetChecklist()">Resetar</button>
+    <button onclick="zoomOut()">Zoom−</button>
+    <button onclick="resetZoom()">100%</button>
+    <button onclick="zoomIn()">Zoom+</button>
+  </div>
+</div>
+
+<div id="viewport">
+  <div id="canvas"><div class="tree" id="tree"></div></div>
+</div>
+
+<div class="hint">Arraste · Scroll = zoom · Clique na bolinha cicla status · Clique no nó = detalhes · 🔑 = código pronto, mas INATIVO sem chave externa</div>
+
+<div id="backdrop" onclick="closeDrawer()"></div>
+<aside id="drawer">
+  <button class="close" onclick="closeDrawer()">✕</button>
+  <div class="dh">
+    <div class="cat" id="d-cat"></div>
+    <h3 id="d-title"></h3>
+    <div class="badges">
+      <span class="badge status-b" id="d-status"></span>
+      <span class="badge phase-b" id="d-phase"></span>
+      <span class="badge ref-b" id="d-ref"></span>
+      <span class="badge ref-b" id="d-prio"></span>
+    </div>
+  </div>
+  <div class="dbody">
+    <p class="desc" id="d-desc"></p>
+    <h6>Foco de Implementação / Detalhes</h6>
+    <div class="rich" id="d-rich"></div>
+    <h6>Cronologia & Dependências</h6>
+    <div class="deps" id="d-deps"></div>
+    <div id="d-code-wrap" style="display:none">
+      <h6>Código / Referência técnica</h6>
+      <pre id="d-code"></pre>
+    </div>
+    <h6>Alterar status</h6>
+    <div class="status-picker" id="d-picker"></div>
+  </div>
+</aside>
+
+<script>
+/* ============ TAXONOMIA ============ */
+const PILLARS = [
+  { id: "p1", num: "01", title: "Estratégia & Marca",      sub: "Posicionamento · Pesquisa",          theme: "var(--color-p1)", icon: "M12 2l3 7h7l-5.5 4.5L18.5 21 12 16.5 5.5 21l2-7.5L2 9h7z" },
+  { id: "p2", num: "02", title: "Produto & Engenharia",    sub: "Stack · Build · Qualidade",          theme: "var(--color-p2)", icon: "M10 20l4-16M6 16l-4-4 4-4M18 8l4 4-4 4" },
+  { id: "p3", num: "03", title: "Marketing & Aquisição",   sub: "SEO/AEO/GEO · Canais · Mídia",        theme: "var(--color-p3)", icon: "M3 11l19-9-9 19-2-8-8-2z" },
+  { id: "p4", num: "04", title: "Infra, Go-live & Operação",sub: "Deploy · Monitoramento · Decisões", theme: "var(--color-p4)", icon: "M22 12h-4l-3 9L9 3l-3 9H2" },
+];
+
+const SUBGROUPS = [
+  { id: "sub-1-1", parent: "p1", title: "Identidade & Posicionamento", ref: "Critérios 1–8" },
+  { id: "sub-1-2", parent: "p1", title: "Pesquisa & Mercado",          ref: "Critérios 9–15" },
+  { id: "sub-2-1", parent: "p2", title: "Stack, Arquitetura & Dados",  ref: "Critérios 16–23" },
+  { id: "sub-2-2", parent: "p2", title: "Build, Conteúdo & Qualidade", ref: "Critérios 21–26" },
+  { id: "sub-3-1", parent: "p3", title: "SEO · AEO · GEO",             ref: "Critérios 27–30" },
+  { id: "sub-3-2", parent: "p3", title: "Canais, Conteúdo & Mídia",    ref: "Critérios 31–34" },
+  { id: "sub-4-1", parent: "p4", title: "Deploy, Domínio & CI/CD",     ref: "Go-live & QA" },
+  { id: "sub-4-2", parent: "p4", title: "Monitoramento, Compliance & Decisões", ref: "Critérios 35–38 + Decisões" },
+];
+
+const phases = [
+  { n: 0, label: "Fase 0 — Fundação & Pesquisa",                  short: "F0", color: "#0891b2" },
+  { n: 1, label: "Fase 1 — Arquitetura & Setup",                  short: "F1", color: "#2563eb" },
+  { n: 2, label: "Fase 2 — Build do Site",                        short: "F2", color: "#0d9488" },
+  { n: 3, label: "Fase 3 — SEO/AEO/GEO & Tracking",               short: "F3", color: "#d97757" },
+  { n: 4, label: "Fase 4 — Infra & Go-live",                      short: "F4", color: "#475569" },
+  { n: 5, label: "Fase 5 — Marketing & Aquisição",                short: "F5", color: "#ca8a04" },
+  { n: 6, label: "Fase 6 — Monitoramento, Compliance & Decisões", short: "F6", color: "#7c3aed" },
+];
+
+const statusMap = { "CONCLUÍDO": "concluido", "EM PROGRESSO": "progresso", "PENDENTE": "pendente", "ROADMAP": "roadmap" };
+const statusOrder = ["PENDENTE", "EM PROGRESSO", "CONCLUÍDO"];
+
+/* ============ DADOS (nós-folha) ============ */
+const dataItems = [
+  /* ---------- FASE 0 — Fundação & Pesquisa ---------- */
+  { id:"c1-missao", parent:"sub-1-1", title:"Missão, Visão e Valores", sub:"Crit. 1", theme:"var(--color-p1)", ref:"Livro-Guia §1 / /sobre", status:"CONCLUÍDO", phase:0, order:1, dependsOn:[],
+    desc:"Missão, visão e valores definidos e publicados na página institucional.", rich:"RESOLVIDO: presente em /sobre (src/app/sobre/page.tsx). Base de toda a narrativa da marca e do tom de voz.", code:"" },
+  { id:"c2-pvu", parent:"sub-1-1", title:"Proposta de Valor Única + por canal", sub:"Crit. 2", theme:"var(--color-p1)", ref:"Livro-Guia §2 / Home H1", status:"CONCLUÍDO", phase:0, order:2, dependsOn:["c1-missao"],
+    desc:"PVU formulada e desdobrada por canal; reflete no H1 do hero.", rich:"RESOLVIDO: PVU reflete no H1 do hero (home). Variações por canal documentadas no Livro-Guia." },
+  { id:"c3-diferenciais", parent:"sub-1-1", title:"Diferenciais reais e verificáveis", sub:"Crit. 3", theme:"var(--color-p1)", ref:"Livro-Guia §3 / Home", status:"CONCLUÍDO", phase:0, order:3, dependsOn:["c2-pvu"],
+    desc:"Seis diferenciais reais e verificáveis na home.", rich:"RESOLVIDO: seção '6 diferenciais' na home (src/lib/content/home-marketing.ts). Sem superlativos não comprováveis (compliance)." },
+  { id:"c4-arquetipo", parent:"sub-1-1", title:"Arquétipo de marca (Cuidador + Sábio)", sub:"Crit. 4", theme:"var(--color-p1)", ref:"Livro-Guia §4 (interno)", status:"CONCLUÍDO", phase:0, order:4, dependsOn:["c1-missao"],
+    desc:"Arquétipo Cuidador + Sábio guiando tom e identidade visual.", rich:"RESOLVIDO: guia interno de tom/visual. Não vira recurso do site, mas governa copy e estética." },
+  { id:"c5-pitch", parent:"sub-1-1", title:"Elevator Pitch + Tagline", sub:"Crit. 5", theme:"var(--color-p1)", ref:"Livro-Guia §5 / footer", status:"CONCLUÍDO", phase:0, order:5, dependsOn:["c2-pvu"],
+    desc:"Tagline 'Abrace a IA. Cuide de quem importa.' publicada.", rich:"RESOLVIDO: tagline em /sobre e no footer (src/components/layout/footer.tsx)." },
+  { id:"c6-tom", parent:"sub-1-1", title:"Tom de voz (Fazer / Não Fazer)", sub:"Crit. 6", theme:"var(--color-p1)", ref:"Livro-Guia §6 / copy global", status:"CONCLUÍDO", phase:0, order:6, dependsOn:["c4-arquetipo"],
+    desc:"Guia de tom de voz aplicado e revisado em todas as páginas.", rich:"RESOLVIDO (17/06): revisão de copy vs. tom de voz — ajustados 5 pontos de superlativo/imprecisão e padronizado 'certificado→verde/comprovada'. Sem termos proibidos em uso real." },
+  { id:"c8-moore", parent:"sub-1-1", title:"Posicionamento formal (Moore)", sub:"Crit. 8", theme:"var(--color-p1)", ref:"Livro-Guia §8 (interno)", status:"CONCLUÍDO", phase:0, order:7, dependsOn:["c3-diferenciais"],
+    desc:"Declaração de posicionamento no formato Geoffrey Moore.", rich:"RESOLVIDO: bússola estratégica interna. Orienta segmentação (clínicas/profissionais de saúde em BH) e mensagem." },
+  { id:"c9-concorrentes", parent:"sub-1-2", title:"Concorrentes (fichas + matriz)", sub:"Crit. 9", theme:"var(--color-p1)", ref:"Livro-Guia §9 (interno)", status:"CONCLUÍDO", phase:0, order:8, dependsOn:[],
+    desc:"Cinco fichas de concorrentes + matriz de posicionamento.", rich:"RESOLVIDO: 5 fichas + matriz no Livro-Guia. Base do Gap Analysis." },
+  { id:"c11-gap", parent:"sub-1-2", title:"Gap Analysis comercial", sub:"Crit. 11", theme:"var(--color-p1)", ref:"Livro-Guia §11 (interno)", status:"CONCLUÍDO", phase:0, order:9, dependsOn:["c9-concorrentes"],
+    desc:"Dez oportunidades priorizadas a partir das lacunas dos concorrentes.", rich:"RESOLVIDO: 10 oportunidades priorizadas. Alimenta estratégia de conteúdo e diferenciais." },
+  { id:"c12-mercado", parent:"sub-1-2", title:"Dados de mercado nacionais", sub:"Crit. 12", theme:"var(--color-p1)", ref:"Livro-Guia §12 (interno)", status:"CONCLUÍDO", phase:0, order:10, dependsOn:[],
+    desc:"~25 indicadores de mercado com fonte citada.", rich:"RESOLVIDO: ~25 indicadores com fonte. Sustentam argumentos de E-E-A-T e conteúdo." },
+  { id:"c13-sazonalidade", parent:"sub-1-2", title:"Sazonalidade de buscas", sub:"Crit. 13", theme:"var(--color-p1)", ref:"Livro-Guia §13 / Calendário", status:"CONCLUÍDO", phase:0, order:11, dependsOn:["c12-mercado"],
+    desc:"Padrões sazonais de busca mapeados; alimentam o calendário editorial.", rich:"RESOLVIDO: alimenta o Calendário Editorial (Calendario-Editorial-AbraceIA-30-dias.html)." },
+  { id:"c14-personas", parent:"sub-1-2", title:"Personas B2B (8+ dimensões)", sub:"Crit. 14", theme:"var(--color-p1)", ref:"Livro-Guia §14 (interno)", status:"CONCLUÍDO", phase:0, order:12, dependsOn:["c8-moore"],
+    desc:"Três personas B2B detalhadas em 8+ dimensões.", rich:"RESOLVIDO: 3 personas B2B (decisor de clínica/profissional). Personas de paciente como referência secundária." },
+  { id:"c15-keywords", parent:"sub-1-2", title:"Keywords 50+ → mapa keyword/página", sub:"Crit. 15", theme:"var(--color-p1)", ref:"Livro-Guia §15 / MAPA-KEYWORD-PAGINA.md", status:"CONCLUÍDO", phase:0, order:13, dependsOn:["c14-personas"],
+    desc:"65 keywords extraídas do Cap. 3.2; mapeamento keyword→página confirmado contra o sitemap autoritativo (Cap. 5).", rich:"RESOLVIDO (24/06): extraídas 65 keywords do Cap. 3.2 do PDF COMPLETO — 40 da AbraceIA (B2B, com volume/intenção/dificuldade/página destino) + 25 modelo-paciente (alimentam o site do CLIENTE, corretamente fora da AbraceIA). MAPA-KEYWORD-PAGINA.md cruza tudo com o código: 9/9 rotas-âncora alinhadas; cobertura do Grupo A ~70%. Achado: o Cap. 3.2 sugeria ~15 landings por especialidade que o Cap. 5 CONSOLIDOU em 3 páginas de serviço (foi o que se construiu). ~12 gaps documentados como OPORTUNIDADE (página-pilar 'marketing digital para médicos' 4,4–9,9k/mês; redes sociais; Instagram; LGPD; CFM 2.336; 'quanto custa'; landings por especialidade) — não bloqueiam o critério." },
+  { id:"c10-serps", parent:"sub-1-2", title:"SERPs capturadas em tempo real", sub:"Crit. 10", theme:"var(--color-p1)", ref:"Livro-Guia §10", status:"EM PROGRESSO", phase:0, order:14, dependsOn:["c15-keywords"],
+    desc:"Captura de SERPs reais; por design, refazer na data de ativação do cliente.", rich:"GAP: capturas iniciais existem, mas devem ser REFEITAS no Google na ativação do cliente (SERPs mudam). Doc parcial por design." },
+
+  /* ---------- FASE 1 — Arquitetura & Setup ---------- */
+  { id:"c16-stack", parent:"sub-2-1", title:"Stack com justificativa", sub:"Crit. 16", theme:"var(--color-p2)", ref:"package.json / Livro-Guia §16", status:"CONCLUÍDO", phase:1, order:1, dependsOn:[],
+    desc:"Next.js 16, React 19, TypeScript, Tailwind 4, Prisma 7 + Neon (Postgres).", rich:"RESOLVIDO: stack confirmada no package.json. Região de deploy gru1 (vercel.json).",
+    code:"next 16.2.7 · react 19.2.4 · typescript 5\ntailwindcss 4 · @prisma/client 7.8 · pg 8.21\nai 6 + @ai-sdk/anthropic 3 · zod 4 · framer-motion 12" },
+  { id:"c17-custos", parent:"sub-2-1", title:"Custo mensal da stack", sub:"Crit. 17", theme:"var(--color-p2)", ref:"Livro-Guia §17 (interno)", status:"CONCLUÍDO", phase:1, order:2, dependsOn:["c16-stack"],
+    desc:"Custo mensal e break-even da stack documentados.", rich:"RESOLVIDO: documentado (Vercel + Neon + Resend + Anthropic/AI Gateway). Não vira recurso do site." },
+  { id:"c19-dev-setup", parent:"sub-2-1", title:"Checklist de ambiente dev", sub:"Crit. 19", theme:"var(--color-p2)", ref:"web/README.md · env.example", status:"CONCLUÍDO", phase:1, order:3, dependsOn:["c16-stack"],
+    desc:"Passo a passo de ambiente local; env.example completo.", rich:"RESOLVIDO: env.example cobre SITE_URL, DATABASE_URL, RESEND, ANTHROPIC/AI_GATEWAY, GTM/GA4, CRM_WEBHOOK. Scripts dev/dev:link (túnel Cloudflare)." },
+  { id:"c7-identidade-visual", parent:"sub-1-1", title:"Identidade visual (HEX / fontes / tokens)", sub:"Crit. 7", theme:"var(--color-p1)", ref:"globals.css / Livro-Guia §7", status:"CONCLUÍDO", phase:1, order:4, dependsOn:["c4-arquetipo"],
+    desc:"Cores e fontes oficiais aplicadas; logo real extraído; hero animado.", rich:"RESOLVIDO (17/06): cores e fontes oficiais aplicadas, 0 cores antigas em src; to-teal-600→to-teal-700. Animação de cruzes 3D com proteção de tela." },
+  { id:"c20-design-system", parent:"sub-2-1", title:"Design System + tokens", sub:"Crit. 20", theme:"var(--color-p2)", ref:"src/app/globals.css", status:"CONCLUÍDO", phase:1, order:5, dependsOn:["c7-identidade-visual"],
+    desc:"Tokens de cor/tipografia/espaçamento centralizados em globals.css.", rich:"RESOLVIDO: design system tokenizado. UI primitives em src/components/ui (button, card, input, modal, toast)." },
+  { id:"c21-modelo-dados", parent:"sub-2-1", title:"Modelo de dados (Prisma + Neon)", sub:"Schema", theme:"var(--color-p2)", ref:"prisma/schema.prisma", status:"CONCLUÍDO", phase:1, order:6, dependsOn:["c16-stack"],
+    desc:"Modelos Lead e QuizResult; migração inicial aplicada.", rich:"RESOLVIDO: model Lead (name, email, phone, message, source, consent, createdAt) e QuizResult (score, answers JSON, email). Migração 20260603120000_init. Adapter @prisma/adapter-pg.",
+    code:"model Lead { id, name, email, phone?, message?,\n  source @default(\"contact\"), consent Boolean, createdAt }\nmodel QuizResult { id, score Int, answers Json, email?, createdAt }" },
+  { id:"c18-cves", parent:"sub-2-1", title:"CVEs / Segurança (auditorias)", sub:"Crit. 18", theme:"var(--color-p2)", ref:"auditoria V1/V2 · pnpm audit", status:"CONCLUÍDO", phase:1, order:7, dependsOn:["c16-stack"],
+    desc:"Auditorias técnicas V1/V2 corrigidas (SSRF, DNS rebinding, LGPD); pnpm audit limpo.", rich:"RESOLVIDO: commits 48acc9c e 3f77b0b fecham SSRF, DNS rebinding, LGPD do quiz/analytics e deps. pnpm audit --audit-level=high roda no CI." },
+  { id:"c22-headers", parent:"sub-2-1", title:"Headers de segurança", sub:"next.config", theme:"var(--color-p2)", ref:"next.config.ts", status:"CONCLUÍDO", phase:1, order:8, dependsOn:["c18-cves"],
+    desc:"5 headers de segurança servidos em todas as rotas.", rich:"RESOLVIDO: HSTS (preload), X-Frame-Options SAMEORIGIN, X-Content-Type-Options nosniff, Referrer-Policy, Permissions-Policy. poweredByHeader off. GAP opcional: CSP.",
+    code:"Strict-Transport-Security: max-age=63072000; includeSubDomains; preload\nX-Frame-Options: SAMEORIGIN\nX-Content-Type-Options: nosniff\nReferrer-Policy: strict-origin-when-cross-origin\nPermissions-Policy: camera=(), microphone=(), geolocation=()" },
+  { id:"c23-sitemap", parent:"sub-2-2", title:"Sitemap + rotas (19 páginas)", sub:"Crit. 23", theme:"var(--color-p2)", ref:"src/app/sitemap.ts", status:"CONCLUÍDO", phase:1, order:9, dependsOn:["c20-design-system"],
+    desc:"sitemap.ts dinâmico + 19 páginas mapeadas (core, serviços, conversão, SEO local, apoio).", rich:"RESOLVIDO: rotas core (/, /sobre, /metodo, /contato), serviços (geo-saude, seo-medico, sites-medicos), conversão (auditoria-ia, auditoria-seo), apoio (faq, compliance, privacidade, termos, cookies), conteúdo (blog, cases, guia)." },
+  { id:"c25-robots-llms", parent:"sub-2-2", title:"robots.ts + llms.txt (bots de IA)", sub:"Crit. 29", theme:"var(--color-p2)", ref:"src/app/robots.ts · public/llms.txt", status:"CONCLUÍDO", phase:1, order:10, dependsOn:["c23-sitemap"],
+    desc:"robots dinâmico e llms.txt para orientar crawlers de IA generativa.", rich:"RESOLVIDO: llms.txt descreve marca, serviços, compliance e stack para ChatGPT/Perplexity/Claude. robots.ts referencia o sitemap. (Decisão sobre permitir/bloquear bots: ver Fase 6.)" },
+
+  /* ---------- FASE 2 — Build do Site ---------- */
+  { id:"c26-componentes", parent:"sub-2-2", title:"Componentes TSX (home, layout, ui)", sub:"Crit. 21", theme:"var(--color-p2)", ref:"src/components/**", status:"CONCLUÍDO", phase:2, order:1, dependsOn:["c20-design-system"],
+    desc:"Biblioteca de componentes: header, footer, hero, pilares, método, CTAs, UI primitives.", rich:"RESOLVIDO: home (hero-actions, pillars-section, method-section, final-cta), layout (header, footer, whatsapp-button), ui (button, card, input, modal, toast), animations (cross-particles, fade-in)." },
+  { id:"c24-blueprints", parent:"sub-2-2", title:"Blueprints de páginas (H1/H2/CTA)", sub:"Crit. 24", theme:"var(--color-p2)", ref:"Livro-Guia §24 / páginas de serviço", status:"CONCLUÍDO", phase:2, order:2, dependsOn:["c26-componentes"],
+    desc:"Cinco blueprints textuais convertidos em páginas reais.", rich:"RESOLVIDO: páginas de serviço (geo-saude, seo-medico, sites-medicos) via service-page.tsx, /metodo e guia GEO seguem os blueprints (H1/H2/CTA)." },
+  { id:"c35-paginas-inst", parent:"sub-2-2", title:"Páginas institucionais", sub:"Estrutura", theme:"var(--color-p2)", ref:"src/app/{sobre,contato,metodo,faq}", status:"CONCLUÍDO", phase:2, order:3, dependsOn:["c26-componentes"],
+    desc:"Sobre, contato, método e FAQ construídas e linkadas.", rich:"RESOLVIDO: /sobre, /contato (com formulário), /metodo, /faq (faq-accordion). Navegação no header/footer." },
+  { id:"lm-auditoria-seo", parent:"sub-2-2", title:"Lead magnet: Auditoria SEO", sub:"Crit. 25", theme:"var(--color-p2)", ref:"/auditoria-seo · /api/analyze-seo", status:"CONCLUÍDO", phase:2, order:4, dependsOn:["c24-blueprints"],
+    desc:"Ferramenta de auditoria SEO com formulário, API e relatório.", rich:"RESOLVIDO: seo-audit-form + seo-audit-report (UI), src/lib/seo-audit.ts (lógica, com testes), rota /api/analyze-seo. Anti-SSRF aplicado." },
+  { id:"lm-auditoria-ia", parent:"sub-2-2", title:"Lead magnet: Auditoria IA", sub:"Crit. 25", theme:"var(--color-p2)", ref:"/auditoria-ia · /api/audit", status:"EM PROGRESSO", phase:2, order:5, dependsOn:["c24-blueprints"], needsKey:"ANTHROPIC_API_KEY ou AI_GATEWAY_API_KEY",
+    desc:"Código pronto, mas a análise por IA depende de chave ausente — hoje cai no fallback.", rich:"CÓDIGO RESOLVIDO: auditoria-form.tsx + /api/audit (com route.test.ts) usam generateText + getAiModel.\n\nGAP CRÍTICO: ANTHROPIC_API_KEY / AI_GATEWAY_API_KEY VAZIAS no .env → isAiConfigured() = false → a rota retorna o texto FALLBACK. O relatório de IA real NÃO é gerado. Não é 100/100 até a chave entrar." },
+  { id:"lm-quiz", parent:"sub-2-2", title:"Lead magnet: Quiz IA Readiness", sub:"Crit. 25", theme:"var(--color-p2)", ref:"quiz-ia-readiness · /api/quiz", status:"CONCLUÍDO", phase:2, order:6, dependsOn:["c24-blueprints"],
+    desc:"Quiz de prontidão para IA; resultado persistido (QuizResult).", rich:"RESOLVIDO: quiz-ia-readiness.tsx + /api/quiz (route.test.ts). Consentimento LGPD antes de persistir score/answers." },
+  { id:"feat-chat", parent:"sub-2-2", title:"Triage Chat (IA, AI SDK Anthropic)", sub:"Feature", theme:"var(--color-p2)", ref:"triage-chat · /api/chat · lib/ai-model", status:"EM PROGRESSO", phase:2, order:7, dependsOn:["c16-stack"], needsKey:"ANTHROPIC_API_KEY ou AI_GATEWAY_API_KEY",
+    desc:"Código pronto, mas SEM chave de IA: hoje o chat só responde o texto de fallback, não a IA real.", rich:"CÓDIGO RESOLVIDO: triage-chat.tsx (com teste) + /api/chat usam generateText + getAiModel. src/lib/ai-model.ts seleciona ANTHROPIC_API_KEY ou AI_GATEWAY_API_KEY (modelo claude-sonnet-4).\n\nGAP CRÍTICO: as chaves estão VAZIAS no .env → isAiConfigured() = false → a rota devolve a mensagem FALLBACK (fallback:true). A IA NÃO está ativa. Não é 100/100 até configurar a chave. (IA não diagnostica/prescreve — compliance.)" },
+  { id:"c34-guia-geo", parent:"sub-2-2", title:"Guia GEO para saúde (lead magnet)", sub:"Conteúdo", theme:"var(--color-p2)", ref:"/guia/geo-para-saude", status:"CONCLUÍDO", phase:2, order:8, dependsOn:["c24-blueprints"],
+    desc:"Página-guia GEO com CTA de download/captura.", rich:"RESOLVIDO: /guia/geo-para-saude (guia-download-cta.tsx, src/lib/content/geo-guide.ts)." },
+  { id:"c26-cases", parent:"sub-2-2", title:"Prova social: cases reais (/cases)", sub:"Crit. 26", theme:"var(--color-p2)", ref:"src/lib/content/cases.ts", status:"CONCLUÍDO", phase:2, order:9, dependsOn:["c35-paginas-inst"],
+    desc:"Seis cases reais com métricas; portfólio com miniaturas (Microlink).", rich:"RESOLVIDO: /cases + /cases/[slug] (case-card, client-portfolio-strip). Screenshots via api.microlink.io (remotePatterns liberado)." },
+  { id:"site-state-pages", parent:"sub-2-2", title:"Páginas de estado (404 / erro)", sub:"UX", theme:"var(--color-p2)", ref:"src/app/not-found.tsx", status:"CONCLUÍDO", phase:2, order:10, dependsOn:["c26-componentes"],
+    desc:"Página 404 personalizada e tratamento de erro.", rich:"RESOLVIDO: not-found.tsx na paleta da marca." },
+  { id:"site-social-assets", parent:"sub-2-2", title:"OG image + favicon + manifest", sub:"Assets", theme:"var(--color-p2)", ref:"opengraph-image.tsx · icon.tsx", status:"CONCLUÍDO", phase:2, order:11, dependsOn:["c7-identidade-visual"],
+    desc:"Imagem social (OG) e ícone/favicon dinâmicos na paleta oficial.", rich:"RESOLVIDO (17/06): opengraph-image.tsx e icon.tsx gerados na paleta oficial. favicon.ico + logos (logo.svg/png, og.svg) em public/." },
+  { id:"c23-cwv-cod", parent:"sub-2-2", title:"Otimização Core Web Vitals (código)", sub:"Crit. 23", theme:"var(--color-p2)", ref:"next/image · fontes · metas", status:"CONCLUÍDO", phase:2, order:12, dependsOn:["c26-componentes"],
+    desc:"Metas de CWV e boas práticas de performance no código (medição em campo é separada).", rich:"RESOLVIDO (meta): fontes via next/font (Sora/Inter), imagens otimizadas, server components. GAP: medição em campo real fica na Fase 4 (ver 'CWV medidos em campo')." },
+  { id:"anti-spam", parent:"sub-2-1", title:"Rate-limit + honeypot (/api/contact)", sub:"Segurança", theme:"var(--color-p2)", ref:"lib/rate-limit.ts · /api/contact", status:"CONCLUÍDO", phase:2, order:13, dependsOn:["c22-headers"],
+    desc:"Honeypot server-side + rate-limit (5 req/10min) no endpoint de contato.", rich:"RESOLVIDO (17/06): honeypot + rate-limit em /api/contact (src/lib/rate-limit.ts). Reduz spam de lead sem CAPTCHA." },
+  { id:"c22-testes", parent:"sub-2-2", title:"Testes automatizados (70 / 10 suítes)", sub:"Crit. 22", theme:"var(--color-p2)", ref:"jest · *.test.* (10 arquivos)", status:"CONCLUÍDO", phase:2, order:14, dependsOn:["lm-quiz","feat-chat"],
+    desc:"70 testes em 10 suítes (Jest + Testing Library), rodando no CI.", rich:"RESOLVIDO: testes em rotas (analyze-seo, audit, quiz), componentes (button, contact-form, triage-chat) e libs (analytics, compliance, faq, seo-audit). pnpm test no pipeline." },
+  { id:"comp-codigo", parent:"sub-4-2", title:"Compliance no código (LGPD + CFM)", sub:"Crit. 36", theme:"var(--color-p4)", ref:"cookie-banner · /compliance · /privacidade", status:"CONCLUÍDO", phase:2, order:15, dependsOn:["c35-paginas-inst"],
+    desc:"Banner de cookies, consentimento server-side e páginas legais publicadas.", rich:"RESOLVIDO: cookie-banner + cookie-preferences-button, consentimento que gateia analytics, páginas /compliance, /privacidade, /termos, /cookies já no site. src/lib/compliance.ts (com testes). Conformidade CFM/CFO/CFP/CFN/COFFITO + LGPD. GAP jurídico/ops: revisão externa e DPO na Fase 6." },
+  { id:"blog12", parent:"sub-2-2", title:"Blog + 18 artigos", sub:"Conteúdo", theme:"var(--color-p2)", ref:"src/lib/content/blog.ts · /blog", status:"CONCLUÍDO", phase:2, order:16, dependsOn:["c13-sazonalidade"],
+    desc:"18 artigos completos no código, renderizados em /blog e incluídos no sitemap.", rich:"RESOLVIDO (24/06): 18 artigos (meta era 12) com sections/heading/paragraphs, FAQ e cases relacionados. Os 6 mais recentes fecham gaps de keyword de alto volume do Cap. 3.2 (pilar 'marketing digital para médicos' 4,4–9,9k/mês; redes sociais; Instagram; LGPD; CFM 2.336; custo de site). /blog, /blog/[slug], sitemap e blogSchema iteram blogPosts dinamicamente — type-check + 70 testes + build OK. Commits 6049d30 e 1a57ccf. Obs.: 'no ar' depende do deploy (Fase 4)." },
+
+  /* ---------- FASE 3 — SEO/AEO/GEO & Tracking ---------- */
+  { id:"c27-seo-onpage", parent:"sub-3-1", title:"SEO On-Page + Schema JSON-LD", sub:"Crit. 27", theme:"var(--color-p3)", ref:"src/lib/schema.ts · seo/json-ld.tsx", status:"CONCLUÍDO", phase:3, order:1, dependsOn:["c23-sitemap"],
+    desc:"18+ tipos de schema JSON-LD (incl. Physician, MedicalBusiness, FAQPage).", rich:"RESOLVIDO: schemas Organization, WebSite, BreadcrumbList, Service, FAQPage, MedicalBusiness, Physician, MedicalOrganization, MedicalClinic, MedicalProcedure, Article, Person, AboutPage, ContactPage, AggregateRating, ImageObject etc.",
+    code:"Tipos em src/lib/schema.ts:\nOrganization · WebSite · SearchAction · BreadcrumbList\nService · FAQPage · MedicalBusiness · Physician\nMedicalOrganization · MedicalClinic · MedicalProcedure\nArticle · Person · AboutPage · ContactPage · AggregateRating" },
+  { id:"c27-metadata", parent:"sub-3-1", title:"Metadata por página", sub:"Crit. 27", theme:"var(--color-p3)", ref:"src/lib/metadata.ts", status:"CONCLUÍDO", phase:3, order:2, dependsOn:["c27-seo-onpage"],
+    desc:"Helper de metadata (title, description, OG, canonical) por rota.", rich:"RESOLVIDO: src/lib/metadata.ts centraliza metadata; cada página define a sua. breadcrumbs.tsx + json-ld.tsx por superfície." },
+  { id:"c28-aeo", parent:"sub-3-1", title:"AEO (FAQ 40–60 palavras + FAQPage)", sub:"Crit. 28", theme:"var(--color-p3)", ref:"faq-accordion · faq.ts · faqSchema", status:"CONCLUÍDO", phase:3, order:3, dependsOn:["c27-seo-onpage"],
+    desc:"26 respostas de FAQ reescritas para formato citável (40–60 palavras).", rich:"RESOLVIDO (17/06): todas as respostas que emitem FAQPage reescritas (resposta direta + contexto), compliance reforçado. FAQPage confirmado em 8 superfícies. src/lib/content/faq.ts (com testes)." },
+  { id:"c29-geo-config", parent:"sub-3-1", title:"GEO config (llms.txt + robots IA)", sub:"Crit. 29", theme:"var(--color-p3)", ref:"public/llms.txt · robots.ts", status:"CONCLUÍDO", phase:3, order:4, dependsOn:["c25-robots-llms"],
+    desc:"Configuração GEO no site (llms.txt + robots para bots de IA).", rich:"RESOLVIDO: llms.txt + conteúdo enciclopédico/E-E-A-T. GAP: o TESTE de baseline em ChatGPT/Perplexity é tarefa off-site (ver Fase 6)." },
+  { id:"c38-a11y-cod", parent:"sub-3-1", title:"Acessibilidade no código (WCAG)", sub:"Crit. 38", theme:"var(--color-p3)", ref:"font-size-controls · a11y estático", status:"CONCLUÍDO", phase:3, order:5, dependsOn:["c26-componentes"],
+    desc:"Controles de tamanho de fonte e a11y estático; auditoria WAVE fica para Fase 4.", rich:"RESOLVIDO: font-size-controls.tsx, HTML semântico, a11y estático OK no QA automatizado. GAP: contraste WCAG AA + navegação por teclado precisam de WAVE em navegador real (Fase 4)." },
+  { id:"c34-tracking-cod", parent:"sub-3-2", title:"Tracking GA4/GTM no código (13 eventos)", sub:"Crit. 34", theme:"var(--color-p3)", ref:"analytics/gtm.tsx · lib/analytics.ts", status:"EM PROGRESSO", phase:3, order:6, dependsOn:["comp-codigo"], needsKey:"NEXT_PUBLIC_GTM_ID / NEXT_PUBLIC_GA4_ID",
+    desc:"Eventos cabeados no código, mas sem GTM/GA4 ID nenhum disparo acontece.", rich:"CÓDIGO RESOLVIDO: 13+ eventos, trackEvent gateado por consentimento LGPD, Consent Mode sincronizado, scroll-tracker, blog-read-tracker, lib/analytics.ts com testes.\n\nGAP: NEXT_PUBLIC_GTM_ID e NEXT_PUBLIC_GA4_ID VAZIOS → gtm.tsx não injeta o contêiner → 0 eventos medidos. Não é 100/100 sem os IDs (ver #59 GA4+GTM com IDs reais)." },
+  { id:"c13-calendario", parent:"sub-3-2", title:"Calendário Editorial (30 dias)", sub:"Crit. 13", theme:"var(--color-p3)", ref:"Calendario-Editorial-...html", status:"CONCLUÍDO", phase:3, order:7, dependsOn:["c13-sazonalidade"],
+    desc:"Calendário editorial de 30 dias produzido (artefato HTML).", rich:"RESOLVIDO: Calendario-Editorial-AbraceIA-30-dias.html. Base de execução do blog e redes sociais." },
+  { id:"c32-social-copy", parent:"sub-3-2", title:"Redes sociais: copy / configs", sub:"Crit. 32", theme:"var(--color-p3)", ref:"Livro-Guia §32", status:"CONCLUÍDO", phase:3, order:8, dependsOn:["c6-tom"],
+    desc:"Copy e configurações de perfis prontas (copy-paste) no Livro-Guia.", rich:"RESOLVIDO (doc): bios, descrições e copy prontas. GAP: criação/otimização dos perfis é execução off-site (Fase 5)." },
+  { id:"c33-trafego-plano", parent:"sub-3-2", title:"Tráfego pago: plano + orçamento", sub:"Crit. 33", theme:"var(--color-p3)", ref:"Livro-Guia §33", status:"CONCLUÍDO", phase:3, order:9, dependsOn:["c15-keywords"],
+    desc:"Plano de campanhas Google/Meta com orçamento documentado.", rich:"RESOLVIDO (doc): estrutura de campanhas, palavras-chave e orçamento. GAP: subir campanhas é execução off-site (Fase 5)." },
+  { id:"c31-link-plano", parent:"sub-3-2", title:"Link Building: plano de 6 meses", sub:"Crit. 31", theme:"var(--color-p3)", ref:"Livro-Guia §31", status:"CONCLUÍDO", phase:3, order:10, dependsOn:["c11-gap"],
+    desc:"Plano de link building de 6 meses pronto.", rich:"RESOLVIDO (doc): alvos, táticas e cronograma. GAP: execução é off-site (Fase 5)." },
+
+  /* ---------- FASE 4 — Infra & Go-live ---------- */
+  { id:"infra-repo", parent:"sub-4-1", title:"Repositório no GitHub", sub:"Infra", theme:"var(--color-p4)", ref:"github.com/pirescarlosalberto87-cell/AbraceIA", status:"CONCLUÍDO", phase:4, order:1, dependsOn:[],
+    desc:"Repositório versionado no GitHub com histórico de commits e PRs.", rich:"RESOLVIDO: remote origin = github.com/pirescarlosalberto87-cell/AbraceIA. Branches main, feat/seo-aeo-geo, feat/identidade-marca-aeo-antispam. PR #1 e #2 já mergeados." },
+  { id:"infra-cicd", parent:"sub-4-1", title:"CI/CD (GitHub Actions)", sub:"Infra", theme:"var(--color-p4)", ref:".github/workflows/ci.yml", status:"CONCLUÍDO", phase:4, order:2, dependsOn:["infra-repo"],
+    desc:"Pipeline de qualidade em push/PR para main: lint, type-check, test, build, audit.", rich:"RESOLVIDO: ci.yml roda pnpm install --frozen-lockfile, prisma generate, lint, type-check, test, build e pnpm audit (high). Node 22, pnpm 9, working-directory web.",
+    code:"jobs.quality: lint → type-check → test → build → audit\ngatilhos: push[main] + pull_request[main]" },
+  { id:"qa-auto", parent:"sub-4-1", title:"QA de lançamento (automatizável)", sub:"Crit. 38", theme:"var(--color-p4)", ref:"build · testes · links · JSON-LD", status:"CONCLUÍDO", phase:4, order:3, dependsOn:["c22-testes"],
+    desc:"Parte automatizável do checklist de lançamento concluída (17/06).", rich:"RESOLVIDO (17/06): build de produção OK, 70 testes, 0 links quebrados, JSON-LD válido em todas as páginas, a11y estático OK, 5 headers servidos. GAP: parte de navegador real (Lighthouse/WAVE) separada abaixo." },
+  { id:"infra-pr-main", parent:"sub-4-1", title:"Abrir/mergear PR da branch → main", sub:"Go-live", theme:"var(--color-p4)", ref:"branch feat/identidade-marca-aeo-antispam", status:"PENDENTE", phase:4, order:4, dependsOn:["qa-auto"],
+    desc:"A branch atual de marca/AEO/anti-spam ainda não foi integrada à main.", rich:"GAP: branch feat/identidade-marca-aeo-antispam está à frente da main com a identidade oficial, AEO e anti-spam. Abrir PR, passar no CI e mergear antes do deploy de produção.",
+    code:"gh pr create --base main --head feat/identidade-marca-aeo-antispam \\\n  --title \"feat: identidade oficial, AEO e anti-spam\"" },
+  { id:"infra-env-prod", parent:"sub-4-1", title:"Configurar env vars de produção (Vercel)", sub:"Go-live", theme:"var(--color-p4)", ref:"env.example → Vercel", status:"PENDENTE", phase:4, order:5, dependsOn:["infra-pr-main"], needsKey:"TODAS (hoje só DATABASE_URL existe)",
+    desc:"Definir as variáveis de ambiente reais no projeto Vercel.", rich:"GAP: preencher DATABASE_URL (Neon), RESEND_API_KEY, ANTHROPIC_API_KEY ou AI_GATEWAY_API_KEY, NEXT_PUBLIC_SITE_URL, e (quando houver) GTM/GA4/CRM. Hoje só existe env.example (placeholders)." },
+  { id:"infra-deploy", parent:"sub-4-1", title:"Deploy na Vercel (go-live)", sub:"Go-live", theme:"var(--color-p4)", ref:"vercel.json (regions gru1)", status:"PENDENTE", phase:4, order:6, dependsOn:["infra-env-prod"],
+    desc:"Subir o site em produção na Vercel (config pronta, deploy não verificado).", rich:"GAP: vercel.json pronto (framework nextjs, install/build pnpm, região gru1), mas não há evidência de deploy de produção ativo. Conectar repo→Vercel e promover para produção." },
+  { id:"infra-dominio", parent:"sub-4-1", title:"Registrar domínio abraceia.com.br", sub:"Go-live", theme:"var(--color-p4)", ref:"NEXT_PUBLIC_SITE_URL", status:"PENDENTE", phase:4, order:7, dependsOn:["infra-deploy"],
+    desc:"Registrar e apontar o domínio para a Vercel (DNS, SSL).", rich:"GAP: abraceia.com.br é o site URL assumido (env.example, llms.txt), mas o registro/DNS/SSL precisa ser executado e conectado ao deploy." },
+  { id:"lead-entrega", parent:"sub-4-1", title:"Entrega real do lead (Resend / CRM)", sub:"Go-live", theme:"var(--color-p4)", ref:"src/lib/integrations.ts", status:"PENDENTE", phase:4, order:8, dependsOn:["infra-env-prod"], needsKey:"RESEND_API_KEY / LEAD_NOTIFICATION_EMAIL / CRM_WEBHOOK_URL",
+    desc:"Ativar envio de e-mail (Resend) e webhook de CRM com chaves reais.", rich:"GAP: integrations.ts já chama api.resend.com/emails e o CRM_WEBHOOK_URL, mas RESEND_API_KEY e CRM_WEBHOOK_URL estão vazios. Sem isso o lead grava no banco mas ninguém é notificado." },
+  { id:"analytics-ids", parent:"sub-3-2", title:"GA4 + GTM com IDs reais", sub:"Crit. 34", theme:"var(--color-p3)", ref:"NEXT_PUBLIC_GTM_ID / GA4_ID", status:"PENDENTE", phase:4, order:9, dependsOn:["infra-env-prod"], needsKey:"NEXT_PUBLIC_GTM_ID / NEXT_PUBLIC_GA4_ID",
+    desc:"Criar contêiner GTM e propriedade GA4 e preencher os IDs.", rich:"GAP: gtm.tsx lê NEXT_PUBLIC_GTM_ID e NEXT_PUBLIC_GA4_ID — ambos vazios. Sem IDs, o tracking (já cabeado) não dispara em produção." },
+  { id:"analytics-validar", parent:"sub-3-2", title:"Validar disparo no GA4 (GTM Preview)", sub:"Crit. 34", theme:"var(--color-p3)", ref:"GTM Preview", status:"PENDENTE", phase:4, order:10, dependsOn:["analytics-ids","infra-deploy"],
+    desc:"Conferir os 13 eventos ao vivo com o contêiner de produção.", rich:"GAP: validar em navegador real, via GTM Preview, que cada evento custom dispara e respeita o Consent Mode." },
+  { id:"pixel-meta", parent:"sub-3-2", title:"Meta Pixel + Conversions API (CAPI)", sub:"Crit. 34", theme:"var(--color-p3)", ref:"Meta Pixel · CAPI (server-side)", status:"PENDENTE", phase:4, order:11, dependsOn:["analytics-ids"], needsKey:"NEXT_PUBLIC_FB_PIXEL_ID / META_CAPI_TOKEN",
+    desc:"Instalar o Meta Pixel (via GTM) + Conversions API server-side, gateado pelo consentimento LGPD.", rich:"GAP: hoje NÃO existe Pixel da Meta — 0 fbq no código (web/src), nenhum ID e nenhuma var de ambiente; só há o trilho Google (GA4/GTM). Cabear o Pixel disparando pelo contêiner GTM (mesmo Consent Mode/consentimento LGPD que gateia o GA4) + a Conversions API (CAPI) server-side para deduplicação e cobertura iOS/ad-blockers. Pré-requisito da medição/otimização das campanhas de Meta Ads (mkt-ads). Vars: NEXT_PUBLIC_FB_PIXEL_ID e META_CAPI_TOKEN." },
+  { id:"search-console", parent:"sub-4-1", title:"Search Console + envio do sitemap", sub:"SEO", theme:"var(--color-p4)", ref:"sitemap.ts", status:"PENDENTE", phase:4, order:11, dependsOn:["infra-dominio"],
+    desc:"Verificar a propriedade e enviar o sitemap ao Google Search Console.", rich:"GAP: após domínio no ar, verificar propriedade, enviar /sitemap.xml e acompanhar indexação/cobertura." },
+  { id:"qa-browser", parent:"sub-4-1", title:"QA browser: Lighthouse >95 + WAVE (WCAG AA)", sub:"Crit. 38", theme:"var(--color-p4)", ref:"Lighthouse · WAVE", status:"PENDENTE", phase:4, order:12, dependsOn:["infra-deploy"],
+    desc:"Rodar Lighthouse (>95) e WAVE (contraste AA + navegação por teclado) no site real.", rich:"GAP: única parte do QA que exige navegador. Confirmar performance/SEO/best-practices >95 e acessibilidade WCAG AA (contraste + teclado). Opcional: adicionar CSP." },
+  { id:"cwv-campo", parent:"sub-4-1", title:"Core Web Vitals medidos em campo", sub:"Crit. 23", theme:"var(--color-p4)", ref:"CrUX / Search Console", status:"PENDENTE", phase:4, order:13, dependsOn:["search-console"],
+    desc:"Medir LCP/INP/CLS com dados de campo após o go-live.", rich:"GAP: complementa a otimização de código (Fase 2). Coletar dados reais (CrUX/Search Console) e ajustar se necessário." },
+
+  /* ---------- FASE 5 — Marketing & Aquisição (off-site) ---------- */
+  { id:"mkt-gmb", parent:"sub-3-1", title:"Google Business Profile (SEO Local)", sub:"Crit. 30", theme:"var(--color-p3)", ref:"Off-site / GBP", status:"PENDENTE", phase:5, order:1, dependsOn:["infra-dominio"],
+    desc:"Criar e otimizar o perfil do Google Business (SEO local / Maps).", rich:"GAP: configurar Google Business Profile completo (categoria, NAP, fotos, serviços) — base do SEO local em BH. Sem isso, crit. 30 fica aberto." },
+  { id:"mkt-perfis", parent:"sub-3-2", title:"Criar/otimizar perfis sociais", sub:"Crit. 32", theme:"var(--color-p3)", ref:"Off-site / Redes sociais", status:"EM PROGRESSO", phase:5, order:2, dependsOn:["c32-social-copy"],
+    desc:"Criar/otimizar Instagram, LinkedIn, YouTube e Facebook com a copy pronta.", rich:"EM PROGRESSO (25/06): Instagram oficial @orbee.abraceia já existe (instagram.com/orbee.abraceia) e o contato oficial da marca — e-mail orbee.abraceia@gmail.com + Instagram — foi publicado no rodapé do site (src/components/layout/footer.tsx via siteConfig.contact) e no rodapé do mockup (web/mockups/MOCKUP-medicos-geral.html). GAP restante: otimizar a bio/feed do IG com a copy do Livro-Guia e criar LinkedIn, YouTube e Facebook." },
+  { id:"mkt-social-bateria", parent:"sub-3-2", title:"Publicar bateria de conteúdo social", sub:"Marketing", theme:"var(--color-p3)", ref:"Calendário Editorial", status:"PENDENTE", phase:5, order:3, dependsOn:["mkt-perfis","blog12"],
+    desc:"Executar o calendário editorial (posts IG/LinkedIn) dos 30/90 dias.", rich:"GAP: publicar a bateria planejada (posts, artigos do blog cruzados nas redes). Depende dos perfis criados e dos 12 artigos." },
+  { id:"mkt-linkbuilding", parent:"sub-3-2", title:"Executar Link Building", sub:"Crit. 31", theme:"var(--color-p3)", ref:"Plano §31", status:"PENDENTE", phase:5, order:4, dependsOn:["c31-link-plano","infra-dominio"],
+    desc:"Executar o plano de link building (diretórios, guest posts, parcerias).", rich:"GAP: rodar as táticas do plano de 6 meses. Depende do site no ar e dos perfis ativos." },
+  { id:"mkt-ads", parent:"sub-3-2", title:"Subir campanhas Google + Meta Ads", sub:"Crit. 33", theme:"var(--color-p3)", ref:"Plano §33", status:"PENDENTE", phase:5, order:5, dependsOn:["c33-trafego-plano","analytics-validar","pixel-meta"],
+    desc:"Lançar campanhas pagas conforme plano e orçamento.", rich:"GAP: subir Google Ads e Meta Ads. Depende do tracking validado (conversões — GA4 e Meta Pixel/CAPI) e das landing pages/lead magnets já prontas." },
+  { id:"mkt-pilotos", parent:"sub-3-2", title:"Recrutar clientes-piloto + reviews", sub:"Aquisição", theme:"var(--color-p3)", ref:"Go-to-market", status:"PENDENTE", phase:5, order:6, dependsOn:["infra-deploy"],
+    desc:"Recrutar 5–10 clientes-piloto e coletar provas sociais/reviews reais.", rich:"GAP: converter primeiros clientes e coletar depoimentos/reviews (reforça os cases e o E-E-A-T)." },
+
+  /* ---------- FASE 6 — Monitoramento, Compliance & Decisões ---------- */
+  { id:"kpi-definidos", parent:"sub-4-2", title:"KPIs (30 métricas) definidos", sub:"Crit. 35", theme:"var(--color-p4)", ref:"Livro-Guia §35", status:"CONCLUÍDO", phase:6, order:1, dependsOn:[],
+    desc:"30 métricas/KPIs definidos com fórmula e meta.", rich:"RESOLVIDO (doc): 30 KPIs definidos (tráfego, conversão, SEO/GEO, custo). GAP: materializar no dashboard (abaixo)." },
+  { id:"roadmap-24s", parent:"sub-4-2", title:"Roadmap de 24 semanas (3 fases)", sub:"Crit. 37", theme:"var(--color-p4)", ref:"Livro-Guia §37", status:"CONCLUÍDO", phase:6, order:2, dependsOn:[],
+    desc:"Roadmap de crescimento: Fundação (1–8), Autoridade (9–16), Crescimento (17–24).", rich:"RESOLVIDO (doc): plano de 24 semanas em 3 fases. Guia a operação pós-lançamento." },
+  { id:"kpi-looker", parent:"sub-4-2", title:"Montar dashboard (Looker Studio)", sub:"Crit. 35", theme:"var(--color-p4)", ref:"Looker Studio + GA4", status:"EM PROGRESSO", phase:6, order:3, dependsOn:["kpi-definidos","analytics-validar"],
+    desc:"Construir o dashboard de KPIs no Looker Studio conectado ao GA4/Search Console.", rich:"GAP: montar o painel de 30 KPIs. Depende de GA4/Search Console com dados reais fluindo." },
+  { id:"geo-baseline", parent:"sub-3-1", title:"GEO baseline + reteste em 90 dias", sub:"Crit. 29", theme:"var(--color-p3)", ref:"ChatGPT · Perplexity · AI Overview", status:"PENDENTE", phase:6, order:4, dependsOn:["infra-dominio"],
+    desc:"Medir baseline de citação em IAs generativas e reter em 90 dias.", rich:"GAP: testar se ChatGPT/Perplexity/Claude/AI Overview citam a marca, registrar baseline e repetir em 90 dias para medir o efeito do GEO (llms.txt + conteúdo)." },
+  { id:"ops-uptime", parent:"sub-4-2", title:"Uptime & Observabilidade (SLO)", sub:"Ops", theme:"var(--color-p4)", ref:"Monitoramento", status:"PENDENTE", phase:6, order:5, dependsOn:["infra-deploy"],
+    desc:"Monitorar uptime, erros e definir SLOs após o go-live.", rich:"GAP: configurar monitor de uptime/erros (ex.: Vercel Analytics/observability ou serviço externo) e alertas." },
+  { id:"comp-dpo", parent:"sub-4-2", title:"Nomear DPO / Encarregado (LGPD)", sub:"Crit. 36", theme:"var(--color-p4)", ref:"LGPD", status:"PENDENTE", phase:6, order:6, dependsOn:["comp-codigo"],
+    desc:"Designar e publicar o Encarregado de Dados (DPO).", rich:"GAP: decisão de stakeholder — nomear DPO e publicar o canal de contato na política de privacidade." },
+  { id:"comp-inpi", parent:"sub-4-2", title:"Registrar marca no INPI", sub:"Legal", theme:"var(--color-p4)", ref:"INPI", status:"PENDENTE", phase:6, order:7, dependsOn:[],
+    desc:"Registrar a marca AbraceIA no INPI.", rich:"GAP: proteção da marca (decisão/ação jurídica externa)." },
+  { id:"comp-juridico", parent:"sub-4-2", title:"Revisão jurídica externa", sub:"Legal", theme:"var(--color-p4)", ref:"Termos · Privacidade · DPA", status:"PENDENTE", phase:6, order:8, dependsOn:["comp-codigo"],
+    desc:"Validar termos, política e DPA com advogado (saúde + LGPD).", rich:"GAP: as páginas legais existem no site, mas precisam de revisão jurídica externa formal antes de uso comercial pleno." },
+  { id:"comp-tributario", parent:"sub-4-2", title:"Enquadramento tributário", sub:"Negócio", theme:"var(--color-p4)", ref:"Contabilidade", status:"PENDENTE", phase:6, order:9, dependsOn:[],
+    desc:"Definir enquadramento tributário do negócio.", rich:"GAP: decisão contábil/societária (regime, emissão de notas)." },
+  { id:"comp-backup", parent:"sub-4-2", title:"Backup + plano de incidente (72h)", sub:"Ops/LGPD", theme:"var(--color-p4)", ref:"Neon · plano de resposta", status:"PENDENTE", phase:6, order:10, dependsOn:["infra-deploy"],
+    desc:"Política de backup e plano de resposta a incidentes (notificação LGPD em 72h).", rich:"GAP: documentar rotina de backup (Neon) e plano de resposta a incidente com prazo de comunicação LGPD." },
+  { id:"dec-crawlers", parent:"sub-4-2", title:"Decisão: permitir crawlers de IA", sub:"Decisão", theme:"var(--color-p4)", ref:"robots.ts · llms.txt", status:"PENDENTE", phase:6, order:11, dependsOn:["c25-robots-llms"],
+    desc:"Decidir formalmente quais bots de IA permitir/bloquear (trade-off GEO × controle).", rich:"GAP: decisão de stakeholder. Estratégia GEO favorece permitir bots (citação), mas a política final precisa ser confirmada e refletida em robots/llms.txt." },
+  { id:"dec-runway", parent:"sub-4-2", title:"Confirmar runway + aporte inicial", sub:"Decisão", theme:"var(--color-p4)", ref:"Financeiro", status:"PENDENTE", phase:6, order:12, dependsOn:[],
+    desc:"Confirmar orçamento de mídia/operação e runway para a fase de crescimento.", rich:"GAP: decisão financeira que destrava o tráfego pago e a operação contínua (Fase 5)." },
+];
+
+/* ============ RENDER ============ */
+const tree = document.getElementById("tree");
+const subByPillar = {};
+SUBGROUPS.forEach(s => { (subByPillar[s.parent] ||= []).push(s); });
+
+// prioridade global #N: ordena por phase, depois order
+const prioritized = [...dataItems].sort((a,b)=> a.phase - b.phase || a.order - b.order);
+const prioMap = {};
+prioritized.forEach((it,i)=> prioMap[it.id] = i+1);
+const TOTAL = dataItems.length;
+
+function svgIcon(d){ return `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="${d}"/></svg>`; }
+function checkSvg(){ return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`; }
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+function buildTree(){
+  const root = document.createElement("div");
+  const concl = dataItems.filter(d=>d.status==="CONCLUÍDO").length;
+  const logoSrc = document.querySelector("#brand .logo img")?.src || "";
+  root.innerHTML = `
+    <div class="root-node">
+      ${logoSrc ? `<img class="root-logo" src="${logoSrc}" alt="AbraceIA" />` : ""}
+      <div class="eyebrow">Orbee Labs · Vertical Saúde · Belo Horizonte</div>
+      <h2>AbraceIA — Presença de Saúde com IA</h2>
+      <p>Mapa de execução do Livro-Guia (38 critérios) + código do site + go-live</p>
+      <div class="root-stats">
+        <div><b>${TOTAL}</b><span>nós-folha</span></div>
+        <div><b>${PILLARS.length}</b><span>pilares</span></div>
+        <div><b>${phases.length}</b><span>fases</span></div>
+        <div><b id="root-done">${concl}</b><span>concluídos</span></div>
+      </div>
+    </div>
+    <div class="v-line"></div>`;
+  tree.appendChild(root);
+
+  const pillarsRow = document.createElement("div");
+  pillarsRow.className = "pillars-row";
+
+  PILLARS.forEach(p => {
+    const col = document.createElement("div");
+    col.className = "pillar-col";
+    const subs = subByPillar[p.id] || [];
+    col.innerHTML = `
+      <div class="pillar" style="--c:${p.theme}">
+        <div class="banner" style="--c:${p.theme}">
+          <span class="num">${p.num}</span>
+          <div class="ico">${svgIcon(p.icon)}</div>
+          <h3>${esc(p.title)}</h3>
+          <small>${esc(p.sub)}</small>
+        </div>
+        <div class="subs-row">
+          ${subs.map(s => {
+            const items = dataItems.filter(d=>d.parent===s.id);
+            return `
+            <div class="sub-col">
+              <div class="subgroup" style="--c:${p.theme}">
+                <h4>${esc(s.title)}</h4>
+                <small>${esc(s.ref)}</small><br/>
+                <span class="count">${items.length} nós</span>
+              </div>
+              <div class="l4" id="l4-${s.id}"></div>
+            </div>`;
+          }).join("")}
+        </div>
+      </div>`;
+    pillarsRow.appendChild(col);
+  });
+  tree.appendChild(pillarsRow);
+}
+
+function renderLevel4Nodes(){
+  SUBGROUPS.forEach(s => {
+    const cont = document.getElementById("l4-"+s.id);
+    if(!cont) return;
+    const items = dataItems.filter(d=>d.parent===s.id)
+      .sort((a,b)=> a.phase - b.phase || a.order - b.order);
+    cont.innerHTML = items.map(it => {
+      const ph = phases[it.phase];
+      const full = esc(it.title);
+      return `
+      <div class="leaf s-${statusMap[it.status]}" style="--c:${it.theme}" data-item-id="${it.id}" title="#${prioMap[it.id]} · ${full}">
+        <div class="check" data-check="${it.id}">${checkSvg()}</div>
+        <div class="body">
+          <div class="titlerow">
+            <span class="prio">#${prioMap[it.id]}</span>
+            <span class="phase-badge" style="background:${ph.color}">${ph.short}</span>
+            ${it.needsKey?`<span class="key-badge" title="Depende de chave externa: ${esc(it.needsKey)}">🔑</span>`:""}
+          </div>
+          <h5>${full}</h5>
+          <span class="sub">${esc(it.sub)}</span>
+        </div>
+      </div>`;
+    }).join("");
+  });
+
+  document.querySelectorAll(".leaf").forEach(el => {
+    const id = el.getAttribute("data-item-id");
+    el.addEventListener("click", e => {
+      if(e.target.closest("[data-check]")) return;
+      openDrawer(id);
+    });
+    const chk = el.querySelector("[data-check]");
+    chk.addEventListener("click", e => { e.stopPropagation(); cycleStatus(id); });
+  });
+}
+
+/* ============ STATUS / PROGRESS ============ */
+function findItem(id){ return dataItems.find(d=>d.id===id); }
+
+function cycleStatus(id){
+  const it = findItem(id);
+  if(it.status === "ROADMAP"){ it.status = "PENDENTE"; }
+  else {
+    const i = statusOrder.indexOf(it.status);
+    it.status = statusOrder[(i+1) % statusOrder.length];
+  }
+  applyStatus(id);
+}
+
+function updateItemStatus(id, status){
+  findItem(id).status = status;
+  applyStatus(id);
+  if(document.getElementById("drawer").classList.contains("open")) renderDrawerStatus(id);
+}
+
+function applyStatus(id){
+  const it = findItem(id);
+  const el = document.querySelector(`.leaf[data-item-id="${id}"]`);
+  if(el){ el.className = "leaf s-"+statusMap[it.status]; el.style.setProperty("--c", it.theme); applyFilters(); }
+  updateProgress();
+  persist();
+}
+
+function updateProgress(){
+  const w = { "CONCLUÍDO":100, "EM PROGRESSO":50, "ROADMAP":0, "PENDENTE":0 };
+  const sum = dataItems.reduce((a,d)=> a + w[d.status], 0);
+  const pct = Math.round(sum / dataItems.length);
+  document.getElementById("progress-fill").style.width = pct + "%";
+  document.getElementById("progress-label").textContent = pct + "%";
+  const done = document.getElementById("root-done");
+  if(done) done.textContent = dataItems.filter(d=>d.status==="CONCLUÍDO").length;
+}
+
+/* ============ PERSISTÊNCIA ============ */
+const STORAGE_KEY = "ABRACEIA_checklist_status_v6";
+function persist(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(dataItems.map(d=>({id:d.id,status:d.status})))); } catch(e){}
+}
+function loadPersisted(){
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const saved = JSON.parse(raw);
+    const map = {}; saved.forEach(s=> map[s.id]=s.status);
+    dataItems.forEach(d=>{ if(map[d.id]) d.status = map[d.id]; });
+  } catch(e){}
+}
+function resetChecklist(){
+  if(!confirm("Resetar todos os status para os valores originais do organograma?")) return;
+  try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+  location.reload();
+}
+
+/* ============ DRAWER ============ */
+function openDrawer(id){
+  const it = findItem(id);
+  const pillar = PILLARS.find(p => (subByPillar[p.id]||[]).some(s=>s.id===it.parent));
+  const sub = SUBGROUPS.find(s=>s.id===it.parent);
+  const ph = phases[it.phase];
+
+  document.getElementById("d-cat").textContent = `${pillar?pillar.title:""} › ${sub?sub.title:""}`;
+  document.getElementById("d-title").textContent = it.title;
+
+  const stB = document.getElementById("d-status");
+  stB.textContent = it.status;
+  stB.style.background = getStatusColor(it.status);
+
+  const phB = document.getElementById("d-phase");
+  phB.textContent = ph.label;
+  phB.style.background = ph.color;
+
+  document.getElementById("d-ref").textContent = "↪ " + it.ref;
+  document.getElementById("d-prio").textContent = `Prioridade #${prioMap[id]} / ${TOTAL}`;
+  document.getElementById("d-desc").textContent = it.desc;
+  document.getElementById("d-rich").textContent = it.rich;
+
+  const deps = (it.dependsOn||[]).map(d=>{ const t=findItem(d); return t?`#${prioMap[d]} ${t.title}`:d; });
+  const unlocks = dataItems.filter(d=>(d.dependsOn||[]).includes(id)).map(d=>`#${prioMap[d.id]} ${d.title}`);
+  document.getElementById("d-deps").innerHTML =
+    `<b>Fase:</b> ${esc(ph.label)}<br/>` +
+    (it.needsKey?`<b style="color:#b45309">🔑 Chave externa necessária:</b> <code>${esc(it.needsKey)}</code> — sem ela o recurso NÃO funciona em produção.<br/>`:"") +
+    `<b>Depende de:</b> ${deps.length?esc(deps.join(" · ")):"—"}<br/>` +
+    `<b>Desbloqueia:</b> ${unlocks.length?esc(unlocks.join(" · ")):"—"}`;
+
+  const codeWrap = document.getElementById("d-code-wrap");
+  if(it.code && it.code.trim()){ codeWrap.style.display="block"; document.getElementById("d-code").textContent = it.code; }
+  else codeWrap.style.display="none";
+
+  renderDrawerStatus(id);
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("backdrop").classList.add("open");
+}
+function renderDrawerStatus(id){
+  const it = findItem(id);
+  const picker = document.getElementById("d-picker");
+  const opts = ["CONCLUÍDO","EM PROGRESSO","ROADMAP","PENDENTE"];
+  picker.innerHTML = opts.map(o=>{
+    const cls = statusMap[o];
+    const active = it.status===o ? "active b-"+cls : "";
+    return `<button class="${active}" onclick="updateItemStatus('${id}','${o}')"><span class="dot ${cls}"></span>${o}</button>`;
+  }).join("");
+  const stB = document.getElementById("d-status");
+  stB.textContent = it.status; stB.style.background = getStatusColor(it.status);
+}
+function getStatusColor(s){ return getComputedStyle(document.documentElement).getPropertyValue("--st-"+statusMap[s]).trim() || "#94a3b8"; }
+function closeDrawer(){ document.getElementById("drawer").classList.remove("open"); document.getElementById("backdrop").classList.remove("open"); }
+
+/* ============ FILTROS (status + fase) ============ */
+const hiddenStatus = new Set();
+let activePhase = null;
+function applyFilters(){
+  document.querySelectorAll(".leaf").forEach(el=>{
+    const it = findItem(el.getAttribute("data-item-id"));
+    el.classList.toggle("dim-status", hiddenStatus.has(it.status));
+    el.classList.toggle("hidden-phase", activePhase!==null && it.phase!==activePhase);
+  });
+}
+function buildLegends(){
+  document.querySelectorAll("#status-legend .chip").forEach(chip=>{
+    chip.addEventListener("click", ()=>{
+      const st = chip.getAttribute("data-status");
+      if(hiddenStatus.has(st)){ hiddenStatus.delete(st); chip.classList.remove("dim"); }
+      else { hiddenStatus.add(st); chip.classList.add("dim"); }
+      applyFilters();
+    });
+  });
+  const pl = document.getElementById("phase-legend");
+  phases.forEach(ph=>{
+    const el = document.createElement("span");
+    el.className = "phase-chip";
+    el.style.background = ph.color;
+    el.textContent = ph.short;
+    el.title = ph.label;
+    el.addEventListener("click", ()=>{
+      if(activePhase===ph.n){ activePhase=null; }
+      else activePhase=ph.n;
+      document.querySelectorAll("#phase-legend .phase-chip").forEach((c,i)=> c.classList.toggle("active", activePhase===phases[i].n));
+      applyFilters();
+    });
+    pl.appendChild(el);
+  });
+}
+
+/* ============ PAN & ZOOM ============ */
+const viewport = document.getElementById("viewport");
+const canvas = document.getElementById("canvas");
+let scale=1, panX=40, panY=90, dragging=false, sx=0, sy=0, ox=0, oy=0;
+function applyTransform(){ canvas.style.transform = `translate(${panX}px,${panY}px) scale(${scale})`; }
+function zoomIn(){ scale=Math.min(2, scale+0.1); applyTransform(); }
+function zoomOut(){ scale=Math.max(0.25, scale-0.1); applyTransform(); }
+function resetZoom(){ scale=1; centerCanvas(); }
+function centerCanvas(){
+  const tw = tree.offsetWidth * scale;
+  panX = Math.max(20, (viewport.clientWidth - tw)/2);
+  panY = 90; applyTransform();
+}
+viewport.addEventListener("mousedown", e=>{
+  if(e.target.closest(".leaf, #drawer, #topbar")) return;
+  dragging=true; viewport.classList.add("grabbing"); sx=e.clientX; sy=e.clientY; ox=panX; oy=panY;
+});
+window.addEventListener("mousemove", e=>{ if(!dragging) return; panX=ox+(e.clientX-sx); panY=oy+(e.clientY-sy); applyTransform(); });
+window.addEventListener("mouseup", ()=>{ dragging=false; viewport.classList.remove("grabbing"); });
+viewport.addEventListener("wheel", e=>{
+  e.preventDefault();
+  const rect = viewport.getBoundingClientRect();
+  const mx = e.clientX-rect.left, my = e.clientY-rect.top;
+  const old = scale;
+  scale = Math.min(2, Math.max(0.25, scale - e.deltaY*0.0012));
+  const k = scale/old;
+  panX = mx - (mx-panX)*k; panY = my - (my-panY)*k;
+  applyTransform();
+}, {passive:false});
+
+/* ============ INIT ============ */
+loadPersisted();
+buildTree();
+renderLevel4Nodes();
+buildLegends();
+updateProgress();
+applyFilters();
+requestAnimationFrame(()=>{ centerCanvas(); });
+window.addEventListener("resize", centerCanvas);
+window.addEventListener("keydown", e=>{ if(e.key==="Escape") closeDrawer(); });
+</script>
+</body>
+</html>

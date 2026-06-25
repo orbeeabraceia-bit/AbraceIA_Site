@@ -25,7 +25,9 @@ package-lock.json
 # misc
 .DS_Store
 *.pem
-docs/
+# docs/ é ignorado, exceto o organograma-mestre (fonte de verdade do projeto)
+docs/*
+!docs/ORGANOGRAMA-AbraceIA.html
 
 # debug
 npm-debug.log*
