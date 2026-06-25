@@ -172,6 +172,19 @@
 
   .footnote{color:var(--muted);font-size:12.5px;padding:30px 0 60px;line-height:1.6;}
 
+  /* ===================== FOOTER ===================== */
+  .site-footer{border-top:1px solid var(--border);background:linear-gradient(to bottom,#fff,var(--cream));}
+  .site-footer .inner{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:32px;padding:48px 0 22px;}
+  .site-footer .brand-col{display:flex;align-items:center;gap:12px;}
+  .site-footer .brand-col img{height:34px;width:34px;object-fit:contain;}
+  .site-footer .brand-col b{font-family:"Bricolage Grotesque";font-weight:800;font-size:20px;}
+  .site-footer .brand-col span{display:block;color:var(--muted);font-size:12.5px;margin-top:2px;}
+  .site-footer .contacts{display:flex;flex-direction:column;gap:10px;}
+  .site-footer .contacts a{display:inline-flex;align-items:center;gap:9px;color:var(--navy);font-size:14px;font-weight:600;transition:color .15s;}
+  .site-footer .contacts a:hover{color:var(--solid);}
+  .site-footer .contacts svg{width:18px;height:18px;flex:none;color:var(--solid);}
+  .site-footer .copy{border-top:1px solid var(--border);padding:18px 0 40px;text-align:center;color:var(--muted);font-size:12px;}
+
   /* fade-in */
   .fade{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
   .fade.in{opacity:1;transform:none;}
@@ -366,6 +379,32 @@
     <p class="footnote">Mockup estático para avaliação de direção criativa. O personagem <b>Dr. Abraço</b> é uma animação SVG/CSS e o player simula um vídeo explicativo (legendado, sem áudio). As capturas do portfólio são <b>screenshots ao vivo dos sites em produção</b> via api.microlink.io. A esfera de cruzes 3D ao fundo do hero é o motor real do site, recolorido com a paleta oficial. Botões e dados de exemplo são ilustrativos. Rota sugerida: <b>/marketing/medicos-bh</b>.</p>
   </div>
 </main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="inner">
+      <div class="brand-col">
+        <img src="../public/logo.png" alt="AbraceIA" onerror="this.style.display='none'" />
+        <div>
+          <b>Abrace<span class="grad" style="font-weight:800">IA</span></b>
+          <span>Abrace a IA. Cuide de quem importa.</span>
+        </div>
+      </div>
+      <div class="contacts">
+        <a href="mailto:orbee.abraceia@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+          orbee.abraceia@gmail.com
+        </a>
+        <a href="https://www.instagram.com/orbee.abraceia/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          @orbee.abraceia
+        </a>
+      </div>
+    </div>
+    <div class="copy">© 2026 AbraceIA — Orbee Labs · Belo Horizonte, MG</div>
+  </div>
+</footer>
 
 <script>
 /* ===================== SITES MÉDICOS REAIS (do portfólio) ===================== */

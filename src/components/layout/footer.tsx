@@ -34,6 +34,49 @@ export function Footer() {
                 {disclaimerTail.join(". ")}
               </p>
             </div>
+            <div className="mt-6 flex flex-col gap-2.5">
+              <a
+                href={`mailto:${siteConfig.contact.email}`}
+                className="inline-flex items-center gap-2 text-sm font-medium text-navy transition-colors hover:text-care"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-[18px] flex-none text-care"
+                  aria-hidden
+                >
+                  <rect x="2" y="4" width="20" height="16" rx="2" />
+                  <path d="m22 7-10 6L2 7" />
+                </svg>
+                {siteConfig.contact.email}
+              </a>
+              <a
+                href={siteConfig.contact.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-sm font-medium text-navy transition-colors hover:text-care"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="size-[18px] flex-none text-care"
+                  aria-hidden
+                >
+                  <rect x="2" y="2" width="20" height="20" rx="5" />
+                  <circle cx="12" cy="12" r="4" />
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+                </svg>
+                {siteConfig.contact.instagramHandle}
+              </a>
+            </div>
             <a
               href="https://orbeelabs.com/"
               target="_blank"

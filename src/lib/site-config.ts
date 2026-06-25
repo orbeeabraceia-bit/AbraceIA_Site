@@ -18,6 +18,11 @@ export const siteConfig = {
     linkedin: "https://www.linkedin.com/company/orbeelabs",
     parent: "https://orbeelabs.com/",
   },
+  contact: {
+    email: "orbee.abraceia@gmail.com",
+    instagram: "https://www.instagram.com/orbee.abraceia/",
+    instagramHandle: "@orbee.abraceia",
+  },
   aiDisclaimer:
     "Conteúdo informativo revisado por profissional habilitado. Não substitui consulta, diagnóstico ou prescrição.",
 } as const;
