@@ -2,25 +2,25 @@
 
 /* AbraceIA — Paleta oficial do Manual de Marca (Orbea Labs, 2026) */
 :root {
-  --teal: #3f8a7e; /* R64 G138 B126 */
+  --teal: #408a7e; /* R64 G138 B126 — oficial */
   --teal-50: #ecf4f2;
   --teal-100: #cfe3df;
   --teal-700: #2e665d;
 
-  --peach: #e49668; /* R227 G150 B104 */
+  --peach: #e39668; /* R227 G150 B104 — oficial */
   --peach-50: #fcf0e9;
   --peach-100: #f8dccc;
   --peach-600: #d07e4f;
   --peach-700: #b86a3d;
 
-  --gold: #d3b675; /* R210 G181 B117 */
+  --gold: #d2b575; /* R210 G181 B117 — oficial */
   --gold-50: #f8f2e4;
   --gold-100: #f0e6cc;
   --gold-500: #d3b675;
   --gold-600: #be9f57;
   --gold-700: #a2853f;
 
-  --onyx: #0d0e0e; /* R11 G12 B13 */
+  --onyx: #0b0c0d; /* R11 G12 B13 — oficial */
   --cream: #f5faf8; /* R245 G250 B248 */
 
   --background: #ffffff;
@@ -53,7 +53,7 @@
 
   --radius-card: 16px;
   --radius-btn: 9999px;
-  --glass-border: rgba(63, 138, 126, 0.2);
+  --glass-border: rgba(64, 138, 126, 0.2);
 }
 
 @theme inline {

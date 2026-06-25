@@ -29,9 +29,9 @@ export function CrossParticles({
 
     // Cores oficiais do Manual de Marca AbraceIA
     const colors = [
-      "#3F8A7E", // Teal
-      "#E49668", // Pêssego
-      "#D3B675", // Ouro
+      "#408A7E", // Teal
+      "#E39668", // Pêssego
+      "#D2B575", // Ouro
     ];
 
     const PARTICLE_COUNT = 1600; // Alta densidade para formar a bolha
