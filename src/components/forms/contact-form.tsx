@@ -8,9 +8,7 @@ import { generateMetaEventId, trackMetaEvent } from "@/lib/meta-pixel";
 import { siteConfig } from "@/lib/site-config";
 
 export function ContactForm() {
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
-    "idle",
-  );
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -77,13 +75,7 @@ export function ContactForm() {
         aria-hidden
       />
       <Input label="Nome completo" name="name" required autoComplete="name" />
-      <Input
-        label="E-mail"
-        name="email"
-        type="email"
-        required
-        autoComplete="email"
-      />
+      <Input label="E-mail" name="email" type="email" required autoComplete="email" />
       <Input label="Telefone (opcional)" name="phone" type="tel" autoComplete="tel" />
       <div className="space-y-1.5">
         <label htmlFor="message" className="block text-sm font-medium text-navy">

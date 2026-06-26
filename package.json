@@ -72,5 +72,10 @@
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "overrides": {
+      "hono@<4.12.25": ">=4.12.25"
+    }
   }
 }
