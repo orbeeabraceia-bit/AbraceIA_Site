@@ -2,7 +2,6 @@ import type { MetadataRoute } from "next";
 import { siteConfig } from "@/lib/site-config";
 import { cases } from "@/lib/content/cases";
 import { blogPosts } from "@/lib/content/blog";
-import { landings } from "@/lib/content/landings";
 
 const staticRoutes = [
   "",
@@ -45,12 +44,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(p.publishedAt),
       changeFrequency: "monthly" as const,
       priority: 0.8,
-    })),
-    ...landings.map((l) => ({
-      url: `${siteConfig.url}/marketing/${l.slug}`,
-      lastModified,
-      changeFrequency: "monthly" as const,
-      priority: 0.85,
     })),
   ];
   return entries;

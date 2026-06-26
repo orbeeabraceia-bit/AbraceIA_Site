@@ -30,6 +30,12 @@ docs/*
 !docs/ORGANOGRAMA-AbraceIA.html
 !docs/BACKUP-E-INCIDENTES-AbraceIA.md
 
+# Landings por especialidade — descopadas do projeto, mantidas só localmente
+# (não apagar; ficam fora do git/deploy). Manter MOCKUP-medicos-geral.html.
+src/app/marketing/
+src/lib/content/landings.ts
+mockups/MOCKUP-landings-marketing.html
+
 # debug
 npm-debug.log*
 yarn-debug.log*
