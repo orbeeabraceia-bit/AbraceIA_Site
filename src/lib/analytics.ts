@@ -42,6 +42,11 @@ export function applyAnalyticsConsent(analytics: boolean, marketing = false) {
       ad_storage: marketing ? "granted" : "denied",
     });
   }
+  // Pixel da Meta: o ad_storage também controla o fbq. Na revogação, 'revoke'
+  // faz o Pixel já injetado parar de enviar eventos (espelha o dataLayer=[]).
+  if (window.fbq) {
+    window.fbq("consent", marketing ? "grant" : "revoke");
+  }
   if (!analytics) {
     window.dataLayer = [];
   }

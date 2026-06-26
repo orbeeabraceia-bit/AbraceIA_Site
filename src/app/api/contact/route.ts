@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { notifyCrmWebhook, sendLeadEmail } from "@/lib/integrations";
+import { sendMetaCapiEvent } from "@/lib/meta-capi";
 import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 const contactSchema = z.object({
@@ -12,6 +13,10 @@ const contactSchema = z.object({
   consent: z.boolean().refine((v) => v === true, {
     message: "Consentimento LGPD obrigatório",
   }),
+  // Mensuração (Meta CAPI): event_id para dedup com o Pixel e o sinal de
+  // consentimento de marketing. Opcionais — o fluxo de lead não depende deles.
+  metaEventId: z.string().max(100).optional(),
+  marketingConsent: z.boolean().optional(),
 });
 
 export async function POST(request: Request) {
@@ -42,17 +47,39 @@ export async function POST(request: Request) {
       );
     }
 
-    const { name, email, phone, message, consent } = parsed.data;
+    const { name, email, phone, message, consent, metaEventId, marketingConsent } = parsed.data;
     const lead = { name, email, phone: phone ?? null, message, source: "contact", consent };
 
     if (process.env.DATABASE_URL && prisma) {
       await prisma.lead.create({ data: lead });
     }
 
-    await Promise.all([
+    const tasks: Promise<unknown>[] = [
       sendLeadEmail(lead),
       notifyCrmWebhook({ type: "lead", ...lead, createdAt: new Date().toISOString() }),
-    ]);
+    ];
+
+    // Conversão Lead pela CAPI — só com consentimento de marketing explícito,
+    // pois envia PII (com hash) para a Meta. O event_id casa com o evento do
+    // Pixel no browser para a Meta deduplicar (Cap. 9.1).
+    if (marketingConsent) {
+      tasks.push(
+        sendMetaCapiEvent({
+          eventName: "Lead",
+          eventId: metaEventId,
+          eventSourceUrl: request.headers.get("referer") ?? undefined,
+          userData: {
+            email,
+            phone,
+            clientIp: clientIp(request),
+            userAgent: request.headers.get("user-agent"),
+          },
+          customData: { lead_source: "contact" },
+        }),
+      );
+    }
+
+    await Promise.all(tasks);
 
     return NextResponse.json({ ok: true });
   } catch {

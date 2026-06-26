@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/footer";
 import { CookieBanner } from "@/components/cookie-banner";
 import { WhatsAppButton } from "@/components/layout/whatsapp-button";
 import { AnalyticsScripts } from "@/components/analytics/gtm";
+import { MetaPixel } from "@/components/analytics/meta-pixel";
 import { ToastProvider } from "@/components/ui/toast-provider";
 import { JsonLd } from "@/components/seo/json-ld";
 import { organizationSchema, websiteSchema } from "@/lib/schema";
@@ -70,6 +71,7 @@ export default function RootLayout({
         <ScrollTracker />
         <CookieBanner />
         <AnalyticsScripts />
+        <MetaPixel />
         <ToastProvider />
       </body>
     </html>

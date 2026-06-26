@@ -3,7 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { trackEvent } from "@/lib/analytics";
+import { hasMarketingConsent, trackEvent } from "@/lib/analytics";
+import { generateMetaEventId, trackMetaEvent } from "@/lib/meta-pixel";
 import { siteConfig } from "@/lib/site-config";
 
 export function ContactForm() {
@@ -26,6 +27,13 @@ export function ContactForm() {
       return;
     }
 
+    // event_id compartilhado entre o Pixel (browser) e a Conversions API
+    // (servidor) para que a Meta deduplique a mesma conversão. Só enviamos o
+    // sinal de marketing ao servidor com consentimento explícito (LGPD): o CAPI
+    // compartilha PII com a Meta e exige a finalidade de marketing.
+    const metaEventId = generateMetaEventId();
+    const marketingConsent = hasMarketingConsent();
+
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -37,6 +45,8 @@ export function ContactForm() {
           message: data.get("message"),
           consent: data.get("consent") === "on",
           website: data.get("website"),
+          metaEventId,
+          marketingConsent,
         }),
       });
 
@@ -48,6 +58,8 @@ export function ContactForm() {
       setStatus("success");
       form.reset();
       trackEvent("generate_lead", { source: "contact" });
+      // No-op sem consentimento de marketing (gateado em trackMetaEvent).
+      trackMetaEvent("Lead", { source: "contact" }, { eventID: metaEventId });
     } catch (err) {
       setStatus("error");
       setError(err instanceof Error ? err.message : "Erro ao enviar");

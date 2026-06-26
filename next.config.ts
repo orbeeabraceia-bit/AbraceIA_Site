@@ -5,16 +5,17 @@ const isDev = process.env.NODE_ENV === "development";
 
 // Content-Security-Policy (Cap. 8.1/9). Abordagem por header, sem nonce, para
 // preservar renderização estática e cache de CDN — crítico para a meta de LCP.
-// Origens liberadas: GTM/GA4 (analytics) e api.microlink.io (thumbnails do
-// portfólio). 'unsafe-inline' é exigido pelos snippets inline do GTM/GA4 e pelos
-// estilos inline do Next. Fontes do Google são self-hosted pelo next/font.
+// Origens liberadas: GTM/GA4 (analytics), Meta Pixel (connect.facebook.net +
+// facebook.com/tr) e api.microlink.io (thumbnails do portfólio). 'unsafe-inline'
+// é exigido pelos snippets inline do GTM/GA4/Pixel e pelos estilos inline do
+// Next. Fontes do Google são self-hosted pelo next/font.
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com https://connect.facebook.net",
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://api.microlink.io https://www.googletagmanager.com https://www.google-analytics.com",
+  "img-src 'self' data: blob: https://api.microlink.io https://www.googletagmanager.com https://www.google-analytics.com https://www.facebook.com https://connect.facebook.net",
   "font-src 'self' data:",
-  "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com",
+  "connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.facebook.com https://connect.facebook.net",
   "frame-src https://www.googletagmanager.com",
   "object-src 'none'",
   "base-uri 'self'",
