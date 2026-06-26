@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import { SeoAuditForm } from "@/components/auditoria/seo-audit-form";
 import { JsonLd } from "@/components/seo/json-ld";
+import { createPageMetadata } from "@/lib/metadata";
 import { webApplicationSchema, breadcrumbSchema } from "@/lib/schema";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "Auditoria SEO Gratuita do seu site",
+  description:
+    "Análise gratuita de 50+ fatores de SEO do seu site, com relatório técnico e recomendações focadas em compliance e na área da saúde.",
+  path: "/auditoria-seo",
+});
 
 export default function AuditoriaSeoPage() {
   return (
@@ -26,9 +35,9 @@ export default function AuditoriaSeoPage() {
             Auditoria SEO gratuita do seu site
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-            Descubra o potencial do seu site nos mecanismos de busca e receba um relatório completo com
-            recomendações personalizadas. Vamos analisar seu site e identificar oportunidades de melhoria
-            focadas no compliance e na área da saúde.
+            Descubra o potencial do seu site nos mecanismos de busca e receba um relatório completo
+            com recomendações personalizadas. Vamos analisar seu site e identificar oportunidades de
+            melhoria focadas no compliance e na área da saúde.
           </p>
         </div>
 

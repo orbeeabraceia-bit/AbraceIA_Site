@@ -158,7 +158,7 @@ export default function HomePage() {
               {
                 title: "Compliance",
                 desc: "Checklist CFM/CFO/CFP antes de publicar.",
-                href: "/sobre",
+                href: "/compliance",
               },
             ].map((item, i) => (
               <FadeIn key={item.title} delay={i * 0.08}>

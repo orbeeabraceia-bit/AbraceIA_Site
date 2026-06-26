@@ -1,9 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ClientPortfolioStrip } from "@/components/cases/client-portfolio-strip";
 import { AuditoriaForm } from "@/components/auditoria/auditoria-form";
 import { Button } from "@/components/ui/button";
 import { JsonLd } from "@/components/seo/json-ld";
+import { createPageMetadata } from "@/lib/metadata";
 import { webApplicationSchema, breadcrumbSchema } from "@/lib/schema";
+
+export const metadata: Metadata = createPageMetadata({
+  title: "Auditoria de Presença em IA — Grátis",
+  description:
+    "Descubra se sua clínica é citada por ChatGPT, Perplexity e Google AI Overview. Relatório orientativo gratuito por especialidade e cidade.",
+  path: "/auditoria-ia",
+});
 
 export default function AuditoriaIaPage() {
   return (
@@ -39,8 +48,9 @@ export default function AuditoriaIaPage() {
       <div className="mt-10 rounded-card border border-ai-100 bg-ai-50 p-5">
         <p className="text-sm font-semibold text-navy">Quer ver a arquitetura por trás?</p>
         <p className="mt-2 text-sm text-muted-foreground">
-          Nossos clientes vão para o ar com uma arquitetura de conversão focada em IA — 
-          FAQ inteligente, depoimentos com disclaimer do CFM e páginas por condição clínica são o padrão de excelência que replicamos.
+          Nossos clientes vão para o ar com uma arquitetura de conversão focada em IA — FAQ
+          inteligente, depoimentos com disclaimer do CFM e páginas por condição clínica são o padrão
+          de excelência que replicamos.
         </p>
         <Link href="/cases" className="mt-4 inline-block">
           <Button intent="outline" size="sm">
