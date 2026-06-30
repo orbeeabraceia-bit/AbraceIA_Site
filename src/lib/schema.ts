@@ -109,42 +109,6 @@ export function professionalServiceSchema() {
   };
 }
 
-export function medicalClinicSchema(name: string, description: string) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "MedicalClinic",
-    name,
-    description,
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: siteConfig.city,
-      addressRegion: siteConfig.state,
-      addressCountry: "BR",
-    },
-  };
-}
-
-export function medicalProcedureSchema(name: string, description: string) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "MedicalProcedure",
-    name,
-    description,
-    procedureType: "https://schema.org/TherapeuticProcedure",
-  };
-}
-
-export function reviewSchema(ratingValue: number, reviewCount: number) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "AggregateRating",
-    ratingValue,
-    reviewCount,
-    bestRating: 5,
-    worstRating: 1,
-  };
-}
-
 export function articleSchema(input: {
   title: string;
   description: string;
@@ -198,15 +162,6 @@ export function contactPageSchema() {
     "@type": "ContactPage",
     name: "Contato AbraceIA",
     url: `${siteConfig.url}/contato`,
-  };
-}
-
-export function webPageSchema(name: string, path: string) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    name,
-    url: `${siteConfig.url}${path}`,
   };
 }
 

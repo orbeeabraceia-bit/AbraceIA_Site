@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#0A0A0A"/>
-  <rect x="0" y="620" width="1200" height="10" fill="#DFB060"/>
-  <text x="80" y="280" fill="#DFB060" font-family="system-ui,sans-serif" font-size="72" font-weight="700">AbraceIA</text>
-  <text x="80" y="360" fill="#F1F7F5" font-family="system-ui,sans-serif" font-size="36">Presença de saúde com IA · Belo Horizonte</text>
-  <text x="80" y="420" fill="#00897B" font-family="system-ui,sans-serif" font-size="28">GEO · SEO · Compliance CFM · Orbee Labs</text>
-  <rect x="80" y="480" width="320" height="8" fill="#FF8C5A" rx="4"/>
-</svg>
