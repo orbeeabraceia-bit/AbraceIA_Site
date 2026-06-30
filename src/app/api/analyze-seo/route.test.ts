@@ -5,6 +5,12 @@ import { POST } from "@/app/api/analyze-seo/route";
 import { analyzeSeo, SsrfBlockedError } from "@/lib/seo-audit";
 import { notifyCrmWebhook } from "@/lib/integrations";
 
+// after() exige contexto de request do Next, ausente em teste unitário direto:
+// mockamos para executar o callback na hora (preservando NextResponse).
+jest.mock("next/server", () => {
+  const actual = jest.requireActual("next/server");
+  return { ...actual, after: (fn: () => unknown) => fn() };
+});
 jest.mock("@/lib/seo-audit", () => {
   const actual = jest.requireActual("@/lib/seo-audit");
   return { ...actual, analyzeSeo: jest.fn() };

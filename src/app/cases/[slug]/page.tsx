@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { getCase, cases } from "@/lib/content/cases";
 import { JsonLd } from "@/components/seo/json-ld";
+import { Breadcrumbs } from "@/components/seo/breadcrumbs";
 import { breadcrumbSchema } from "@/lib/schema";
 import { createPageMetadata } from "@/lib/metadata";
 import { Button } from "@/components/ui/button";
@@ -41,9 +42,20 @@ export default async function CasePage({ params }: Props) {
         ]}
       />
       <article className="mx-auto max-w-5xl px-4 py-16 md:px-6">
-        <p className="text-sm text-ai">{c.specialty} · {c.timeline}</p>
+        <Breadcrumbs
+          items={[
+            { name: "Início", path: "/" },
+            { name: "Cases", path: "/cases" },
+            { name: c.title },
+          ]}
+        />
+        <p className="text-sm text-ai">
+          {c.specialty} · {c.timeline}
+        </p>
         <h1 className="mt-2 font-display text-3xl font-bold text-navy">{c.title}</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{c.credentials} · {c.location}</p>
+        <p className="mt-2 text-sm text-muted-foreground">
+          {c.credentials} · {c.location}
+        </p>
         <a
           href={c.websiteUrl}
           target="_blank"
@@ -78,9 +90,7 @@ export default async function CasePage({ params }: Props) {
               Citações em IA: {c.aiCitations.before} → {c.aiCitations.after}
             </p>
           )}
-          {c.aiNote && (
-            <p className="mt-2 text-sm text-muted-foreground">{c.aiNote}</p>
-          )}
+          {c.aiNote && <p className="mt-2 text-sm text-muted-foreground">{c.aiNote}</p>}
         </section>
         <section className="mt-8">
           <h2 className="text-xl font-semibold text-navy">Evidências (GSC · GA4 · CWV)</h2>
@@ -113,7 +123,9 @@ export default async function CasePage({ params }: Props) {
         {c.quote && (
           <blockquote className="mt-8 border-l-4 border-care bg-teal-50 p-4 italic text-navy">
             &ldquo;{c.quote.text}&rdquo;
-            <footer className="mt-2 text-sm not-italic text-muted-foreground">— {c.quote.author}</footer>
+            <footer className="mt-2 text-sm not-italic text-muted-foreground">
+              — {c.quote.author}
+            </footer>
           </blockquote>
         )}
         <Link href="/contato" className="mt-10 inline-block">

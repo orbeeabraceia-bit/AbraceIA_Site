@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { notifyCrmWebhook } from "@/lib/integrations";
@@ -6,7 +6,10 @@ import { clientIp, rateLimit } from "@/lib/rate-limit";
 
 const quizSchema = z.object({
   score: z.number().int().min(0).max(100),
-  answers: z.record(z.string(), z.boolean()),
+  // Limite de chaves para evitar payloads inflados indo direto ao JSONB.
+  answers: z
+    .record(z.string().max(80), z.boolean())
+    .refine((a) => Object.keys(a).length <= 50, { message: "Respostas em excesso" }),
   email: z.email().optional(),
   consent: z.boolean().optional(),
 });
@@ -32,7 +35,10 @@ export async function POST(request: Request) {
     // validado no servidor (a API é pública e pode ser chamada direto).
     if (parsed.data.email && parsed.data.consent !== true) {
       return NextResponse.json(
-        { error: "Para registrar seu e-mail, é necessário aceitar a Política de Privacidade (LGPD)." },
+        {
+          error:
+            "Para registrar seu e-mail, é necessário aceitar a Política de Privacidade (LGPD).",
+        },
         { status: 400 },
       );
     }
@@ -47,12 +53,14 @@ export async function POST(request: Request) {
       });
     }
 
-    await notifyCrmWebhook({
-      type: "quiz",
-      score: parsed.data.score,
-      email: parsed.data.email ?? null,
-      createdAt: new Date().toISOString(),
-    });
+    after(() =>
+      notifyCrmWebhook({
+        type: "quiz",
+        score: parsed.data.score,
+        email: parsed.data.email ?? null,
+        createdAt: new Date().toISOString(),
+      }),
+    );
 
     return NextResponse.json({ ok: true, score: parsed.data.score });
   } catch {

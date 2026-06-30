@@ -4,6 +4,12 @@
 import { POST } from "@/app/api/quiz/route";
 import { notifyCrmWebhook } from "@/lib/integrations";
 
+// after() exige contexto de request do Next, ausente em teste unitário direto:
+// mockamos para executar o callback na hora (preservando NextResponse).
+jest.mock("next/server", () => {
+  const actual = jest.requireActual("next/server");
+  return { ...actual, after: (fn: () => unknown) => fn() };
+});
 jest.mock("@/lib/db", () => ({ prisma: null }));
 jest.mock("@/lib/integrations", () => ({ notifyCrmWebhook: jest.fn() }));
 

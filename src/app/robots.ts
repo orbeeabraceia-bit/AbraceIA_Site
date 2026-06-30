@@ -7,6 +7,8 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
+        // Route handlers não são páginas — não devem ser indexados.
+        disallow: "/api/",
       },
       {
         userAgent: "GPTBot",

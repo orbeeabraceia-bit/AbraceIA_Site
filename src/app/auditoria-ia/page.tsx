@@ -12,6 +12,7 @@ export const metadata: Metadata = createPageMetadata({
   description:
     "Descubra se sua clínica é citada por ChatGPT, Perplexity e Google AI Overview. Relatório orientativo gratuito por especialidade e cidade.",
   path: "/auditoria-ia",
+  keywords: ["auditoria IA saúde", "presença ChatGPT clínica", "GEO saúde BH"],
 });
 
 export default function AuditoriaIaPage() {

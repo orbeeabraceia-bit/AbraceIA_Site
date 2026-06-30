@@ -39,7 +39,12 @@ export type SeoAuditResult = {
   };
   mobile: { viewport: boolean; touchFriendly: boolean; textReadable: boolean; status: SeoStatus };
   security: { https: boolean; mixedContent: boolean; securityHeaders: string[]; status: SeoStatus };
-  content: { wordCount: number; keywordDensity: number; readabilityScore: number; status: SeoStatus };
+  content: {
+    wordCount: number;
+    keywordDensity: number;
+    readabilityScore: number;
+    status: SeoStatus;
+  };
   overallScore: number;
   recommendations: string[];
   criticalIssues: string[];
@@ -96,11 +101,54 @@ export function isPrivateIp(ip: string): boolean {
   if (lower === "::" || lower === "::1") return true;
   if (lower.startsWith("fe80:") || lower.startsWith("fc") || lower.startsWith("fd")) return true;
   if (lower.startsWith("::ffff:")) return isPrivateIp(lower.slice("::ffff:".length));
+
+  // Endereços de transição que encapsulam um IPv4 podem mascarar um destino
+  // privado (ex.: 2002:c0a8:0101:: = 6to4 sobre 192.168.1.1). Expandimos e
+  // validamos o IPv4 embutido.
+  const hextets = expandIpv6(lower);
+  if (hextets) {
+    // 6to4 (2002::/16): IPv4 nos hextets 1–2.
+    if (hextets[0] === 0x2002) {
+      if (isPrivateIp(hextetsToIpv4(hextets[1], hextets[2]))) return true;
+    }
+    // NAT64 (64:ff9b::/96): IPv4 nos dois últimos hextets.
+    if (hextets[0] === 0x0064 && hextets[1] === 0xff9b) {
+      if (isPrivateIp(hextetsToIpv4(hextets[6], hextets[7]))) return true;
+    }
+  }
   return false;
 }
 
+function hextetsToIpv4(high: number, low: number): string {
+  return [(high >> 8) & 0xff, high & 0xff, (low >> 8) & 0xff, low & 0xff].join(".");
+}
+
+// Expande um IPv6 (com "::" e possíveis hextets vazios) para exatamente 8
+// hextets numéricos. Retorna null se a forma não for um IPv6 reconhecível.
+function expandIpv6(ip: string): number[] | null {
+  if (!ip.includes(":")) return null;
+  const halves = ip.split("::");
+  if (halves.length > 2) return null;
+  const head = halves[0] ? halves[0].split(":") : [];
+  const tail = halves.length === 2 && halves[1] ? halves[1].split(":") : [];
+  const fill = 8 - head.length - tail.length;
+  if (halves.length === 1 && head.length !== 8) return null;
+  if (halves.length === 2 && fill < 0) return null;
+  const groups = [...head, ...Array(halves.length === 2 ? fill : 0).fill("0"), ...tail];
+  if (groups.length !== 8) return null;
+  const out: number[] = [];
+  for (const g of groups) {
+    if (!/^[0-9a-f]{1,4}$/.test(g)) return null;
+    out.push(parseInt(g, 16));
+  }
+  return out;
+}
+
 export function isBlockedHostname(hostname: string): boolean {
-  const host = hostname.toLowerCase().replace(/^\[|\]$/g, "").replace(/\.$/, "");
+  const host = hostname
+    .toLowerCase()
+    .replace(/^\[|\]$/g, "")
+    .replace(/\.$/, "");
   if (host === "localhost" || host.endsWith(".localhost")) return true;
   if (host.endsWith(".local") || host.endsWith(".internal")) return true;
   if (isIP(host)) return isPrivateIp(host);
@@ -132,7 +180,7 @@ const MAX_HTML_BYTES = 2_000_000;
 const REDIRECT_STATUS = new Set([301, 302, 303, 307, 308]);
 
 const FETCH_HEADERS = {
-  "User-Agent": "Mozilla/5.0 (compatible; AbraceIA-SEO-Bot/1.0; +https://abraceia.com.br)",
+  "User-Agent": "Mozilla/5.0 (compatible; AbraceIA-SEO-Bot/1.0; +https://abraceia.com)",
   Accept: "text/html,application/xhtml+xml",
 };
 
@@ -275,9 +323,7 @@ export async function analyzeSeo(rawUrl: string): Promise<SeoAuditResult> {
     titleLen >= 30 && titleLen <= 60 ? "good" : titleLen === 0 ? "error" : "warning";
 
   // --- Técnico: meta description ---
-  const descMatch = head.match(
-    /<meta[^>]+name=["']description["'][^>]*content=["']([^"']*)["']/i,
-  );
+  const descMatch = head.match(/<meta[^>]+name=["']description["'][^>]*content=["']([^"']*)["']/i);
   const descText = descMatch ? decodeEntities(descMatch[1].trim()) : "";
   const descLen = descText.length;
   const descStatus: SeoStatus =
@@ -303,7 +349,11 @@ export async function analyzeSeo(rawUrl: string): Promise<SeoAuditResult> {
     (tag) => !/\balt\s*=\s*["'][^"']*["']/i.test(tag) && !/\balt\s*=\s*["']{2}/i.test(tag),
   ).length;
   const imagesStatus: SeoStatus =
-    imagesWithoutAlt === 0 ? "good" : imagesWithoutAlt / Math.max(imagesTotal, 1) > 0.3 ? "error" : "warning";
+    imagesWithoutAlt === 0
+      ? "good"
+      : imagesWithoutAlt / Math.max(imagesTotal, 1) > 0.3
+        ? "error"
+        : "warning";
 
   // --- Técnico: links ---
   const hrefs = [...html.matchAll(/<a\b[^>]*href=["']([^"']+)["']/gi)].map((m) => m[1]);
@@ -321,12 +371,14 @@ export async function analyzeSeo(rawUrl: string): Promise<SeoAuditResult> {
   const hasViewport = /<meta[^>]+name=["']viewport["']/i.test(head);
   const hasCharset = /<meta[^>]+charset/i.test(head);
   const hasRobots = /<meta[^>]+name=["']robots["']/i.test(head);
-  const metaTagsStatus: SeoStatus = hasViewport && hasCharset ? "good" : hasViewport ? "warning" : "error";
+  const metaTagsStatus: SeoStatus =
+    hasViewport && hasCharset ? "good" : hasViewport ? "warning" : "error";
 
   // --- Mobile ---
   const textReadable = hasViewport && /width=device-width/i.test(head);
   const touchFriendly = hasViewport;
-  const mobileStatus: SeoStatus = hasViewport && textReadable ? "good" : hasViewport ? "warning" : "error";
+  const mobileStatus: SeoStatus =
+    hasViewport && textReadable ? "good" : hasViewport ? "warning" : "error";
 
   // --- Segurança ---
   const https = url.startsWith("https://");
@@ -418,8 +470,7 @@ export async function analyzeSeo(rawUrl: string): Promise<SeoAuditResult> {
   } else if (headings.status === "warning") {
     warnings.push("Estrutura de headings pode melhorar");
   }
-  if (imagesStatus !== "good")
-    recommendations.push("Adicione alt text em todas as imagens");
+  if (imagesStatus !== "good") recommendations.push("Adicione alt text em todas as imagens");
   if (!hasViewport) {
     criticalIssues.push("Meta viewport ausente — site não é mobile-friendly");
     recommendations.push("Adicione meta tags essenciais (viewport, charset)");
@@ -435,8 +486,7 @@ export async function analyzeSeo(rawUrl: string): Promise<SeoAuditResult> {
   if (mixedContent) warnings.push("Conteúdo misto (HTTP) detectado em página HTTPS");
   if (contentStatus !== "good")
     recommendations.push("Aumente o conteúdo da página (mínimo 300 palavras)");
-  if (performanceScore < 70)
-    recommendations.push("Otimize a velocidade de carregamento da página");
+  if (performanceScore < 70) recommendations.push("Otimize a velocidade de carregamento da página");
   if (lcp > 2500) warnings.push("LCP acima do recomendado (> 2,5s)");
 
   return {
@@ -457,7 +507,12 @@ export async function analyzeSeo(rawUrl: string): Promise<SeoAuditResult> {
       headings,
       images: { total: imagesTotal, withoutAlt: imagesWithoutAlt, status: imagesStatus },
       links: { internal, external, broken: 0, status: linksStatus },
-      metaTags: { viewport: hasViewport, charset: hasCharset, robots: hasRobots, status: metaTagsStatus },
+      metaTags: {
+        viewport: hasViewport,
+        charset: hasCharset,
+        robots: hasRobots,
+        status: metaTagsStatus,
+      },
     },
     mobile: { viewport: hasViewport, touchFriendly, textReadable, status: mobileStatus },
     security: { https, mixedContent, securityHeaders, status: securityStatus },

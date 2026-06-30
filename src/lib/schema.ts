@@ -80,10 +80,14 @@ export function faqSchema(items: { question: string; answer: string }[]) {
   };
 }
 
-export function medicalBusinessSchema() {
+// AbraceIA é uma agência de marketing para saúde — NÃO presta serviço médico.
+// Por isso a entidade correta é ProfessionalService (subtipo de LocalBusiness),
+// e não MedicalBusiness/Physician, que seriam representação enganosa em contexto
+// YMYL (saúde) para quem não atende pacientes.
+export function professionalServiceSchema() {
   return {
     "@context": "https://schema.org",
-    "@type": "MedicalBusiness",
+    "@type": "ProfessionalService",
     name: siteConfig.org.name,
     url: siteConfig.url,
     description: siteConfig.description,
@@ -93,22 +97,15 @@ export function medicalBusinessSchema() {
       addressRegion: siteConfig.state,
       addressCountry: "BR",
     },
-  };
-}
-
-export function physicianSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Physician",
-    name: medicalReviewer.name,
-    medicalSpecialty: "Medicina geral",
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: siteConfig.city,
-      addressRegion: siteConfig.state,
-      addressCountry: "BR",
+    areaServed: { "@type": "City", name: siteConfig.city },
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "customer service",
+      email: siteConfig.org.email,
+      telephone: siteConfig.org.phone,
+      availableLanguage: "Portuguese",
     },
-    memberOf: { "@type": "MedicalOrganization", name: siteConfig.org.name },
+    sameAs: [siteConfig.social.instagram, siteConfig.social.linkedin],
   };
 }
 
@@ -153,6 +150,8 @@ export function articleSchema(input: {
   description: string;
   path: string;
   datePublished: string;
+  /** Data da última revisão real do conteúdo. Cai para datePublished se ausente. */
+  dateModified?: string;
 }) {
   return {
     "@context": "https://schema.org",
@@ -162,7 +161,7 @@ export function articleSchema(input: {
     // Imagem é recomendada pelo Google para rich results de Article.
     image: `${siteConfig.url}/opengraph-image`,
     datePublished: input.datePublished,
-    dateModified: input.datePublished,
+    dateModified: input.dateModified ?? input.datePublished,
     inLanguage: "pt-BR",
     author: {
       "@type": "Person",

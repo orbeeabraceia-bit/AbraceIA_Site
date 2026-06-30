@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -122,6 +122,15 @@ export function SeoAuditForm() {
   const [result, setResult] = useState<SeoAuditResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const progressTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Garante que o timer de progresso seja limpo se o componente desmontar
+  // durante a análise (ex.: usuário navega para fora), evitando setProgress
+  // em componente desmontado.
+  useEffect(() => {
+    return () => {
+      if (progressTimer.current) clearInterval(progressTimer.current);
+    };
+  }, []);
 
   const set = (key: Exclude<keyof FormData, "consent">) => (v: string) =>
     setData((d) => ({ ...d, [key]: v }));

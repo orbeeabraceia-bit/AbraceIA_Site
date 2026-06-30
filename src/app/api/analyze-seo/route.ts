@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { z } from "zod";
 import { analyzeSeo, normalizeUrl, SsrfBlockedError } from "@/lib/seo-audit";
 import { notifyCrmWebhook } from "@/lib/integrations";
@@ -50,7 +50,10 @@ export async function POST(request: Request) {
   const fd = parsed.data.formData;
   if ((fd?.email || fd?.telefone) && fd?.consent !== true) {
     return NextResponse.json(
-      { error: "Para enviar seus dados de contato, é necessário aceitar a Política de Privacidade (LGPD)." },
+      {
+        error:
+          "Para enviar seus dados de contato, é necessário aceitar a Política de Privacidade (LGPD).",
+      },
       { status: 400 },
     );
   }
@@ -69,17 +72,21 @@ export async function POST(request: Request) {
     const result = await analyzeSeo(url);
 
     if (fd?.email || fd?.telefone) {
-      void notifyCrmWebhook({
-        type: "seo-audit",
-        url,
-        score: result.overallScore,
-        name: fd.nomeEmpresa,
-        email: fd.email,
-        phone: fd.telefone,
-        sector: fd.setor,
-        goal: fd.objetivo,
-        createdAt: result.timestamp,
-      });
+      // after(): roda após a resposta sem ser truncado pelo encerramento da
+      // função serverless (o que ocorria com `void` fire-and-forget).
+      after(() =>
+        notifyCrmWebhook({
+          type: "seo-audit",
+          url,
+          score: result.overallScore,
+          name: fd.nomeEmpresa,
+          email: fd.email,
+          phone: fd.telefone,
+          sector: fd.setor,
+          goal: fd.objetivo,
+          createdAt: result.timestamp,
+        }),
+      );
     }
 
     return NextResponse.json(result);

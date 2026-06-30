@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { z } from "zod";
 import { generateText } from "ai";
 import { getAiModel, isAiConfigured } from "@/lib/ai-model";
@@ -65,13 +65,16 @@ export async function POST(request: Request) {
 
     const { name, specialty, city } = parsed.data;
 
-    void notifyCrmWebhook({
-      type: "audit",
-      name,
-      specialty,
-      city,
-      createdAt: new Date().toISOString(),
-    });
+    // after(): notifica o CRM após a resposta sem risco de truncamento serverless.
+    after(() =>
+      notifyCrmWebhook({
+        type: "audit",
+        name,
+        specialty,
+        city,
+        createdAt: new Date().toISOString(),
+      }),
+    );
 
     if (!isAiConfigured()) {
       return NextResponse.json(fallbackReport(name, specialty, city));
@@ -88,9 +91,7 @@ Respeite CFM 2.336/2023 — sem promessa de resultado.`;
       maxOutputTokens: 800,
     });
 
-    const ai = extractJson(text) as
-      | { summary?: string; items?: string[]; risks?: string[] }
-      | null;
+    const ai = extractJson(text) as { summary?: string; items?: string[]; risks?: string[] } | null;
 
     // Sem JSON utilizável → checklist orientativo (não devolvemos texto cru).
     if (!ai || typeof ai.summary !== "string" || !Array.isArray(ai.items)) {

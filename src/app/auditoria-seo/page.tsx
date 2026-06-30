@@ -9,6 +9,7 @@ export const metadata: Metadata = createPageMetadata({
   description:
     "Análise gratuita de 50+ fatores de SEO do seu site, com relatório técnico e recomendações focadas em compliance e na área da saúde.",
   path: "/auditoria-seo",
+  keywords: ["auditoria SEO gratuita", "análise de SEO", "relatório SEO", "otimização de site"],
 });
 
 export default function AuditoriaSeoPage() {

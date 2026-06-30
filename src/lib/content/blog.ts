@@ -6,6 +6,8 @@ export type BlogPost = {
   excerpt: string;
   keyword: string;
   publishedAt: string;
+  /** Data da última revisão real do conteúdo (opcional). Alimenta dateModified. */
+  updatedAt?: string;
   readMinutes: number;
   /** Resposta direta (40–60 palavras) para Featured Snippets — "definição em caixa" (AEO). */
   summary?: string;

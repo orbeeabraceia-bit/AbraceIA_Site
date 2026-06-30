@@ -6,6 +6,11 @@ type PageMetaInput = {
   description: string;
   path: string;
   keywords?: string[];
+  /** "article" para posts de blog (habilita publishedTime/authors no OG). */
+  type?: "website" | "article";
+  publishedTime?: string;
+  modifiedTime?: string;
+  authors?: string[];
 };
 
 export function createPageMetadata({
@@ -13,6 +18,10 @@ export function createPageMetadata({
   description,
   path,
   keywords = [],
+  type = "website",
+  publishedTime,
+  modifiedTime,
+  authors,
 }: PageMetaInput): Metadata {
   const url = `${siteConfig.url}${path}`;
   return {
@@ -26,8 +35,10 @@ export function createPageMetadata({
       url,
       siteName: siteConfig.name,
       locale: "pt_BR",
-      type: "website",
       // Imagem fornecida pela convenção app/opengraph-image.tsx (PNG 1200×630).
+      ...(type === "article"
+        ? { type: "article" as const, publishedTime, modifiedTime, authors }
+        : { type: "website" as const }),
     },
     twitter: {
       card: "summary_large_image",

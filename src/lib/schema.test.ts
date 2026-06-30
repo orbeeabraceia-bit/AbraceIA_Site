@@ -4,8 +4,7 @@ import {
   breadcrumbSchema,
   serviceSchema,
   faqSchema,
-  medicalBusinessSchema,
-  physicianSchema,
+  professionalServiceSchema,
   articleSchema,
   webApplicationSchema,
   howToSchema,
@@ -55,9 +54,24 @@ describe("schema.org generators", () => {
     });
   });
 
-  it("medicalBusinessSchema e physicianSchema têm tipos de saúde", () => {
-    expect(medicalBusinessSchema()["@type"]).toBe("MedicalBusiness");
-    expect(physicianSchema()["@type"]).toBe("Physician");
+  it("professionalServiceSchema é ProfessionalService (não entidade médica)", () => {
+    const s = professionalServiceSchema();
+    // AbraceIA é agência de marketing: NÃO deve se declarar MedicalBusiness/Physician.
+    expect(s["@type"]).toBe("ProfessionalService");
+    expect(s.areaServed).toMatchObject({ "@type": "City" });
+    expect(s.contactPoint).toMatchObject({ "@type": "ContactPoint" });
+  });
+
+  it("articleSchema usa dateModified quando fornecido", () => {
+    const s = articleSchema({
+      title: "T",
+      description: "D",
+      path: "/blog/x",
+      datePublished: "2026-01-01",
+      dateModified: "2026-05-10",
+    });
+    expect(s.datePublished).toBe("2026-01-01");
+    expect(s.dateModified).toBe("2026-05-10");
   });
 
   it("articleSchema inclui autor e revisor", () => {

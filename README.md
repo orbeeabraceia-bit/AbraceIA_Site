@@ -3,7 +3,7 @@
 Implementação do **Livro-Guia AbraceIA Saúde BH 2026** (Orbee Labs).
 
 > **Este repositório é a landing da vertical AbraceIA**, servida na raiz do domínio
-> (abraceia.com.br). A jornada "/abraceia" descrita no adendo do Livro-Guia corresponde
+> (abraceia.com). A jornada "/abraceia" descrita no adendo do Livro-Guia corresponde
 > à rota `/` deste site — a vertical tem domínio próprio, não uma subrota do site Orbee Labs.
 
 ## Stack (Cap. 4.1)

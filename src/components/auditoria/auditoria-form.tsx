@@ -40,13 +40,17 @@ export function AuditoriaForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, specialty, city, consent }),
       });
+      if (!res.ok) {
+        const e = (await res.json().catch(() => null)) as { error?: string } | null;
+        throw new Error(e?.error || "Erro na auditoria");
+      }
       const data = (await res.json()) as AuditResult;
       setResult(data);
       setModalOpen(true);
       trackEvent("ai_audit_completed", { mode: data.mode });
       toast.success("Auditoria concluída");
-    } catch {
-      toast.error("Erro na auditoria. Tente novamente.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Erro na auditoria. Tente novamente.");
     } finally {
       setLoading(false);
     }

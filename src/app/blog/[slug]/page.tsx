@@ -26,6 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: post.excerpt,
     path: `/blog/${slug}`,
     keywords: [post.keyword],
+    type: "article",
+    publishedTime: post.publishedAt,
+    modifiedTime: post.updatedAt ?? post.publishedAt,
   });
 }
 
@@ -43,6 +46,7 @@ export default async function BlogPostPage({ params }: Props) {
             description: post.excerpt,
             path: `/blog/${slug}`,
             datePublished: post.publishedAt,
+            dateModified: post.updatedAt,
           }),
           breadcrumbSchema([
             { name: "Home", path: "/" },

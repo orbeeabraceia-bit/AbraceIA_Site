@@ -3,16 +3,17 @@ import { forwardRef, type ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-btn font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-care focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 min-h-11 min-w-[44px]",
+  // min-w garante alvo de toque ≥44px na largura; a altura é controlada por
+  // `size` (sem min-h global, que antes forçava 44px e anulava o size:sm).
+  "inline-flex items-center justify-center gap-2 rounded-btn font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-care focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 min-w-[44px]",
   {
     variants: {
       intent: {
-        primary:
-          "orbee-btn-gradient hover:scale-[1.02] shadow-sm",
+        // primary e ai compartilham o mesmo gradiente (alias semântico).
+        primary: "orbee-btn-gradient hover:scale-[1.02] shadow-sm",
         ai: "orbee-btn-gradient hover:scale-[1.02] shadow-sm",
         care: "bg-care text-white hover:bg-care/90 rounded-btn",
-        outline:
-          "border-2 border-care bg-white text-navy hover:bg-teal-50 rounded-btn",
+        outline: "border-2 border-care bg-white text-navy hover:bg-teal-50 rounded-btn",
         ghost: "text-navy hover:bg-muted rounded-btn",
       },
       size: {
@@ -29,8 +30,7 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+  extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {}
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, intent, size, type = "button", ...props }, ref) => (

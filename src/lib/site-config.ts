@@ -3,13 +3,13 @@ export const siteConfig = {
   tagline: "Abrace a IA. Cuide de quem importa.",
   description:
     "Vertical de saúde da Orbee Labs. Presença digital com IA, SEO arquitetural e compliance CFM/CFO/CFP em Belo Horizonte.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://abraceia.com.br",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://abraceia.com",
   locale: "pt-BR",
   city: "Belo Horizonte",
   state: "MG",
   org: {
     name: "AbraceIA — Orbee Labs",
-    email: "contato@orbeelabs.com",
+    email: "contato@abraceia.com",
     phone: "+5531982556751",
     address: "Rua Costa Senna, 597 — Belo Horizonte, MG",
   },
@@ -19,7 +19,7 @@ export const siteConfig = {
     parent: "https://orbeelabs.com/",
   },
   contact: {
-    email: "orbee.abraceia@gmail.com",
+    email: "contato@abraceia.com",
     instagram: "https://www.instagram.com/orbee.abraceia/",
     instagramHandle: "@orbee.abraceia",
   },

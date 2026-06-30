@@ -15,7 +15,7 @@ Overview), sempre dentro da ética do conselho profissional de cada cliente.
 - Marca: AbraceIA (Orbee Labs)
 - Cidade: Belo Horizonte, MG, Brasil (atende também região metropolitana e online)
 - Tagline: "Abrace a IA. Cuide de quem importa."
-- Site: https://abraceia.com.br
+- Site: https://abraceia.com
 - Stack: Next.js 16, React 19, Tailwind 4, Prisma, PostgreSQL (Neon), Vercel
 
 ## Por que GEO importa na saúde
@@ -103,8 +103,8 @@ diagnóstico ou prescrição, e orienta procurar profissional presencial.
   dias úteis.
 
 ## Contato
-- Site: https://abraceia.com.br
-- Contato: https://abraceia.com.br/contato
+- Site: https://abraceia.com
+- Contato: https://abraceia.com/contato
 - Organização: AbraceIA — Orbee Labs (https://orbeelabs.com)
 
 ## Fontes e autoria

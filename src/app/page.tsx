@@ -12,7 +12,7 @@ import { ClientPortfolioStrip } from "@/components/cases/client-portfolio-strip"
 import { FadeIn } from "@/components/animations/fade-in";
 import { cases } from "@/lib/content/cases";
 import { siteFaq } from "@/lib/content/faq";
-import { faqSchema, medicalBusinessSchema, physicianSchema } from "@/lib/schema";
+import { faqSchema, professionalServiceSchema } from "@/lib/schema";
 import { createPageMetadata } from "@/lib/metadata";
 import { PillarsSection } from "@/components/home/pillars-section";
 import { MethodSection } from "@/components/home/method-section";
@@ -50,7 +50,7 @@ const homeFaq = [siteFaq[2], siteFaq[4], siteFaq[8], siteFaq[9], siteFaq[0], sit
 export default function HomePage() {
   return (
     <>
-      <JsonLd data={[faqSchema(homeFaq), medicalBusinessSchema(), physicianSchema()]} />
+      <JsonLd data={[faqSchema(homeFaq), professionalServiceSchema()]} />
       <section className="relative overflow-hidden bg-gradient-to-b from-cream/30 via-white to-white px-4 py-12 md:py-20">
         <CrossParticles />
         {/* Glow de fundo simulando IA */}
